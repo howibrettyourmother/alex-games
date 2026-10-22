@@ -34,6 +34,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#2f6b3a url(hub/bg.jpg
 </style></head><body class="alex"><div id="app">
 <div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div>
 <script>
+/*framed-games*/var fw=null;
+function sizeF(){if(!fw)return;fw.style.width=innerWidth+'px';fw.style.height=innerHeight+'px';var f=fw.firstChild;f.style.width=innerWidth+'px';f.style.height=innerHeight+'px'}
+function openGame(h){if(self!==top||!window.postMessage){location.href=h;return}
+ try{if(cur)cur.pause()}catch(e){}
+ fw=document.createElement('div');fw.style.cssText='position:fixed;left:0;top:0;z-index:99999;overflow:hidden;background:#000';
+ var f=document.createElement('iframe');f.src=h;f.setAttribute('allow','autoplay; fullscreen');f.setAttribute('allowfullscreen','');f.setAttribute('scrolling','no');
+ f.style.cssText='display:block;border:0;margin:0;padding:0';fw.appendChild(f);document.body.appendChild(fw);sizeF();
+ setTimeout(function(){try{f.focus()}catch(e){}},300)}
+function closeGame(){if(!fw)return;fw.parentNode.removeChild(fw);fw=null;busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})}
+addEventListener('resize',sizeF);addEventListener('orientationchange',function(){setTimeout(sizeF,300)});
+addEventListener('message',function(e){if(e.origin===location.origin&&e.data==='hubClose')closeGame()});
+if(self!==top){try{parent.postMessage('hubClose',location.origin)}catch(e){}}
+
 var T=[{"href": "/alex-river-run/", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}],KID="alex",HASHOST=0;
 document.body.classList.add(HASHOST?'hb':'nh');
 document.getElementById(HASHOST?'sign':'host').remove();
@@ -49,7 +62,7 @@ T.forEach(function(t,i){var d=document.createElement('div');d.className='t';d.st
  d.setAttribute('role','link');d.setAttribute('aria-label',t.href);
  d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');talk();var a=play(t.clip);
   try{localStorage.kidsHub=KID}catch(e){}
-  var gone=false;function go(){if(gone)return;gone=true;location.href=t.href}
+  var gone=false;function go(){if(gone)return;gone=true;openGame(t.href)}
   if(a)a.onended=go;setTimeout(go,1400);setTimeout(function(){busy=false},3000)});
  g.appendChild(d)});
 lay();addEventListener('resize',lay);
