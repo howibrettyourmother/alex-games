@@ -7,26 +7,30 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 html,body{margin:0;height:100%;overflow:hidden;background:#2f6b3a url(hub/bg.jpg) center/cover no-repeat;font-family:system-ui,sans-serif}
-#app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;gap:3vmin;
- padding:max(2vmin,env(safe-area-inset-top)) max(3vmin,env(safe-area-inset-right)) max(2vmin,env(safe-area-inset-bottom)) max(3vmin,env(safe-area-inset-left))}
+#app{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;
+ padding:2vmin 3vmin;padding:max(2vmin,env(safe-area-inset-top)) max(3vmin,env(safe-area-inset-right)) max(2vmin,env(safe-area-inset-bottom)) max(3vmin,env(safe-area-inset-left))}
 #host{flex:0 0 auto;width:24vmin;height:24vmin;border-radius:50%;border:1.2vmin solid #fff;background:#fff center/cover;
- box-shadow:0 1vmin 3vmin #0004;animation:bob 2.4s ease-in-out infinite;cursor:pointer;position:relative}
+ box-shadow:0 1vmin 3vmin #0004;animation:bob 2.4s ease-in-out infinite;cursor:pointer;position:relative;margin-right:3vmin}
 #host.talk{animation:talk .25s ease-in-out 6}
 .hb #host{display:block}.nh #host{display:none}
-#grid{display:grid;gap:3vmin;grid-template-columns:repeat(var(--c),1fr);max-width:100%}
+#grid{display:grid;grid-gap:3vmin;gap:3vmin;grid-template-columns:repeat(var(--c),1fr);max-width:100%}
 .t{width:var(--s);height:var(--s);border-radius:5vmin;background:#fff center/cover no-repeat;border:1.4vmin solid #fff;
  box-shadow:0 1.2vmin 0 #0002,0 1.5vmin 3vmin #0004;cursor:pointer;transition:transform .15s;position:relative}
 .t:active{transform:scale(.94)}
 .t.go{animation:pop .7s ease-out forwards}
 .alex .t{border-color:#7a4a22;border-radius:3vmin;box-shadow:0 1.2vmin 0 #4a2a10,0 1.5vmin 3vmin #0006}
-.alex .t::after{content:"";position:absolute;inset:-.6vmin;border-radius:2.6vmin;border:.5vmin dashed #e9c47a;pointer-events:none}
+.alex .t::after{content:"";position:absolute;top:-.6vmin;right:-.6vmin;bottom:-.6vmin;left:-.6vmin;border-radius:2.6vmin;border:.5vmin dashed #e9c47a;pointer-events:none}
 .zoe .t{border-color:#fff;outline:.8vmin solid #ffb6dd}
-#sign{flex:0 0 auto;font-size:15vmin;filter:drop-shadow(0 1vmin 1vmin #0005);animation:bob 2.4s ease-in-out infinite;cursor:pointer}
+#sign{flex:0 0 auto;font-size:15vmin;filter:drop-shadow(0 1vmin 1vmin #0005);animation:bob 2.4s ease-in-out infinite;cursor:pointer;margin-right:3vmin}
 @keyframes bob{50%{transform:translateY(-1.5vmin) rotate(-3deg)}}
 @keyframes talk{50%{transform:scale(1.08) rotate(4deg)}}
 @keyframes pop{30%{transform:scale(1.12) rotate(-3deg)}100%{transform:scale(1.05)}}
 #ok{position:fixed;right:max(1.5vmin,env(safe-area-inset-right));bottom:max(1vmin,env(safe-area-inset-bottom));font-size:3vmin;opacity:.75}
-@media (orientation:portrait){#app{flex-direction:column}#host,#sign{width:20vmin;height:20vmin}}
+@media (orientation:portrait){#app{flex-direction:column}#host,#sign{width:20vmin;height:20vmin;margin:0 0 3vmin 0}}
+#bd{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;background:#ffe3f3e6;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;overflow:hidden;transition:opacity .6s}
+#bd .k{font-size:38vmin;animation:bob 1.6s ease-in-out infinite}#bd .p{font-size:12vmin;animation:talk .8s ease-in-out infinite}
+#bd i{position:absolute;top:-10vmin;font-style:normal;font-size:6vmin;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(120vh) rotate(720deg)}}
 </style></head><body class="alex"><div id="app">
 <div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div>
 <script>
@@ -53,5 +57,12 @@ var greeted=false;function hi(){if(greeted)return;greeted=true;talk();play('hub/
 (document.getElementById('host')||document.getElementById('sign')).addEventListener('click',function(){greeted=false;hi()});
 addEventListener('pointerdown',function(e){if(!e.target.classList.contains('t'))hi()},{once:true});
 addEventListener('pageshow',function(){busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})});
+var BD=null;(function(){if(!BD)return;var d=new Date(),day=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+try{if(localStorage.zoeBdayDay===day)return}catch(e){}
+var o=document.createElement('div');o.id='bd';o.innerHTML='<div class="k">🎂</div><div class="p">👆</div>';
+var E=['🎉','🎈','✨','💖','🎊','⭐'];for(var i=0;i<28;i++){var c=document.createElement('i');c.textContent=E[i%6];c.style.left=(Math.random()*100)+'vw';c.style.animationDuration=(3+Math.random()*3)+'s';c.style.animationDelay=(-Math.random()*5)+'s';o.appendChild(c)}
+document.body.appendChild(o);greeted=true;var done=false;
+o.addEventListener('click',function(e){e.stopPropagation();if(done)return;done=true;o.querySelector('.p').textContent='🥳';try{localStorage.zoeBdayDay=day}catch(x){}
+ talk();var a=play(BD);function close(){o.style.opacity=0;setTimeout(function(){o.remove()},600)}if(a)a.onended=close;setTimeout(close,4500)})})();
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready}).then(function(){document.getElementById('ok').textContent='✈️✓'}).catch(function(){})}
 </script></body></html>
