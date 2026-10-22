@@ -2,7 +2,7 @@
  "name": "Alex's Adventures",
  "short_name": "Alex Games",
  "start_url": "./",
- "scope": "./",
+ "scope": "/",
  "display": "fullscreen",
  "orientation": "landscape",
  "background_color": "#2f6b3a",
