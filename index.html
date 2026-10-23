@@ -271,7 +271,7 @@ function start(snd){if(st)return;st=1;go.style.display='none';
  [0,1250,2500,3700,5000].forEach(function(t,i){T.push(setTimeout(function(){show(i)},t))});T.push(setTimeout(end,6800))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
 var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(!st)start(true);else{if(!au&&WA.ok){WA.unlock();au={}}end()}});
-T.push(setTimeout(function(){start(false)},4000));
+/*no silent auto-start: iOS only allows the intro track from a tap, so wait for TAP TO START*/
 window.__axStart=start;})();
 </script>
 </body></html>
