@@ -149,9 +149,9 @@ if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(f
 </script><style>
 #ax{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;overflow:hidden;cursor:pointer;background:#120a2a;transition:opacity .45s;-webkit-transition:opacity .45s;font-family:system-ui,-apple-system,sans-serif}
 #ax div,#ax span{position:absolute}
-#ax .sc{top:0;left:0;width:100%;height:100%;opacity:0;visibility:hidden;overflow:hidden}
+#ax .sc{top:-3vmin;left:-3vmin;width:100%;height:100%;width:calc(100% + 6vmin);height:calc(100% + 6vmin);opacity:0;visibility:hidden;overflow:hidden}
 #ax .sc.on{opacity:1;visibility:visible}
-#ax.shake{animation:axsh .45s linear;-webkit-animation:axsh .45s linear}
+#ax.shake .sc.on{animation:axsh .45s linear;-webkit-animation:axsh .45s linear}
 @keyframes axsh{10%{transform:translate(-2vmin,1vmin)}30%{transform:translate(2vmin,-1.5vmin)}50%{transform:translate(-1.5vmin,1.5vmin)}70%{transform:translate(1.5vmin,-.5vmin)}90%{transform:translate(-.5vmin,.5vmin)}}
 @-webkit-keyframes axsh{10%{-webkit-transform:translate(-2vmin,1vmin)}30%{-webkit-transform:translate(2vmin,-1.5vmin)}50%{-webkit-transform:translate(-1.5vmin,1.5vmin)}70%{-webkit-transform:translate(1.5vmin,-.5vmin)}90%{-webkit-transform:translate(-.5vmin,.5vmin)}}
 /* T-rex */
