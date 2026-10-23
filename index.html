@@ -173,7 +173,7 @@ function start(snd){if(st)return;st=snd?2:1;zg.style.display='none';o.className=
  else TM.push(setTimeout(end,rm?2500:5600))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
 var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(!st)start(true);else{if(st===1){WA.unlock();st=2}end()}});
-TM.push(setTimeout(function(){start(false)},4000));window.__ziStart=start})();
+/*no silent auto-start (iOS needs the tap for audio)*/window.__ziStart=start})();
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready}).then(function(){document.getElementById('ok').textContent='✈️✓'}).catch(function(){})}
 </script><style>
 #ax{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;overflow:hidden;cursor:pointer;background:#120a2a;transition:opacity .45s;-webkit-transition:opacity .45s;font-family:system-ui,-apple-system,sans-serif}
@@ -258,15 +258,17 @@ var H='';ORD.forEach(function(k){H+='<div class="sc '+k+'">'+S[k]+'</div>'});
 H+='<div class="sc slam"><div class="rays"></div><div class="ttl">ALEX</div><div class="sub">⚡ ADVENTURES ⚡</div></div>';
 H+='<div class="go"><b>💥 TAP TO START! 💥</b></div><div class="tap">tap to skip ⏭</div>';
 var o=document.createElement('div');o.id='ax';o.className=rm?'rm':'';o.innerHTML=H;document.body.appendChild(o);
-WA.load('hub/intro'+v+'.mp3');WA.load(HICLIP);var sc=o.querySelectorAll('.sc'),go=o.querySelector('.go'),st=0,done=false,T=[],au=null;
+WA.load(HICLIP);var sc=o.querySelectorAll('.sc'),go=o.querySelector('.go'),st=0,done=false,T=[],au=null;
 function show(i){for(var k=0;k<sc.length;k++)sc[k].className=sc[k].className.replace(' on','');if(sc[i])sc[i].className+=' on';
  if(i===2&&ORD[2]==='rex'||i===1&&ORD[1]==='rex'||i===0&&ORD[0]==='rex')T.push(setTimeout(shake,650));if(i===4)shake()}
 function shake(){if(rm)return;o.className=o.className.replace(' shake','');void o.offsetWidth;o.className+=' shake'}
 function end(){if(done)return;done=true;T.forEach(clearTimeout);
- if(au)WA.stop(au,400);
+ if(au&&au.pause){var a0=au,k0=0,fi=setInterval(function(){k0++;try{a0.volume=Math.max(0,1-k0/8)}catch(e){}if(k0>=8){clearInterval(fi);try{a0.pause()}catch(e){}}},50)}
  o.style.opacity=0;setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&typeof hi==='function')hi()},500)}
 function start(snd){if(st)return;st=1;go.style.display='none';
- if(snd&&WA.ok){WA.unlock();au=WA.play('hub/intro'+v+'.mp3')}
+ if(snd){/*iOS: the <audio> element must be created AND play()ed synchronously inside the tap; it also plays with the silent switch on (WebAudio does not)*/
+  try{au=new Audio('hub/intro'+v+'.mp3');au.muted=false;au.volume=1;au.setAttribute('playsinline','');var pp=au.play();if(pp&&pp.catch)pp.catch(function(){});window.__axAudio=au}catch(e){au={}}
+  if(WA.ok)WA.unlock()}
  if(rm){show(4);T.push(setTimeout(end,2500));return}
  [0,1250,2500,3700,5000].forEach(function(t,i){T.push(setTimeout(function(){show(i)},t))});T.push(setTimeout(end,6800))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
@@ -274,4 +276,8 @@ var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)
 /*no silent auto-start: iOS only allows the intro track from a tap, so wait for TAP TO START*/
 window.__axStart=start;})();
 </script>
+<script>/*sw-reload*/(function(){if(!('serviceWorker' in navigator))return;var sw=navigator.serviceWorker,had=!!sw.controller,done=false;
+sw.addEventListener('controllerchange',function(){if(!had){had=true;return}if(done)return;done=true;try{if(sessionStorage.swReloaded&&Date.now()-sessionStorage.swReloaded<10000)return;sessionStorage.swReloaded=Date.now()}catch(e){}location.reload()});
+function up(){if(sw.getRegistration)sw.getRegistration().then(function(g){if(g)g.update()}).catch(function(){})}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')up()});})();</script>
 </body></html>
