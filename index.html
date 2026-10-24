@@ -98,7 +98,7 @@ addEventListener('resize',sizeF);addEventListener('orientationchange',function()
 addEventListener('message',function(e){if(e.origin===location.origin&&e.data==='hubClose')closeGame()});
 if(self!==top){try{parent.postMessage('hubClose',location.origin)}catch(e){}}
 
-var T=[{"href": "/alex-cave-rescue/", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}],KID="alex",HASHOST=0;
+var T=[{"href": "/alex-cave-rescue/", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}, {"href": "/dino-stampede-smash/?mode=alex", "img": "hub/dino-stampede-smash-alex.png", "clip": "hub/a_ds.mp3"}],KID="alex",HASHOST=0;
 document.body.classList.add(HASHOST?'hb':'nh');
 document.getElementById(HASHOST?'sign':'host').remove();
 var g=document.getElementById('grid'),cur=null,busy=false;
@@ -193,7 +193,11 @@ o.addEventListener('pointerdown',function(e){e.stopPropagation()});
 var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(au&&t-au.kickT<700)return;end()});
 start();window.__ziStart=start})();
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready}).then(function(){document.getElementById('ok').textContent='✈️✓'}).catch(function(){})}
-</script><style>
+</script><script>/*sw-reload*/(function(){if(!('serviceWorker' in navigator))return;var sw=navigator.serviceWorker,had=!!sw.controller,done=false;
+sw.addEventListener('controllerchange',function(){if(!had){had=true;return}if(done)return;done=true;try{if(sessionStorage.swReloaded&&Date.now()-sessionStorage.swReloaded<10000)return;sessionStorage.swReloaded=Date.now()}catch(e){}location.reload()});
+function up(){if(sw.getRegistration)sw.getRegistration().then(function(g){if(g)g.update()}).catch(function(){})}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')up()});})();</script>
+<style>
 #ax{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;overflow:hidden;cursor:pointer;background:#120a2a;transition:opacity .45s;-webkit-transition:opacity .45s;font-family:system-ui,-apple-system,sans-serif}
 #ax div,#ax span{position:absolute}
 #ax .sc{top:-3vmin;left:-3vmin;width:100%;height:100%;width:calc(100% + 6vmin);height:calc(100% + 6vmin);opacity:0;visibility:hidden;overflow:hidden}
@@ -290,8 +294,4 @@ o.addEventListener('pointerdown',function(e){e.stopPropagation()});
 var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(au&&t-au.kickT<700)return;end()});
 start();window.__axStart=start;})();
 </script>
-<script>/*sw-reload*/(function(){if(!('serviceWorker' in navigator))return;var sw=navigator.serviceWorker,had=!!sw.controller,done=false;
-sw.addEventListener('controllerchange',function(){if(!had){had=true;return}if(done)return;done=true;try{if(sessionStorage.swReloaded&&Date.now()-sessionStorage.swReloaded<10000)return;sessionStorage.swReloaded=Date.now()}catch(e){}location.reload()});
-function up(){if(sw.getRegistration)sw.getRegistration().then(function(g){if(g)g.update()}).catch(function(){})}
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')up()});})();</script>
 </body></html>
