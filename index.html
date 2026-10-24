@@ -1,12 +1,12 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Alex's Adventures</title><meta name="theme-color" content="#2f6b3a">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon-32.png">
+<link rel="preload" href="hub/bg.jpg" as="image"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon-32.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Alex's Adventures">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-html,body{margin:0;height:100%;overflow:hidden;background:#2f6b3a url(hub/bg.jpg) center/cover no-repeat;font-family:system-ui,sans-serif}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;background:#2f6b3a url(hub/bg.jpg) center/cover no-repeat;font-family:system-ui,sans-serif}
 #app{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;
  padding:2vmin 3vmin;padding:max(2vmin,env(safe-area-inset-top)) max(3vmin,env(safe-area-inset-right)) max(2vmin,env(safe-area-inset-bottom)) max(3vmin,env(safe-area-inset-left))}
 #host{flex:0 0 auto;width:24vmin;height:24vmin;border-radius:50%;border:1.2vmin solid #fff;background:#fff center/cover;
@@ -16,7 +16,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#2f6b3a url(hub/bg.jpg
 #grid{display:grid;grid-gap:3vmin;gap:3vmin;grid-template-columns:repeat(var(--c),1fr);max-width:100%}
 .t{width:var(--s);height:var(--s);border-radius:5vmin;background:#fff center/cover no-repeat;border:1.4vmin solid #fff;
  box-shadow:0 1.2vmin 0 #0002,0 1.5vmin 3vmin #0004;cursor:pointer;transition:transform .15s;position:relative}
-.t:active{transform:scale(.94)}
+.t:active,.t.pr{transform:scale(.93);filter:brightness(1.08)}
+.t .cb{position:absolute;right:-2vmin;top:-2vmin;min-width:7vmin;height:7vmin;padding:0 1.6vmin;border-radius:3.5vmin;background:#ffd93b;color:#5a3300;font:900 3.2vmin/7vmin system-ui,-apple-system,sans-serif;text-align:center;box-shadow:0 .6vmin 0 #b8860b,0 .8vmin 2vmin #0005;border:.5vmin solid #fff;pointer-events:none;animation:bob 2.4s ease-in-out infinite}
 .t.go{animation:pop .7s ease-out forwards}
 .t.soon{opacity:.92}.t.soon.go{animation:pop .5s ease-out}
 .alex .t{border-color:#7a4a22;border-radius:3vmin;box-shadow:0 1.2vmin 0 #4a2a10,0 1.5vmin 3vmin #0006}
@@ -115,14 +116,32 @@ var WA=(function(){var AC=window.AudioContext||window.webkitAudioContext,ctx=nul
   if(e.b||e.bad)go();else e.w=go;return h};
  x.stop=function(h,ms){if(!h)return;var was=h.on;h.on=0;if(was===2){var n=ctx.currentTime,d=(ms||400)/1000;try{h.g.gain.setValueAtTime(h.g.gain.value,n);h.g.gain.linearRampToValueAtTime(0,n+d);h.s.stop(n+d+.05)}catch(e){try{h.s.stop(0)}catch(e2){}}}};
  return x})();
+/*introAudio: try autoplay with sound; if blocked (iOS), start on the very first touch anywhere, jumping to where the visuals are*/
+function introAudio(src,t0,onStart){var a=null,on=false,dead=false,EV=['touchstart','touchend','pointerdown','mousedown','click','keydown'],h={kickT:0};
+ try{a=new Audio(src);a.preload='auto';a.volume=.85}catch(e){return h}h.a=a;window.__introAudio=a;
+ function arm(){EV.forEach(function(n){addEventListener(n,kick,{capture:true,passive:true})})}
+ function disarm(){EV.forEach(function(n){removeEventListener(n,kick,{capture:true,passive:true})})}
+ function seek(){var off=(Date.now()-t0)/1000;try{if(a.duration&&off>a.duration-.3){dead=true;return}a.currentTime=off}catch(e){}}
+ function ok(){if(on)return;on=true;h.kickT=Date.now();disarm();if(onStart)onStart()}
+ function kick(){if(dead||on){disarm();return}try{if(WA.ok)WA.unlock()}catch(e){}seek();if(dead){disarm();return}
+  try{var p=a.play();if(p&&p.then)p.then(ok,function(){});else ok()}catch(e){}h.kickT=Date.now()}
+ h.on=function(){return on};h.stop=function(){dead=true;disarm();if(!on)return;var k=0,fi=setInterval(function(){k++;try{a.volume=Math.max(0,.85*(1-k/8))}catch(e){}if(k>=8){clearInterval(fi);try{a.pause()}catch(e){}}},50)};
+ try{if(WA.ok)WA.unlock()}catch(e){}
+ try{var p=a.play();if(p&&p.then)p.then(ok,function(){window.__introBlocked=1;arm()});else if(!a.paused)ok();else arm()}catch(e){arm()}
+ return h}
 function talk(){var h=document.getElementById('host')||document.getElementById('sign');h.classList.remove('talk');void h.offsetWidth;h.classList.add('talk')}
 function lay(){var w=innerWidth,h=innerHeight,n=T.length,port=h>w;
  var c=port?2:(n<=4?(w/h>1.9?4:2):(w/h>1.9?5:3)),r=Math.ceil(n/c);
  var aw=port?w*.9:w*.68,ah=port?h*.62:h*.86;
  var s=Math.min((aw-(c-1)*Math.min(w,h)*.03)/c,(ah-(r-1)*Math.min(w,h)*.03)/r,330);
  g.style.setProperty('--c',c);g.style.setProperty('--s',s+'px')}
+/*continue badge: a game with saved progress on this device (same origin localStorage)*/
+var SAVE={'alex-cave-rescue':/^alexCaveRescue/,'alex-galaxy-math':/^alexGalaxyMath/,'alex-river-run':/^arr_/,'alex-floor-is-lava':/^afl_/,'fry-thief-seagull':/^fts_/,'the-bee-game':/^tbg_/,'wilson-water-pirates':/^wwp_/,'zoes-princess-castle':/^zpc/,'zoes-unicorn-adventure':/^zua_/,'doodle-and-zoe':/^dz_/};
+function saved(img){var m=/hub\/([\w-]+)\.png/.exec(img),re=m&&SAVE[m[1]];if(!re)return false;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(re.test(k)&&!/mut/.test(k))return true}}catch(e){}return false}
 T.forEach(function(t,i){var d=document.createElement('div');d.className='t';d.style.backgroundImage='url('+t.img+')';
- d.setAttribute('role','link');d.setAttribute('aria-label',t.href);
+ d.setAttribute('role','button');d.setAttribute('tabindex','0');d.setAttribute('aria-label',(/([\w-]+)\.png/.exec(t.img)||['',''])[1].replace(/-/g,' '));
+ if(!t.soon&&saved(t.img)){var cb=document.createElement('span');cb.className='cb';cb.textContent='▶ Continue';d.appendChild(cb)}
+ d.addEventListener('touchstart',function(){d.classList.add('pr')},{passive:true});['touchend','touchcancel'].forEach(function(n){d.addEventListener(n,function(){d.classList.remove('pr')},{passive:true})});
  if(t.soon){d.className+=' soon';d.addEventListener('click',function(){d.classList.remove('go');void d.offsetWidth;d.classList.add('go')});g.appendChild(d);return}
  d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');talk();var a=play(t.clip);
   try{localStorage.kidsHub=KID}catch(e){}
@@ -144,7 +163,7 @@ var th=q||(doy%8===3&&BD?BDAY:TH[doy%TH.length]);if(q==='off')return;
 if(th==='stars2')th='stars';
 if(th===BDAY)HICLIP=BD;
 var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-var o=document.createElement('div');o.id='intro';o.className='wait th-'+th+(rm?' rm':'');var TR='hub/zi_'+th+'.mp3';WA.load(TR);WA.load(HICLIP);
+var o=document.createElement('div');o.id='intro';o.className='th-'+th+(rm?' rm':'');var TR='hub/zi_'+th+'.mp3';WA.load(HICLIP);
 var H='',i,E;
 function sp(t,cls,st){return '<span class="'+cls+'" style="'+st+'">'+t+'</span>'}
 function rnd(a,b){return a+Math.random()*(b-a)}
@@ -162,18 +181,17 @@ if(th==='zoe'){var L=['Z','O','E'];for(i=0;i<3;i++)H+=sp(L[i],'big','left:'+(22+
 var msg=th===BDAY?'Happy Birthday, Zoe!':'Hi Zoe!',m='';
 m='<span class="w">';for(i=0;i<msg.length;i++)m+=msg[i]===' '?'</span> <span class="w">':sp(msg[i],'l','-webkit-animation-delay:'+(2.3+i*.07)+'s;animation-delay:'+(2.3+i*.07)+'s');
 m+='</span>';H+='<div class="dogw"><div class="dog" style="background-image:url(hub/host.png)"></div></div><div class="msg">'+m+'</div><div class="tap">👆</div>';
-H+='<div class="zgo">';for(i=0;i<14;i++)H+=sp(['✨','⭐','💖','🌟'][i%4],'tw','left:'+rnd(3,92)+'%;top:'+rnd(3,88)+'%;font-size:'+rnd(4,8)+'vmin;-webkit-animation-delay:'+rnd(0,1.6)+'s;animation-delay:'+rnd(0,1.6)+'s');
-H+='<div class="gd" style="background-image:url(hub/host.png)"></div><b>✨ Tap to start! ✨</b></div>';
+if(0){H+='<div class="zgo">';for(i=0;i<14;i++)H+=sp(['✨','⭐','💖','🌟'][i%4],'tw','left:'+rnd(3,92)+'%;top:'+rnd(3,88)+'%;font-size:'+rnd(4,8)+'vmin;-webkit-animation-delay:'+rnd(0,1.6)+'s;animation-delay:'+rnd(0,1.6)+'s');
+H+='<div class="gd" style="background-image:url(hub/host.png)"></div><b>✨ Tap to start! ✨</b></div>'}
 o.innerHTML=H;document.body.appendChild(o);
-var done=false,st=0,au=null,TM=[],zg=o.querySelector('.zgo');
-function end(){if(done)return;done=true;TM.forEach(clearTimeout);if(au)WA.stop(au,400);o.style.opacity=0;
- setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(st===2)hi()},500)}
-function start(snd){if(st)return;st=snd?2:1;zg.style.display='none';o.className=o.className.replace('wait ','');
- if(snd&&WA.ok){WA.unlock();WA.load(HICLIP);au=WA.play(TR,end);TM.push(setTimeout(end,7500))}
- else TM.push(setTimeout(end,rm?2500:5600))}
+var done=false,st=0,au=null,TM=[],t0=Date.now();
+function end(){if(done)return;done=true;TM.forEach(clearTimeout);if(au)au.stop();o.style.opacity=0;
+ setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&au.on())hi()},500)}
+function start(){if(st)return;st=1;t0=Date.now();au=introAudio(TR,t0);TM.push(setTimeout(end,rm?2500:6200))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
-var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(!st)start(true);else{if(st===1){WA.unlock();st=2}end()}});
-/*no silent auto-start (iOS needs the tap for audio)*/window.__ziStart=start})();
+/*tap = skip, except the touch that just switched the sound on*/
+var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(au&&t-au.kickT<700)return;end()});
+start();window.__ziStart=start})();
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready}).then(function(){document.getElementById('ok').textContent='✈️✓'}).catch(function(){})}
 </script><style>
 #ax{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;overflow:hidden;cursor:pointer;background:#120a2a;transition:opacity .45s;-webkit-transition:opacity .45s;font-family:system-ui,-apple-system,sans-serif}
@@ -256,25 +274,21 @@ for(var f=0;f<6;f++){var dl=f*.17;S.fws+='<div class="fw" style="left:'+R(10,90)
 S.fws+=sp('💥','kb','left:12%;top:58%;-webkit-animation-delay:.6s;animation-delay:.6s')+sp('💥','kb','left:70%;top:62%;-webkit-animation-delay:.85s;animation-delay:.85s');
 var H='';ORD.forEach(function(k){H+='<div class="sc '+k+'">'+S[k]+'</div>'});
 H+='<div class="sc slam"><div class="rays"></div><div class="ttl">ALEX</div><div class="sub">⚡ ADVENTURES ⚡</div></div>';
-H+='<div class="go"><b>💥 TAP TO START! 💥</b></div><div class="tap">tap to skip ⏭</div>';
+H+='<div class="go" style="display:none"></div><div class="tap">tap to skip ⏭</div>';
 var o=document.createElement('div');o.id='ax';o.className=rm?'rm':'';o.innerHTML=H;document.body.appendChild(o);
 WA.load(HICLIP);var sc=o.querySelectorAll('.sc'),go=o.querySelector('.go'),st=0,done=false,T=[],au=null;
 function show(i){for(var k=0;k<sc.length;k++)sc[k].className=sc[k].className.replace(' on','');if(sc[i])sc[i].className+=' on';
  if(i===2&&ORD[2]==='rex'||i===1&&ORD[1]==='rex'||i===0&&ORD[0]==='rex')T.push(setTimeout(shake,650));if(i===4)shake()}
 function shake(){if(rm)return;o.className=o.className.replace(' shake','');void o.offsetWidth;o.className+=' shake'}
-function end(){if(done)return;done=true;T.forEach(clearTimeout);
- if(au&&au.pause){var a0=au,k0=0,fi=setInterval(function(){k0++;try{a0.volume=Math.max(0,1-k0/8)}catch(e){}if(k0>=8){clearInterval(fi);try{a0.pause()}catch(e){}}},50)}
- o.style.opacity=0;setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&typeof hi==='function')hi()},500)}
-function start(snd){if(st)return;st=1;go.style.display='none';
- if(snd){/*iOS: the <audio> element must be created AND play()ed synchronously inside the tap; it also plays with the silent switch on (WebAudio does not)*/
-  try{au=new Audio('hub/intro'+v+'.mp3');au.muted=false;au.volume=1;au.setAttribute('playsinline','');var pp=au.play();if(pp&&pp.catch)pp.catch(function(){});window.__axAudio=au}catch(e){au={}}
-  if(WA.ok)WA.unlock()}
+function end(){if(done)return;done=true;T.forEach(clearTimeout);if(au)au.stop();
+ o.style.opacity=0;setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&au.on()&&typeof hi==='function')hi()},500)}
+/*visuals start right away; the song autoplays if allowed, else starts in sync on the very first touch*/
+function start(){if(st)return;st=1;go.style.display='none';var t0=Date.now();au=introAudio('hub/intro'+v+'.mp3',t0);window.__axAudio=au.a;
  if(rm){show(4);T.push(setTimeout(end,2500));return}
  [0,1250,2500,3700,5000].forEach(function(t,i){T.push(setTimeout(function(){show(i)},t))});T.push(setTimeout(end,6800))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
-var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(!st)start(true);else{if(!au&&WA.ok){WA.unlock();au={}}end()}});
-/*no silent auto-start: iOS only allows the intro track from a tap, so wait for TAP TO START*/
-window.__axStart=start;})();
+var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(au&&t-au.kickT<700)return;end()});
+start();window.__axStart=start;})();
 </script>
 <script>/*sw-reload*/(function(){if(!('serviceWorker' in navigator))return;var sw=navigator.serviceWorker,had=!!sw.controller,done=false;
 sw.addEventListener('controllerchange',function(){if(!had){had=true;return}if(done)return;done=true;try{if(sessionStorage.swReloaded&&Date.now()-sessionStorage.swReloaded<10000)return;sessionStorage.swReloaded=Date.now()}catch(e){}location.reload()});
