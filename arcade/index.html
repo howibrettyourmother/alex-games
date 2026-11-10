@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<script>/*audio-guard v1*/(function(){if(window.__AG)return;var W=window,D=document,ctxs=[],els=[],hid=false,was=[],wasEl=[],pend=false,iv=W.setInterval;
+var AG=W.__AG={hidden:function(){return hid},ctxs:ctxs,els:els,blocked:0};
+function reg(c){if(c&&ctxs.indexOf(c)<0){ctxs.push(c);if(c.state==='running')c.__agWant=true;try{c.addEventListener('statechange',function(){if(c.state==='running')c.__agWant=true;if(!hid&&c.__agWant&&(c.state==='interrupted'||c.state==='suspended'))pend=true})}catch(e){}}}
+['AudioContext','webkitAudioContext'].forEach(function(n){var B=W[n];if(!B)return;try{var P=B.prototype,r=P.resume;
+ W[n]=function(a,b){var c=arguments.length?new B(a):new B();reg(c);return c};W[n].prototype=P;try{Object.setPrototypeOf(W[n],B)}catch(e){}
+ P.resume=function(){reg(this);if(hid){this.__agWant=true;return Promise.resolve()}return r.apply(this,arguments)}}catch(e){}});
+var S=W.AudioScheduledSourceNode&&AudioScheduledSourceNode.prototype;[S,W.AudioBufferSourceNode&&AudioBufferSourceNode.prototype,W.OscillatorNode&&OscillatorNode.prototype].forEach(function(p){if(!p||!p.hasOwnProperty('start'))return;var st=p.start;
+ p.start=function(){reg(this.context);if(hid){AG.blocked++;return}return st.apply(this,arguments)}});
+var M=W.HTMLMediaElement&&HTMLMediaElement.prototype;if(M){var pl=M.play;M.play=function(){if(els.indexOf(this)<0)els.push(this);if(hid){AG.blocked++;return Promise.resolve()}return pl.apply(this,arguments)}}
+var ss=W.speechSynthesis;if(ss&&ss.speak){var sp=ss.speak.bind(ss);try{ss.speak=function(u){if(hid){AG.blocked++;return}return sp(u)}}catch(e){}}
+W.setInterval=function(f){var a=[].slice.call(arguments);if(typeof f==='function')a[0]=function(){if(!hid)return f.apply(this,arguments)};return iv.apply(W,a)};
+function allEls(){D.querySelectorAll('audio,video').forEach(function(e){if(els.indexOf(e)<0)els.push(e)});return els}
+function hide(){if(hid)return;hid=true;was=[];wasEl=[];
+ ctxs.forEach(function(c){try{if(c.state==='running'||c.state==='interrupted'||c.__agWant){was.push(c);c.__agWant=true}if(c.state!=='closed')c.suspend()}catch(e){}});
+ allEls().forEach(function(e){try{if(!e.paused){wasEl.push(e);e.pause()}}catch(e2){}});try{ss&&ss.cancel()}catch(e){}}
+function show(){if(!hid||D.visibilityState==='hidden')return;hid=false;
+ was.forEach(function(c){try{c.__agWant=true;if(c.state!=='closed')c.resume().catch(function(){pend=true});}catch(e){pend=true}});
+ wasEl.forEach(function(e){try{if(e.paused){var p=e.play();p&&p.catch&&p.catch(function(){pend=true})}}catch(e2){}});
+ setTimeout(function(){was.forEach(function(c){if(c.state!=='running'&&c.state!=='closed')pend=true})},300)}
+function kick(){if(!pend||hid)return;pend=false;ctxs.forEach(function(c){try{if(c.__agWant&&c.state!=='running'&&c.state!=='closed')c.resume()}catch(e){}});
+ wasEl.forEach(function(e){try{if(e.paused)e.play().catch(function(){})}catch(x){}});wasEl=[]}
+['touchstart','touchend','pointerdown','mousedown','keydown'].forEach(function(t){W.addEventListener(t,kick,{capture:true,passive:true})});
+D.addEventListener('visibilitychange',function(){D.visibilityState==='hidden'?hide():show()});
+W.addEventListener('pagehide',hide);D.addEventListener('freeze',hide);W.addEventListener('blur',function(){if(D.visibilityState==='hidden')hide()});
+W.addEventListener('pageshow',show);W.addEventListener('focus',show);D.addEventListener('resume',show);
+iv.call(W,function(){if(!hid)ctxs.forEach(function(c){if(c.__agWant&&c.state==='interrupted')pend=true})},2000);
+AG.hide=hide;AG.show=show})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Alex's Arcade</title><meta name="theme-color" content="#5e0a14">
+<link rel="manifest" href="../manifest.json"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon-32.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@font-face{font-family:PM;src:url(pm.woff2) format('woff2');font-display:swap}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;font-family:system-ui,sans-serif;
+ background:repeating-linear-gradient(90deg,#6e0d18 0 3vw,#8d1622 3vw 5vw,#5e0a14 5vw 8vw)}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vmin;
+ padding:max(2vmin,env(safe-area-inset-top)) max(3vmin,env(safe-area-inset-right)) max(2vmin,env(safe-area-inset-bottom)) max(3vmin,env(safe-area-inset-left))}
+.cb{background:#c9975e repeating-linear-gradient(0deg,#0000 0 7px,#7a4a2212 7px 9px);border:.6vmin solid #7a4a22;box-shadow:0 1vmin 0 #4a2a10,0 1.6vmin 3vmin #0007}
+h1{margin:0;padding:1.4vmin 5vmin;font:400 9vmin/1.05 PM,"Marker Felt",cursive;color:#2f8a3a;transform:rotate(-1.5deg);border-radius:1vmin;
+ clip-path:polygon(0 10%,8% 0,22% 8%,40% 1%,58% 7%,76% 0,92% 6%,100% 2%,99% 100%,60% 97%,30% 100%,1% 96%)}
+h1 small{display:block;font-size:.36em;color:#5b3f9e;text-align:center}
+#row{display:flex;gap:3vmin;align-items:flex-end;justify-content:center;flex-wrap:nowrap}
+.cab{position:relative;width:var(--s);border-radius:2vmin 2vmin 1vmin 1vmin;padding:1.6vmin 1.6vmin 2.4vmin;cursor:pointer;transition:transform .15s;text-align:center}
+.cab:active,.cab.pr{transform:scale(.94)}.cab.go{animation:pop .6s ease-out forwards}
+.cab .scr{width:100%;aspect-ratio:1;border-radius:1.4vmin;background:#000 center/cover;border:.8vmin solid #1b1b1b;box-shadow:inset 0 0 2vmin #000a}
+.cab .nm{margin-top:1.2vmin;font:400 3.4vmin/1.05 PM,"Marker Felt",cursive;color:#1f3a6e;min-height:7vmin;display:flex;align-items:center;justify-content:center}
+.cab .tk{position:absolute;left:50%;bottom:-2.2vmin;transform:translateX(-50%) rotate(-3deg);background:#ffde3b;color:#7a2a00;font:800 2.2vmin/1 system-ui;padding:.6vmin 1.4vmin;border-radius:.6vmin;border:.3vmin dashed #b37b00;white-space:nowrap}
+.cab.big{width:calc(var(--s)*1.35)}.cab.big .nm{font-size:4.2vmin;color:#2f8a3a}
+.cab.big::before{content:"NEW!";position:absolute;right:-2vmin;top:-2.6vmin;background:#e8342a;color:#fff;font:400 3vmin/1 PM,"Marker Felt",cursive;padding:1vmin 1.6vmin;border-radius:4vmin;transform:rotate(10deg);box-shadow:0 .5vmin 0 #8a1a12;z-index:2}
+@keyframes pop{30%{transform:scale(1.1) rotate(-3deg)}100%{transform:scale(1.04)}}
+@keyframes bob{50%{transform:translateY(-1vmin)}}
+#back{position:fixed;left:max(2vmin,env(safe-area-inset-left));top:max(2vmin,env(safe-area-inset-top));padding:1.2vmin 2.4vmin;border-radius:2vmin;font:400 3.6vmin/1 PM,"Marker Felt",cursive;color:#21571f;cursor:pointer}
+@media (orientation:portrait){#row{flex-wrap:wrap}}
+</style></head><body>
+<div id="back" class="cb" role="button" aria-label="Back to Alex's games">◀ Games</div>
+<div id="app"><h1 class="cb">Alex's Arcade<small>tickets, prizes &amp; flying junk!</small></h1><div id="row"></div></div>
+<script>
+var G=[{href:'/alex-excavator-blowout/?kid=alex',img:'../hub/alex-excavator-blowout.png',clip:'../hub/a_eb.mp3',n:'Excavator Blowout',t:'by Alex and friends',big:1},
+ {href:'/fry-thief-seagull/?kid=alex',img:'../hub/fry-thief-seagull.png',clip:'../hub/a_ps.mp3',n:'Poopy Seagull',t:'arcade classic'},
+ {href:'/dino-stampede-smash/?mode=alex&kid=alex',img:'../hub/dino-stampede-smash-alex.png',clip:'../hub/a_ds.mp3',n:'Dino Smash',t:'smash it!'},
+ {href:'/alex-floor-is-lava/?kid=alex',img:'../hub/alex-floor-is-lava.png',clip:'../hub/a_fl.mp3',n:'Floor Is Lava',t:'jump!'}];
+var row=document.getElementById('row'),busy=false,cur=null;
+function play(s){try{if(cur)cur.pause();cur=new Audio(s);cur.play().catch(function(){})}catch(e){}return cur}
+G.forEach(function(g){var d=document.createElement('div');d.className='cab cb'+(g.big?' big':'');d.setAttribute('role','button');d.setAttribute('aria-label',g.n);
+ d.innerHTML='<div class="scr" style="background-image:url('+g.img+')"></div><div class="nm">'+g.n+'</div><div class="tk">🎟️ '+g.t+'</div>';
+ d.addEventListener('touchstart',function(){d.classList.add('pr')},{passive:true});['touchend','touchcancel'].forEach(function(n){d.addEventListener(n,function(){d.classList.remove('pr')},{passive:true})});
+ d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');try{localStorage.kidsHub='alex'}catch(e){}var a=play(g.clip),gone=false;function go(){if(gone)return;gone=true;location.href=g.href}if(a)a.onended=go;setTimeout(go,1400);setTimeout(function(){busy=false},3000)});
+ row.appendChild(d)});
+function lay(){var w=innerWidth,h=innerHeight,n=G.length+.35,s=Math.min((w*.9-(G.length-1)*Math.min(w,h)*.03)/n-Math.min(w,h)*.04,h*.36,260);if(h>w)s=Math.min(w*.38,h*.24);document.documentElement.style.setProperty('--s',s+'px')}
+lay();addEventListener('resize',lay);
+document.getElementById('back').addEventListener('click',function(){if(self!==top){try{parent.postMessage('hubClose',location.origin);return}catch(e){}}location.href='/alex-games/'});
+addEventListener('pageshow',function(){busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})});
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',function(){navigator.serviceWorker.register('../sw.js',{scope:'/alex-games/'}).catch(function(){})})}</script>
+</body></html>

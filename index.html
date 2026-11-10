@@ -30,6 +30,7 @@ AG.hide=hide;AG.show=show})();</script>
 
 
 
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Alex's Adventures</title><meta name="theme-color" content="#2f6b3a">
 <link rel="preload" href="hub/bg.jpg" as="image"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon-32.png">
@@ -114,7 +115,12 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-ac
 #intro.rm .fw,#intro.rm .tw,#intro.rm .fall2,#intro.rm .uni,#intro.rm .tap{display:none}
 @media (orientation:portrait){#intro .msg{font-size:13vw}.th-birthday #intro .msg,#intro.th-birthday .msg{font-size:9vw}#intro .cnt{font-size:9vw}}
 </style></head><body class="alex"><div id="app">
-<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div>
+<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div><style>#arcBtn{position:fixed;z-index:5;left:max(2vmin,env(safe-area-inset-left));bottom:max(2vmin,env(safe-area-inset-bottom));display:flex;align-items:center;gap:1.2vmin;padding:1.4vmin 2.6vmin;border-radius:2.4vmin;
+ background:#c9975e repeating-linear-gradient(0deg,#0000 0 6px,#7a4a2214 6px 8px);border:.6vmin solid #7a4a22;box-shadow:0 1vmin 0 #4a2a10,0 1.4vmin 3vmin #0006;color:#21571f;font:900 4.2vmin/1 "Marker Felt","Chalkboard SE",system-ui,sans-serif;cursor:pointer;transform:rotate(-2deg);animation:bob 2.8s ease-in-out infinite}
+#arcBtn:active{transform:scale(.94)}#arcBtn .j{font-size:6vmin}</style>
+<div id="arcBtn" role="button" tabindex="0" aria-label="Alex's Arcade"><span class="j">🕹️</span><span>Arcade</span></div>
+<script>/*alex-arcade*/(function(){var b=document.getElementById('arcBtn');if(!b)return;b.addEventListener('click',function(){if(busy)return;busy=true;talk();var a=play('hub/a_ar.mp3');try{localStorage.kidsHub=KID}catch(e){}
+ var gone=false;function go(){if(gone)return;gone=true;openGame('/alex-games/arcade/?kid=alex')}if(a)a.onended=go;setTimeout(go,1300);setTimeout(function(){busy=false},3000)})})();</script>
 <script>
 /*framed-games*/var fw=null;
 function sizeF(){if(!fw)return;fw.style.width=innerWidth+'px';fw.style.height=innerHeight+'px';var f=fw.firstChild;f.style.width=innerWidth+'px';f.style.height=innerHeight+'px'}
@@ -129,7 +135,7 @@ addEventListener('resize',sizeF);addEventListener('orientationchange',function()
 addEventListener('message',function(e){if(e.origin===location.origin&&e.data==='hubClose')closeGame()});
 if(self!==top){try{parent.postMessage('hubClose',location.origin)}catch(e){}}
 
-var T=[{"href": "/alex-cave-rescue/?kid=alex", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/?kid=alex", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/?kid=alex", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/?kid=alex", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/?kid=alex", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/?kid=alex", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/?kid=alex", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}, {"href": "/dino-stampede-smash/?mode=alex&kid=alex", "img": "hub/dino-stampede-smash-alex.png", "clip": "hub/a_ds.mp3"}],KID="alex",HASHOST=0;
+var T=[{"href": "/alex-excavator-blowout/?kid=alex", "img": "hub/alex-excavator-blowout.png", "clip": "hub/a_eb.mp3"}, {"href": "/alex-cave-rescue/?kid=alex", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/?kid=alex", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/?kid=alex", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/?kid=alex", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/?kid=alex", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/?kid=alex", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/?kid=alex", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}, {"href": "/dino-stampede-smash/?mode=alex&kid=alex", "img": "hub/dino-stampede-smash-alex.png", "clip": "hub/a_ds.mp3"}],KID="alex",HASHOST=0;
 document.body.classList.add(HASHOST?'hb':'nh');
 document.getElementById(HASHOST?'sign':'host').remove();
 var g=document.getElementById('grid'),cur=null,busy=false;
@@ -167,7 +173,7 @@ function lay(){var w=innerWidth,h=innerHeight,n=T.length,port=h>w;
  var s=Math.min((aw-(c-1)*Math.min(w,h)*.03)/c,(ah-(r-1)*Math.min(w,h)*.03)/r,330);
  g.style.setProperty('--c',c);g.style.setProperty('--s',s+'px')}
 /*continue badge: a game with saved progress on this device (same origin localStorage)*/
-var SAVE={'alex-cave-rescue':/^alexCaveRescue/,'alex-galaxy-math':/^alexGalaxyMath/,'alex-river-run':/^arr_/,'alex-floor-is-lava':/^afl_/,'fry-thief-seagull':/^fts_/,'the-bee-game':/^tbg_/,'wilson-water-pirates':/^wwp_/,'zoes-princess-castle':/^zpc/,'zoes-unicorn-adventure':/^zua_/,'doodle-and-zoe':/^dz_/};
+var SAVE={'alex-excavator-blowout':/^aeb_/,'alex-cave-rescue':/^alexCaveRescue/,'alex-galaxy-math':/^alexGalaxyMath/,'alex-river-run':/^arr_/,'alex-floor-is-lava':/^afl_/,'fry-thief-seagull':/^fts_/,'the-bee-game':/^tbg_/,'wilson-water-pirates':/^wwp_/,'zoes-princess-castle':/^zpc/,'zoes-unicorn-adventure':/^zua_/,'doodle-and-zoe':/^dz_/};
 function saved(img){var m=/hub\/([\w-]+)\.png/.exec(img),re=m&&SAVE[m[1]];if(!re)return false;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(re.test(k)&&!/mut/.test(k))return true}}catch(e){}return false}
 T.forEach(function(t,i){var d=document.createElement('div');d.className='t';d.style.backgroundImage='url('+t.img+')';
  d.setAttribute('role','button');d.setAttribute('tabindex','0');d.setAttribute('aria-label',(/([\w-]+)\.png/.exec(t.img)||['',''])[1].replace(/-/g,' '));
