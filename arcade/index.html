@@ -66,15 +66,12 @@ function play(s){try{if(cur)cur.pause();cur=new Audio(s);cur.play().catch(functi
 G.forEach(function(g){var d=document.createElement('div');d.className='cab cb'+(g.big?' big':'');d.setAttribute('role','button');d.setAttribute('aria-label',g.n);
  d.innerHTML='<div class="scr" style="background-image:url('+g.img+')"></div><div class="nm">'+g.n+'</div><div class="tk">🎟️ '+g.t+'</div>';
  d.addEventListener('touchstart',function(){d.classList.add('pr')},{passive:true});['touchend','touchcancel'].forEach(function(n){d.addEventListener(n,function(){d.classList.remove('pr')},{passive:true})});
- d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');try{localStorage.kidsHub='alex'}catch(e){}var a=play(g.clip),gone=false;function go(){if(gone)return;gone=true;try{sessionStorage.arcPlayed=1}catch(e){}location.href=g.href}if(a)a.onended=go;setTimeout(go,1400);setTimeout(function(){busy=false},3000)});
+ d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');try{localStorage.kidsHub='alex'}catch(e){}var a=play(g.clip),gone=false;function go(){if(gone)return;gone=true;location.href=g.href}if(a)a.onended=go;setTimeout(go,1400);setTimeout(function(){busy=false},3000)});
  row.appendChild(d)});
 function lay(){var w=innerWidth,h=innerHeight,n=G.length+.35,s=Math.min((w*.9-(G.length-1)*Math.min(w,h)*.03)/n-Math.min(w,h)*.04,h*.36,260);if(h>w)s=Math.min(w*.38,h*.24);document.documentElement.style.setProperty('--s',s+'px')}
 lay();addEventListener('resize',lay);
 document.getElementById('back').addEventListener('click',function(){if(self!==top){try{parent.postMessage('hubClose',location.origin);return}catch(e){}}location.href='/alex-games/'});
-/*bedtime: if this arcade visit was the "one last game", coming back here after a game returns to the hub's goodnight screen*/
-function bedBack(){try{if(!sessionStorage.arcPlayed)return;sessionStorage.removeItem('arcPlayed');var s=JSON.parse(localStorage.getItem('kidsBed_alex')||'{}');
- if(s.ph==='used'&&Date.now()-(s.t||0)<3*3600e3&&self!==top)parent.postMessage('hubClose',location.origin)}catch(e){}}
-bedBack();addEventListener('pageshow',function(){bedBack();busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})});
+addEventListener('pageshow',function(){busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})});
 </script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',function(){navigator.serviceWorker.register('../sw.js',{scope:'/alex-games/'}).catch(function(){})})}</script>
 </body></html>
