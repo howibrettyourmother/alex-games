@@ -127,7 +127,7 @@ function sizeF(){if(!fw)return;fw.style.width=innerWidth+'px';fw.style.height=in
 function openGame(h){if(self!==top||!window.postMessage){location.href=h;return}
  try{if(cur)cur.pause()}catch(e){}
  fw=document.createElement('div');fw.style.cssText='position:fixed;left:0;top:0;z-index:99999;overflow:hidden;background:#000';
- var f=document.createElement('iframe');f.src=h;f.setAttribute('allow','autoplay; fullscreen; web-share; clipboard-write');f.setAttribute('allowfullscreen','');f.setAttribute('scrolling','no');
+ var f=document.createElement('iframe');f.src=h;f.setAttribute('allow','autoplay; fullscreen; web-share; clipboard-write; microphone');f.setAttribute('allowfullscreen','');f.setAttribute('scrolling','no');
  f.style.cssText='display:block;border:0;margin:0;padding:0';fw.appendChild(f);document.body.appendChild(fw);sizeF();
  setTimeout(function(){try{f.focus()}catch(e){}},300)}
 function closeGame(){if(!fw)return;fw.parentNode.removeChild(fw);fw=null;busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})}
@@ -135,7 +135,7 @@ addEventListener('resize',sizeF);addEventListener('orientationchange',function()
 addEventListener('message',function(e){if(e.origin===location.origin&&e.data==='hubClose')closeGame()});
 if(self!==top){try{parent.postMessage('hubClose',location.origin)}catch(e){}}
 
-var T=[{"href": "/alex-excavator-blowout/?kid=alex", "img": "hub/alex-excavator-blowout.png", "clip": "hub/a_eb.mp3"}, {"href": "/alex-cave-rescue/?kid=alex", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/?kid=alex", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/?kid=alex", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/?kid=alex", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/?kid=alex", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/?kid=alex", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/?kid=alex", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}, {"href": "/dino-stampede-smash/?mode=alex&kid=alex", "img": "hub/dino-stampede-smash-alex.png", "clip": "hub/a_ds.mp3"}],KID="alex",HASHOST=0;
+var T=[{"href": "/alex-excavator-blowout/?kid=alex", "img": "hub/alex-excavator-blowout.png", "clip": "hub/a_eb.mp3"}, {"href": "/silly-beat-band/?kid=alex", "img": "hub/silly-beat-band.png", "clip": "hub/a_sb.mp3"}, {"href": "/alex-cave-rescue/?kid=alex", "img": "hub/alex-cave-rescue.png", "clip": "hub/a_cr.mp3"}, {"href": "/alex-galaxy-math/?kid=alex", "img": "hub/alex-galaxy-math.png", "clip": "hub/a_gm.mp3"}, {"href": "/alex-river-run/?kid=alex", "img": "hub/alex-river-run.png", "clip": "hub/a_rr.mp3"}, {"href": "/alex-floor-is-lava/?kid=alex", "img": "hub/alex-floor-is-lava.png", "clip": "hub/a_fl.mp3"}, {"href": "/fry-thief-seagull/?kid=alex", "img": "hub/fry-thief-seagull.png", "clip": "hub/a_ps.mp3"}, {"href": "/the-bee-game/?kid=alex", "img": "hub/the-bee-game.png", "clip": "hub/a_bg.mp3"}, {"href": "/wilson-water-pirates/?kid=alex", "img": "hub/wilson-water-pirates.png", "clip": "hub/a_wp.mp3"}, {"href": "/dino-stampede-smash/?mode=alex&kid=alex", "img": "hub/dino-stampede-smash-alex.png", "clip": "hub/a_ds.mp3"}],KID="alex",HASHOST=0;
 document.body.classList.add(HASHOST?'hb':'nh');
 document.getElementById(HASHOST?'sign':'host').remove();
 var g=document.getElementById('grid'),cur=null,busy=false;
@@ -173,7 +173,7 @@ function lay(){var w=innerWidth,h=innerHeight,n=T.length,port=h>w;
  var s=Math.min((aw-(c-1)*Math.min(w,h)*.03)/c,(ah-(r-1)*Math.min(w,h)*.03)/r,330);
  g.style.setProperty('--c',c);g.style.setProperty('--s',s+'px')}
 /*continue badge: a game with saved progress on this device (same origin localStorage)*/
-var SAVE={'alex-excavator-blowout':/^aeb_/,'alex-cave-rescue':/^alexCaveRescue/,'alex-galaxy-math':/^alexGalaxyMath/,'alex-river-run':/^arr_/,'alex-floor-is-lava':/^afl_/,'fry-thief-seagull':/^fts_/,'the-bee-game':/^tbg_/,'wilson-water-pirates':/^wwp_/,'zoes-princess-castle':/^zpc/,'zoes-unicorn-adventure':/^zua_/,'doodle-and-zoe':/^dz_/};
+var SAVE={'alex-excavator-blowout':/^aeb_/,'silly-beat-band':/^sbb_alex_songs$/,'alex-cave-rescue':/^alexCaveRescue/,'alex-galaxy-math':/^alexGalaxyMath/,'alex-river-run':/^arr_/,'alex-floor-is-lava':/^afl_/,'fry-thief-seagull':/^fts_/,'the-bee-game':/^tbg_/,'wilson-water-pirates':/^wwp_/,'zoes-princess-castle':/^zpc/,'zoes-unicorn-adventure':/^zua_/,'doodle-and-zoe':/^dz_/};
 function saved(img){var m=/hub\/([\w-]+)\.png/.exec(img),re=m&&SAVE[m[1]];if(!re)return false;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(re.test(k)&&!/mut/.test(k))return true}}catch(e){}return false}
 T.forEach(function(t,i){var d=document.createElement('div');d.className='t';d.style.backgroundImage='url('+t.img+')';
  d.setAttribute('role','button');d.setAttribute('tabindex','0');d.setAttribute('aria-label',(/([\w-]+)\.png/.exec(t.img)||['',''])[1].replace(/-/g,' '));
@@ -419,6 +419,7 @@ var G=[
   if(c[3])a.push(I('🥇','Gold medals','medal',c[3]));if(c[2])a.push(I('🥈','Silver medals','medal',c[2]));if(c[1])a.push(I('🥉','Bronze medals','medal',c[1]));var b=+kv('afl_best','alex')||0;if(b)a.stat='🔥 Best: '+b;return a}},
  {kid:'alex',n:'Poopy Seagull',img:'fry-thief-seagull',f:function(){var a=[],s=J(kv('fts_stickers','alex'),[]);(Array.isArray(s)?s:[]).forEach(function(i){if(FTS[i])a.push(I(FTE[i],FTS[i],'sticker'))});
   var b=Math.max(+kv('fts_best0','alex')||0,+kv('fts_best1','alex')||0);if(b)a.stat='🍟 Best: '+b;return a}},
+ {kid:'both',n:'Silly Beat Band',img:'silly-beat-band',f:function(){var a=[],s=J(kv('sbb_songs',KID),[]);if(!Array.isArray(s))s=[];if(s.length)a.push(I('🎵','Songs made','prize',s.length));if(s.length>=5)a.push(I('🎸','Band leader','medal'));if(s.length)a.stat='🎶 '+s.length+' song'+(s.length>1?'s':'')+' saved';return a}},
  {kid:'both',n:'The Bee Game',img:'the-bee-game',f:function(){var a=[],b=Math.max(+kv('tbg_best0','alex')||0,+kv('tbg_best1','alex')||0,+kv('tbg_best2','alex')||0),u=+kv('tbg_unlock','alex')||0;if(b)a.push(I('🐝','Best score: '+b,'medal'));if(u>=5)a.push(I('🍯','All levels open','medal'));return a}},
  {kid:'both',n:'Water Pirates',img:'wilson-water-pirates',f:function(){var a=[],b=J(kv('wwp_badges','alex'),{});for(var k in b){if(!b[k])continue;var w=WPB[k]||(/^sec(\d+)$/.test(k)?['🗺️','Reached part '+(+k.slice(3)+1)]:['🏅',k]);a.push(I(w[0],w[1],'medal'))}
   var be=+kv('wwp_best','alex')||0,tb=+lsg('wwp_team_best')||0;a.stat=[be?'🏴‍☠️ Best: '+be:'',tb?'🤝 Team best: '+tb:''].filter(Boolean).join(' · ');return a}},
