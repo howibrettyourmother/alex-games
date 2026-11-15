@@ -117,12 +117,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-ac
 #intro.rm .fw,#intro.rm .tw,#intro.rm .fall2,#intro.rm .uni,#intro.rm .tap{display:none}
 @media (orientation:portrait){#intro .msg{font-size:13vw}.th-birthday #intro .msg,#intro.th-birthday .msg{font-size:9vw}#intro .cnt{font-size:9vw}}
 </style></head><body class="alex"><div id="app">
-<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div><style>#arcBtn{position:fixed;z-index:5;left:max(2vmin,env(safe-area-inset-left));bottom:max(2vmin,env(safe-area-inset-bottom));display:flex;align-items:center;gap:1.2vmin;padding:1.4vmin 2.6vmin;border-radius:2.4vmin;
- background:#c9975e repeating-linear-gradient(0deg,#0000 0 6px,#7a4a2214 6px 8px);border:.6vmin solid #7a4a22;box-shadow:0 1vmin 0 #4a2a10,0 1.4vmin 3vmin #0006;color:#21571f;font:900 4.2vmin/1 "Marker Felt","Chalkboard SE",system-ui,sans-serif;cursor:pointer;transform:rotate(-2deg);animation:bob 2.8s ease-in-out infinite}
-#arcBtn:active{transform:scale(.94)}#arcBtn .j{font-size:6vmin}</style>
-<div id="arcBtn" role="button" tabindex="0" aria-label="Alex's Arcade"><span class="j">🕹️</span><span>Arcade</span></div>
-<script>/*alex-arcade*/(function(){var b=document.getElementById('arcBtn');if(!b)return;b.addEventListener('click',function(){if(busy)return;busy=true;talk();var a=play('hub/a_ar.mp3');try{localStorage.kidsHub=KID}catch(e){}
- var gone=false;function go(){if(gone)return;gone=true;openGame('/alex-games/arcade/?kid=alex')}if(a)a.onended=go;setTimeout(go,1300);setTimeout(function(){busy=false},3000)})})();</script>
+<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><div id="grid"></div></div><div id="ok"></div>
 <script>
 /*framed-games*/var fw=null;
 function sizeF(){if(!fw)return;fw.style.width=innerWidth+'px';fw.style.height=innerHeight+'px';var f=fw.firstChild;f.style.width=innerWidth+'px';f.style.height=innerHeight+'px'}
