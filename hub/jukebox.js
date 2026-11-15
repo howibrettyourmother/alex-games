@@ -12,14 +12,14 @@
     {title:"Unicorn Adventure", art:"/doodle-and-zoe/hub/zoes-unicorn-adventure.jpg", src:"/doodle-and-zoe/hub/videos/unicorn-adventure-720p.mp4", poster:"/doodle-and-zoe/hub/videos/unicorn-adventure-poster.jpg", kind:"video"},
     {title:"The Bee Game", art:"/doodle-and-zoe/hub/the-bee-game.jpg", src:"/doodle-and-zoe/hub/videos/the-bee-game-720p.mp4", poster:"/doodle-and-zoe/hub/videos/the-bee-game-poster.jpg", kind:"video"},
     {title:"Water Pirates", art:"/doodle-and-zoe/hub/wilson-water-pirates.jpg", src:"/doodle-and-zoe/hub/videos/water-pirates-720p.mp4", poster:"/doodle-and-zoe/hub/videos/water-pirates-poster.jpg", kind:"video"},
-    {title:"Mermaid Lagoon", art:"/doodle-and-zoe/hub/zoes-mermaid-lagoon.jpg", src:"/zoes-mermaid-lagoon/clips/intro.mp3", kind:"song"},
-    {title:"Silly Beat Band", art:"hub/silly-beat-band.jpg", src:"/silly-beat-band/music/intro.mp3", kind:"song"},
-    {title:"Dino Smash", art:"/doodle-and-zoe/hub/dino-stampede-smash-zoe.jpg", src:"/dino-stampede-smash/music/intro.mp3", kind:"song"},
-    {title:"Cave Rescue", art:"hub/alex-cave-rescue.jpg", src:"/alex-cave-rescue/music/intro.m4a", kind:"song"},
-    {title:"Galaxy Math", art:"hub/alex-galaxy-math.jpg", src:"/alex-galaxy-math/music/intro.m4a", kind:"song"},
-    {title:"River Run", art:"hub/alex-river-run.jpg", src:"/alex-river-run/music/intro.m4a", kind:"song"},
-    {title:"Floor Is Lava", art:"hub/alex-floor-is-lava.jpg", src:"/alex-floor-is-lava/music/intro.m4a", kind:"song"},
-    {title:"Poopy Seagull", art:"hub/fry-thief-seagull.jpg", src:"/fry-thief-seagull/music/intro.m4a", kind:"song"}
+    {title:"Mermaid Lagoon", art:"/doodle-and-zoe/hub/zoes-mermaid-lagoon.jpg", src:"/doodle-and-zoe/hub/videos/mermaid-lagoon-720p.mp4", poster:"/doodle-and-zoe/hub/videos/mermaid-lagoon-poster.jpg", kind:"video"},
+    {title:"Silly Beat Band", art:"hub/silly-beat-band.jpg", src:"/doodle-and-zoe/hub/videos/silly-beat-band-720p.mp4", poster:"/doodle-and-zoe/hub/videos/silly-beat-band-poster.jpg", kind:"video"},
+    {title:"Dino Smash", art:"/doodle-and-zoe/hub/dino-stampede-smash-zoe.jpg", src:"/doodle-and-zoe/hub/videos/dino-smash-720p.mp4", poster:"/doodle-and-zoe/hub/videos/dino-smash-poster.jpg", kind:"video"},
+    {title:"Cave Rescue", art:"hub/alex-cave-rescue.jpg", src:"/doodle-and-zoe/hub/videos/cave-rescue-720p.mp4", poster:"/doodle-and-zoe/hub/videos/cave-rescue-poster.jpg", kind:"video"},
+    {title:"Galaxy Math", art:"hub/alex-galaxy-math.jpg", src:"/doodle-and-zoe/hub/videos/galaxy-math-720p.mp4", poster:"/doodle-and-zoe/hub/videos/galaxy-math-poster.jpg", kind:"video"},
+    {title:"River Run", art:"hub/alex-river-run.jpg", src:"/doodle-and-zoe/hub/videos/river-run-720p.mp4", poster:"/doodle-and-zoe/hub/videos/river-run-poster.jpg", kind:"video"},
+    {title:"Floor Is Lava", art:"hub/alex-floor-is-lava.jpg", src:"/doodle-and-zoe/hub/videos/floor-is-lava-720p.mp4", poster:"/doodle-and-zoe/hub/videos/floor-is-lava-poster.jpg", kind:"video"},
+    {title:"Poopy Seagull", art:"hub/fry-thief-seagull.jpg", src:"/doodle-and-zoe/hub/videos/poopy-seagull-720p.mp4", poster:"/doodle-and-zoe/hub/videos/poopy-seagull-poster.jpg", kind:"video"}
   ];
   var loops=[
     {title:"Doodle & Zoe", art:"/doodle-and-zoe/hub/doodle-and-zoe.jpg", src:"/doodle-and-zoe/music/title.m4a", kind:"loop"},
