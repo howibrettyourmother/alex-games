@@ -124,7 +124,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-ac
 <script>
 /*framed-games*/var fw=null;
 function sizeF(){if(!fw)return;fw.style.width=innerWidth+'px';fw.style.height=innerHeight+'px';var f=fw.firstChild;f.style.width=innerWidth+'px';f.style.height=innerHeight+'px'}
-function openGame(h){if(self!==top||!window.postMessage){location.href=h;return}
+function openGame(h){try{HT.fade(400)}catch(e){}if(self!==top||!window.postMessage){location.href=h;return}
  try{if(cur)cur.pause()}catch(e){}
  fw=document.createElement('div');fw.style.cssText='position:fixed;left:0;top:0;z-index:99999;overflow:hidden;background:#000';
  var f=document.createElement('iframe');f.src=h;f.setAttribute('allow','autoplay; fullscreen; web-share; clipboard-write; microphone');f.setAttribute('allowfullscreen','');f.setAttribute('scrolling','no');
@@ -139,7 +139,7 @@ var T=[{"href": "/alex-excavator-blowout/?kid=alex", "img": "hub/alex-excavator-
 document.body.classList.add(HASHOST?'hb':'nh');
 document.getElementById(HASHOST?'sign':'host').remove();
 var g=document.getElementById('grid'),cur=null,busy=false;
-function play(src){try{if(cur){cur.pause()}cur=new Audio(src);cur.play().catch(function(){})}catch(e){}return cur}
+function play(src){try{if(cur){cur.pause()}cur=new Audio(src);cur.play().catch(function(){});if(window.HT)HT.duck(cur)}catch(e){}return cur}
 /*webaudio: decoded ahead, unlocked in the tap, gain fades (iOS ignores HTMLAudio.volume)*/
 var WA=(function(){var AC=window.AudioContext||window.webkitAudioContext,ctx=null,B={},x={ok:false,u:false};
  try{if(AC){ctx=new AC();x.ok=true}}catch(e){}
@@ -152,7 +152,7 @@ var WA=(function(){var AC=window.AudioContext||window.webkitAudioContext,ctx=nul
    s.onended=function(){if(h.on===2){h.on=0;if(cb)cb()}};s.start(0,off)}
   if(e.b||e.bad)go();else e.w=go;return h};
  x.stop=function(h,ms){if(!h)return;var was=h.on;h.on=0;if(was===2){var n=ctx.currentTime,d=(ms||400)/1000;try{h.g.gain.setValueAtTime(h.g.gain.value,n);h.g.gain.linearRampToValueAtTime(0,n+d);h.s.stop(n+d+.05)}catch(e){try{h.s.stop(0)}catch(e2){}}}};
- return x})();
+ x.ctx=ctx;return x})();
 /*introAudio: try autoplay with sound; if blocked (iOS), start on the very first touch anywhere, jumping to where the visuals are*/
 function introAudio(src,t0,onStart){var a=null,on=false,dead=false,EV=['touchstart','touchend','pointerdown','mousedown','click','keydown'],h={kickT:0};
  try{a=new Audio(src);a.preload='auto';a.volume=.85}catch(e){return h}h.a=a;window.__introAudio=a;
@@ -166,6 +166,53 @@ function introAudio(src,t0,onStart){var a=null,on=false,dead=false,EV=['touchsta
  try{if(WA.ok)WA.unlock()}catch(e){}
  try{var p=a.play();if(p&&p.then)p.then(ok,function(){window.__introBlocked=1;arm()});else if(!a.paused)ok();else arm()}catch(e){arm()}
  return h}
+/*hub theme song (per kid; build.py sets SONG, null = off). Once per browser session (sessionStorage), autoplays if allowed,
+  otherwise starts on the first tap; big 🔇 Skip song button; fades out on tile tap / game open / app hidden; ducks under voice clips.
+  Muted by localStorage.kidsHubMute='1' (or hubMute_<kid>='1'), ?mute=1 or ?song=off. Never runs inside an iframe.*/
+var SONG="hub/theme.mp3";
+var HT=(function(){var x={started:false},a=null,on=false,done=false,gn=null,V=.85,btn=null,KEY='hubSong_'+KID,
+ EV=['touchstart','touchend','pointerdown','mousedown','click','keydown'],t0=0;x.kickT=0;
+ function q(n){return(location.search.match(new RegExp('[?&]'+n+'=(\\w+)'))||[])[1]}
+ function muted(){try{if(localStorage.kidsHubMute==='1'||localStorage['hubMute_'+KID]==='1')return true}catch(e){}return q('mute')==='1'||q('song')==='off'}
+ x.due=function(){if(!SONG||self!==top||done||x.started)return false;try{if(sessionStorage[KEY])return false}catch(e){}return !muted()};
+ x.playing=function(){return on&&!done&&!!a&&!a.paused};
+ x.busy=function(){return x.started&&!done};
+ function arm(){EV.forEach(function(n){addEventListener(n,kick,{capture:true,passive:true})})}
+ function disarm(){EV.forEach(function(n){removeEventListener(n,kick,{capture:true,passive:true})})}
+ function setV(v,ms){if(!a)return;if(gn){try{var n=WA.ctx.currentTime;gn.gain.cancelScheduledValues(n);gn.gain.setValueAtTime(gn.gain.value,n);gn.gain.linearRampToValueAtTime(v,n+(ms||0)/1000)}catch(e){}}else{try{a.volume=Math.max(0,Math.min(1,v*V))}catch(e){}}}
+ /*route through Web Audio (when it is running) so fades/ducks also work on iPad, where HTMLAudio.volume is ignored*/
+ function route(){if(gn||!a||!WA.ctx||WA.ctx.state!=='running'||!WA.ctx.createMediaElementSource)return;try{var m=WA.ctx.createMediaElementSource(a),g=WA.ctx.createGain();g.gain.value=V;m.connect(g);g.connect(WA.ctx.destination);a.volume=1;gn=g}catch(e){}}
+ function ui(){if(btn||!document.body)return;btn=document.createElement('button');btn.id='hts';btn.type='button';btn.setAttribute('aria-label','Skip song');btn.innerHTML='<span>🔇</span> Skip song';
+  btn.style.cssText='position:fixed;z-index:120;right:max(2vmin,env(safe-area-inset-right));bottom:max(7vmin,env(safe-area-inset-bottom));min-height:66px;min-width:66px;padding:0 24px;display:flex;align-items:center;gap:10px;font:800 24px/1 system-ui,-apple-system,sans-serif;color:#fff;background:#1d3b24ee;border:3px solid #fff;border-radius:40px;box-shadow:0 6px 18px #0007;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:opacity .4s,transform .15s,bottom .4s';
+  ['pointerdown','touchstart','mousedown'].forEach(function(n){btn.addEventListener(n,function(e){e.stopPropagation();btn.style.transform='scale(.94)'},{passive:true})});
+  btn.addEventListener('click',function(e){e.stopPropagation();x.skip()});document.body.appendChild(btn);
+  /*sit above the cinematic's 'tap to skip' label while it is up*/
+  var lo=function(){return document.getElementById('ax')||document.getElementById('intro')},b=btn;if(lo()){b.style.bottom='max(16vmin,env(safe-area-inset-bottom))';var iv=setInterval(function(){if(!lo()||!b.parentNode){clearInterval(iv);b.style.bottom='max(7vmin,env(safe-area-inset-bottom))'}},300)}}
+ function unui(){if(!btn)return;var b=btn;btn=null;b.style.opacity=0;b.style.pointerEvents='none';setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b)},450)}
+ function ok(){if(on||done)return;on=true;x.kickT=Date.now();disarm();try{sessionStorage[KEY]=Date.now()}catch(e){}route();ui()}
+ function kick(e){if(done||on){disarm();return}
+  var t=e&&e.target;if(t&&t.closest&&t.closest('.t,#hts')){x.fade(0);return}  /*first tap is a game tile: just go, no song*/
+  try{if(WA.ok)WA.unlock()}catch(er){}
+  var off=(Date.now()-t0)/1000;try{a.currentTime=(off<5.5)?off:0}catch(er){}  /*in sync with the cinematic if it is still up, else from the top*/
+  try{var p=a.play();if(p&&p.then)p.then(ok,function(){});else ok()}catch(er){}x.kickT=Date.now()}
+ x.start=function(st){if(!x.due()){return{on:function(){return false},stop:function(){},kickT:0}}x.started=true;t0=st||Date.now();
+  try{a=new Audio(SONG);a.preload='auto';a.volume=V}catch(e){done=true;return{on:function(){return false},stop:function(){}}}window.__hubSong=a;
+  a.addEventListener('ended',function(){done=true;unui()});
+  try{if(WA.ok)WA.unlock()}catch(e){}
+  try{var p=a.play();if(p&&p.then)p.then(ok,function(){window.__songBlocked=1;arm()});else if(!a.paused)ok();else arm()}catch(e){arm()}
+  var h={a:a,on:function(){return on},stop:function(){/*the song keeps going after the cinematic*/}};
+  Object.defineProperty(h,'kickT',{get:function(){return x.kickT}});return h};
+ x.fade=function(ms){if(done&&!on){disarm();unui();return}var was=done;done=true;disarm();unui();if(!a||was&&a.paused)return;
+  if(!on){try{a.pause()}catch(e){}return}
+  ms=ms||0;route();if(gn){setV(0,ms);setTimeout(function(){try{a.pause()}catch(e){}},ms+60)}
+  else{var k=0,n=Math.max(1,Math.round(ms/50)),v0=a.volume,fi=setInterval(function(){k++;try{a.volume=Math.max(0,v0*(1-k/n))}catch(e){}if(k>=n){clearInterval(fi);try{a.pause()}catch(e){}}},50)}};
+ x.skip=function(){x.fade(250)};
+ x.duck=function(clip){if(!x.playing()||!clip)return;route();setV(.3,150);var r=function(){if(!done)setV(1,400)};clip.addEventListener('ended',r);clip.addEventListener('pause',r)};
+ document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&x.busy())x.fade(0)});
+ addEventListener('pagehide',function(){if(x.busy())x.fade(0)});
+ /*no cinematic took it (e.g. ?intro=off)? start on its own once the page is parsed*/
+ document.addEventListener('DOMContentLoaded',function(){if(x.due())x.start(Date.now()-60000)});
+ return x})();
 function talk(){var h=document.getElementById('host')||document.getElementById('sign');h.classList.remove('talk');void h.offsetWidth;h.classList.add('talk')}
 function lay(){var w=innerWidth,h=innerHeight,n=T.length,port=h>w;
  var c=port?2:(n<=4?(w/h>1.9?4:2):(w/h>1.9?5:3)),r=Math.ceil(n/c);
@@ -180,15 +227,15 @@ T.forEach(function(t,i){var d=document.createElement('div');d.className='t';d.st
  if(!t.soon&&saved(t.img)){var cb=document.createElement('span');cb.className='cb';cb.textContent='▶ Continue';d.appendChild(cb)}
  d.addEventListener('touchstart',function(){d.classList.add('pr')},{passive:true});['touchend','touchcancel'].forEach(function(n){d.addEventListener(n,function(){d.classList.remove('pr')},{passive:true})});
  if(t.soon){d.className+=' soon';d.addEventListener('click',function(){d.classList.remove('go');void d.offsetWidth;d.classList.add('go')});g.appendChild(d);return}
- d.addEventListener('click',function(){if(busy)return;busy=true;d.classList.add('go');talk();var a=play(t.clip);
+ d.addEventListener('click',function(){if(busy)return;busy=true;try{HT.fade(500)}catch(e){}d.classList.add('go');talk();var a=play(t.clip);
   try{localStorage.kidsHub=KID}catch(e){}
   var gone=false;function go(){if(gone)return;gone=true;openGame(t.href)}
   if(a)a.onended=go;setTimeout(go,1400);setTimeout(function(){busy=false},3000)});
  g.appendChild(d)});
 lay();addEventListener('resize',lay);
 var greeted=false;function busyV(){return cur&&!cur.paused&&!cur.ended}
-function hi(){if(greeted||busyV())return;greeted=true;talk();if(WA.u){WA.play(HICLIP,null,1)}else play(HICLIP)}
-(document.getElementById('host')||document.getElementById('sign')).addEventListener('click',function(){greeted=false;hi()});
+function hi(f){if(greeted||busyV()||(!f&&HT.busy()))return;greeted=true;talk();if(WA.u){WA.play(HICLIP,null,1)}else play(HICLIP)}
+(document.getElementById('host')||document.getElementById('sign')).addEventListener('click',function(){greeted=false;hi(1)});
 addEventListener('pointerdown',function(e){if(!e.target.classList.contains('t'))hi()},{once:true});
 addEventListener('pageshow',function(){busy=false;document.querySelectorAll('.go').forEach(function(x){x.classList.remove('go')})});
 var BD=null,HICLIP='hub/a_hi.mp3';
@@ -227,7 +274,7 @@ o.innerHTML=H;document.body.appendChild(o);
 var done=false,st=0,au=null,TM=[],t0=Date.now();
 function end(){if(done)return;done=true;TM.forEach(clearTimeout);if(au)au.stop();o.style.opacity=0;
  setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&au.on())hi()},500)}
-function start(){if(st)return;st=1;t0=Date.now();au=introAudio(TR,t0);TM.push(setTimeout(end,rm?2500:6200))}
+function start(){if(st)return;st=1;t0=Date.now();au=HT.due()?HT.start(t0):introAudio(TR,t0);TM.push(setTimeout(end,rm?2500:6200))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
 /*tap = skip, except the touch that just switched the sound on*/
 var last=0;o.addEventListener('click',function(){var t=Date.now();if(t-last<350)return;last=t;if(au&&t-au.kickT<700)return;end()});
@@ -327,7 +374,7 @@ function shake(){if(rm)return;o.className=o.className.replace(' shake','');void 
 function end(){if(done)return;done=true;T.forEach(clearTimeout);if(au)au.stop();
  o.style.opacity=0;setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);if(au&&au.on()&&typeof hi==='function')hi()},500)}
 /*visuals start right away; the song autoplays if allowed, else starts in sync on the very first touch*/
-function start(){if(st)return;st=1;go.style.display='none';var t0=Date.now();au=introAudio('hub/intro'+v+'.mp3',t0);window.__axAudio=au.a;
+function start(){if(st)return;st=1;go.style.display='none';var t0=Date.now();au=(window.HT&&HT.due())?HT.start(t0):introAudio('hub/intro'+v+'.mp3',t0);window.__axAudio=au.a;
  if(rm){show(4);T.push(setTimeout(end,2500));return}
  [0,1250,2500,3700,5000].forEach(function(t,i){T.push(setTimeout(function(){show(i)},t))});T.push(setTimeout(end,6800))}
 o.addEventListener('pointerdown',function(e){e.stopPropagation()});
