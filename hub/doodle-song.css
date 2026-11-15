@@ -1,0 +1,25 @@
+/* Featured Doodle's Song tile + full-screen landscape video player */
+#doodleSong{flex:0 0 auto;width:22vmin;margin:0 2.8vmin 0 0;padding:0;border:0;background:transparent;cursor:pointer;position:relative;z-index:6;touch-action:manipulation;-webkit-tap-highlight-color:transparent;animation:bob 2.6s ease-in-out infinite}
+#doodleSong .art{display:block;width:22vmin;height:22vmin;border-radius:4.4vmin;object-fit:cover;background:#fff;border:1.2vmin solid #fff;box-shadow:0 1.2vmin 0 #0002,0 1.5vmin 3vmin #0004}
+.zoe #doodleSong .art{box-shadow:0 0 0 .45vmin #ffd0ea,0 1.2vmin 0 #e0559c,0 1.5vmin 3vmin #c74d8a55}
+.alex #doodleSong .art{box-shadow:0 0 0 .45vmin #ffe9a8,0 1.2vmin 0 #b8860b,0 1.5vmin 3vmin #0005}
+#doodleSong .badge{position:absolute;left:-1.2vmin;top:-1.6vmin;width:7.2vmin;height:7.2vmin;border-radius:50%;background:#ffd93b;border:.45vmin solid #fff;display:flex;align-items:center;justify-content:center;font-size:4vmin;box-shadow:0 .5vmin 0 #b8860b,0 .6vmin 1.4vmin #0005;z-index:2}
+#doodleSong .nm{display:block;margin-top:.7vmin;text-align:center;font:900 2.3vmin/1.1 Baloo2Z,system-ui,sans-serif;letter-spacing:.01em}
+.zoe #doodleSong .nm{color:#c2185b;text-shadow:0 .25vmin 0 #fff8}
+.alex #doodleSong .nm{color:#5a3300;text-shadow:0 .25vmin 0 #fff6}
+#doodleSong:active{transform:scale(.93)}
+@media (orientation:portrait){#doodleSong{margin:0 0 3vmin 0}#doodleSong .art{width:20vmin;height:20vmin}}
+
+#loafPlayer{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:#140c18;touch-action:manipulation}
+#loafPlayer.on{display:flex}
+#loafPlayer video{width:100%;height:100%;object-fit:contain;background:#000}
+#loafPlayer .tap,#loafPlayer .ended{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vmin;background:rgba(12,6,16,.45);cursor:pointer}
+#loafPlayer .tap img,#loafPlayer .ended img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0;opacity:.85}
+#loafPlayer .tap .go,#loafPlayer .ended .msg{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2vmin}
+#loafPlayer .playico{width:18vmin;height:18vmin;border-radius:50%;background:linear-gradient(#ff7ab8,#e44594);border:.7vmin solid #fff;box-shadow:0 1.2vmin 0 #b02670,0 1.6vmin 3vmin #0008;color:#fff;font-size:9vmin;display:flex;align-items:center;justify-content:center;padding-left:1vmin}
+.alex #loafPlayer .playico{background:linear-gradient(#ffd24a,#e0a000);box-shadow:0 1.2vmin 0 #8a5a00,0 1.6vmin 3vmin #0008;color:#3a2200}
+#loafPlayer .lbl{position:relative;z-index:1;font:900 5vmin/1 Baloo2Z,system-ui,sans-serif;color:#fff;text-shadow:0 .4vmin 0 #0008}
+#loafPlayer .bar{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;justify-content:center;flex-wrap:wrap;gap:3vmin;padding:3vmin 3vmin max(3.5vmin,env(safe-area-inset-bottom));background:linear-gradient(#0000,#000c 55%)}
+#loafPlayer .bar button{appearance:none;border:0;cursor:pointer;min-height:72px;min-width:220px;padding:0 28px;border-radius:40px;font:900 28px/1 Baloo2Z,system-ui,sans-serif;color:#fff;background:linear-gradient(#ff7ab8,#e44594);border:3px solid #fff;box-shadow:0 6px 0 #b02670,0 8px 18px #0007;-webkit-tap-highlight-color:transparent}
+.alex #loafPlayer .bar button{background:linear-gradient(#ffd24a,#e0a000);color:#3a2200;box-shadow:0 6px 0 #8a5a00,0 8px 18px #0007}
+#loafPlayer .bar button:active{transform:scale(.94);box-shadow:0 3px 0 #b02670}
