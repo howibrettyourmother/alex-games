@@ -8,7 +8,6 @@
 .zoe #doodleSong .nm{color:#c2185b;text-shadow:0 .25vmin 0 #fff8}
 .alex #doodleSong .nm{color:#5a3300;text-shadow:0 .25vmin 0 #fff6}
 #doodleSong:active{transform:scale(.93)}
-@media (orientation:portrait){#doodleSong{margin:0 0 3vmin 0}#doodleSong .art{width:20vmin;height:20vmin}}
 
 #loafPlayer{position:fixed;left:0;top:0;right:0;bottom:0;width:100vw;height:100vh;z-index:400;display:none;background:#000;touch-action:manipulation;overflow:hidden}
 #loafPlayer.on{display:block}
@@ -32,3 +31,28 @@
 
 #loafPlayer .loading{cursor:default;background:rgba(12,6,16,.2)}
 #loafPlayer .loading .lbl{font:900 4.2vmin/1 Baloo2Z,system-ui,sans-serif;color:#fff;background:#0009;padding:1.4vmin 3.2vmin;border-radius:3vmin;border:.35vmin solid #fff8;text-shadow:0 .3vmin 0 #0008}
+
+#songTiles{flex:0 0 auto;display:flex;flex-direction:row;align-items:flex-start;gap:2vmin;margin:0 2.8vmin 0 0;z-index:6;position:relative}
+#danceSong{flex:0 0 auto;width:22vmin;margin:0;padding:0;border:0;background:transparent;cursor:pointer;position:relative;z-index:6;touch-action:manipulation;-webkit-tap-highlight-color:transparent;animation:bob 2.8s ease-in-out infinite}
+#danceSong .art{display:block;width:22vmin;height:22vmin;border-radius:4.4vmin;object-fit:cover;background:#fff;border:1.2vmin solid #fff;box-shadow:0 1.2vmin 0 #0002,0 1.5vmin 3vmin #0004}
+.zoe #danceSong .art{box-shadow:0 0 0 .45vmin #ffd0ea,0 1.2vmin 0 #e0559c,0 1.5vmin 3vmin #c74d8a55}
+.alex #danceSong .art{box-shadow:0 0 0 .45vmin #ffe9a8,0 1.2vmin 0 #b8860b,0 1.5vmin 3vmin #0005}
+#danceSong .badge{position:absolute;left:-1.2vmin;top:-1.6vmin;width:7.2vmin;height:7.2vmin;border-radius:50%;background:#ff7ab8;border:.45vmin solid #fff;display:flex;align-items:center;justify-content:center;font-size:4vmin;box-shadow:0 .5vmin 0 #b02670,0 .6vmin 1.4vmin #0005;z-index:2}
+.alex #danceSong .badge{background:#ffd24a;box-shadow:0 .5vmin 0 #b8860b,0 .6vmin 1.4vmin #0005}
+#danceSong .nm{display:block;margin-top:.7vmin;text-align:center;font:900 2.3vmin/1.1 Baloo2Z,system-ui,sans-serif;letter-spacing:.01em}
+.zoe #danceSong .nm{color:#c2185b;text-shadow:0 .25vmin 0 #fff8}
+.alex #danceSong .nm{color:#5a3300;text-shadow:0 .25vmin 0 #fff6}
+#danceSong:active{transform:scale(.93)}
+/* Stack the two featured song tiles in landscape so the game grid still has room, especially on Zoe's hub next to Real Doodle. */
+@media (orientation:landscape){
+  #songTiles{flex-direction:column;gap:1.1vmin;margin-right:2.4vmin}
+  #doodleSong,#danceSong{width:16.5vmin;margin:0}
+  #doodleSong .art,#danceSong .art{width:16.5vmin;height:16.5vmin;border-radius:3.3vmin;border-width:0.9vmin}
+  #doodleSong .nm,#danceSong .nm{font-size:1.9vmin;margin-top:.4vmin}
+  #doodleSong .badge,#danceSong .badge{width:5.6vmin;height:5.6vmin;font-size:3.1vmin;left:-0.9vmin;top:-1.2vmin}
+}
+@media (orientation:portrait){
+  #songTiles{flex-direction:row;margin:0 0 3vmin 0;gap:3vmin}
+  #doodleSong,#danceSong{margin:0}
+  #doodleSong .art,#danceSong .art{width:20vmin;height:20vmin}
+}

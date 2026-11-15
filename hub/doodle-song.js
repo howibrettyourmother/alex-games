@@ -7,6 +7,10 @@
   var DEFAULT_SRC='/doodle-and-zoe/hub/doodle-the-loaf-720p.mp4';
   var DEFAULT_POSTER=(/\/alex-games\//.test(location.pathname)?'/doodle-and-zoe/':'')+'hub/doodles-song-poster.jpg';
   var DEFAULT_TITLE="Doodle's Song";
+
+  var DANCE_SRC='/doodle-and-zoe/hub/videos/doodle-dance-720p.mp4';
+  var DANCE_POSTER='/doodle-and-zoe/hub/videos/doodle-dance-poster.jpg';
+  var DANCE_TITLE='The Doodle Dance';
   var curSrc=DEFAULT_SRC, curPoster=DEFAULT_POSTER, curTitle=DEFAULT_TITLE;
   var box, vid, tap, ended, loading;
 
@@ -143,15 +147,23 @@
     playNow({src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
   }
 
+  function hookTile(el, opts){
+    if(!el)return;
+    function go(e){
+      e.preventDefault();
+      e.stopPropagation();
+      playNow(opts);
+    }
+    el.addEventListener('pointerdown', go, {passive:false});
+    el.addEventListener('click', function(e){
+      if(box&&box.classList.contains('on')&&vid&&!vid.paused){ e.preventDefault(); e.stopPropagation(); return; }
+      go(e);
+    });
+  }
   function hook(){
     mount();
-    var t=document.getElementById('doodleSong');
-    if(!t)return;
-    t.addEventListener('pointerdown', onTileGesture, {passive:false});
-    t.addEventListener('click', function(e){
-      if(box&&box.classList.contains('on')&&vid&&!vid.paused){ e.preventDefault(); e.stopPropagation(); return; }
-      onTileGesture(e);
-    });
+    hookTile(document.getElementById('doodleSong'), {src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
+    hookTile(document.getElementById('danceSong'), {src:DANCE_SRC, poster:DANCE_POSTER, title:DANCE_TITLE});
   }
 
   window.__LOAF={open:playNow,close:close,replay:playNow,playNow:playNow};
