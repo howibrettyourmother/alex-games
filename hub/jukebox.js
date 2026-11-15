@@ -7,6 +7,7 @@
     {title:"The Doodle Dance", art:"hub/doodle-dance.jpg", src:"/doodle-and-zoe/hub/videos/doodle-dance-720p.mp4", poster:"/doodle-and-zoe/hub/videos/doodle-dance-poster.jpg", kind:"video"},
     {title:"Silly Face Zoe", art:"hub/silly-face-zoe.jpg", src:"/doodle-and-zoe/hub/videos/silly-face-zoe-720p.mp4", poster:"/doodle-and-zoe/hub/videos/silly-face-zoe-poster.jpg", kind:"video"},
     {title:"Go, Alex, Go!", art:"hub/go-alex-go.jpg", src:"/doodle-and-zoe/hub/videos/go-alex-go-720p.mp4", poster:"/doodle-and-zoe/hub/videos/go-alex-go-poster.jpg", kind:"video"},
+    {title:"Dance With Dad", art:"hub/dance-with-dad.jpg", src:"/doodle-and-zoe/hub/videos/dance-with-dad-720p.mp4", poster:"/doodle-and-zoe/hub/videos/dance-with-dad-poster.jpg", kind:"video"},
     {title:"Alex's Games", art:"icon-192.png", src:"/doodle-and-zoe/hub/videos/alex-games-720p.mp4", poster:"/doodle-and-zoe/hub/videos/alex-games-poster.jpg", kind:"video"},
     {title:"Excavator Blowout", art:"hub/alex-excavator-blowout.jpg", src:"/doodle-and-zoe/hub/videos/excavator-blowout-720p.mp4", poster:"/doodle-and-zoe/hub/videos/excavator-blowout-poster.jpg", kind:"video"},
     {title:"Doodle & Zoe", art:"/doodle-and-zoe/hub/doodle-and-zoe.jpg", src:"/doodle-and-zoe/hub/videos/doodle-and-zoe-720p.mp4", poster:"/doodle-and-zoe/hub/videos/doodle-and-zoe-poster.jpg", kind:"video"},
