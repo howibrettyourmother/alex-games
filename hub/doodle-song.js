@@ -1,11 +1,13 @@
-/* Doodle's Song — full-screen VIDEO. play() is called in the same tap handler.
-   Overlay/poster + "loading…" stay up until the 'playing' event so older iPads
-   never sit on a black frame. iOS fallback: webkitEnterFullscreen().
-   The service worker does not intercept this mp4 (browser streams with Range). */
+/* Full-screen video player for Doodle's Song and jukebox music videos.
+   play() is called in the same tap handler. Poster + "loading…" stay up until
+   the 'playing' event. iOS fallback: webkitEnterFullscreen().
+   The service worker does not intercept mp4 (browser streams with Range). */
 (function(){
   if(window.__LOAF)return;
-  var SRC='/doodle-and-zoe/hub/doodle-the-loaf-720p.mp4';
-  var POSTER=(/\/alex-games\//.test(location.pathname)?'/doodle-and-zoe/':'')+'hub/doodles-song-poster.jpg';
+  var DEFAULT_SRC='/doodle-and-zoe/hub/doodle-the-loaf-720p.mp4';
+  var DEFAULT_POSTER=(/\/alex-games\//.test(location.pathname)?'/doodle-and-zoe/':'')+'hub/doodles-song-poster.jpg';
+  var DEFAULT_TITLE="Doodle's Song";
+  var curSrc=DEFAULT_SRC, curPoster=DEFAULT_POSTER, curTitle=DEFAULT_TITLE;
   var box, vid, tap, ended, loading;
 
   function fadeHub(){try{if(window.HT)HT.fade(280)}catch(e){}}
@@ -26,6 +28,31 @@
   function showEnded(){ showEl(ended); }
   function showLoading(){ showEl(loading); }
 
+  function setPosters(src){
+    if(!box)return;
+    var imgs=box.querySelectorAll('.loading img, .tap img, .ended img');
+    for(var i=0;i<imgs.length;i++) imgs[i].src=src;
+    var lbl=ended&&ended.querySelector('.lbl');
+    if(lbl)lbl.textContent=curTitle;
+    if(box)box.setAttribute('aria-label', curTitle);
+  }
+
+  function applyMedia(opts){
+    if(opts&&(opts.src||opts.poster||opts.title)){
+      curSrc=opts.src||curSrc;
+      curPoster=opts.poster||curPoster;
+      curTitle=opts.title||curTitle;
+    }
+    if(!vid)return;
+    vid.setAttribute('poster', curPoster);
+    vid.poster=curPoster;
+    setPosters(curPoster);
+    if(vid.getAttribute('src')!==curSrc){
+      vid.setAttribute('src', curSrc);
+      vid.src=curSrc;
+    }
+  }
+
   function armVideo(){
     if(!vid)return;
     vid.muted=false;
@@ -37,7 +64,7 @@
     vid.setAttribute('playsinline','');
     vid.setAttribute('webkit-playsinline','');
     vid.setAttribute('preload','metadata');
-    vid.setAttribute('poster',POSTER);
+    vid.setAttribute('poster',curPoster);
     vid.removeAttribute('muted');
     vid.style.width='100vw';
     vid.style.height='100vh';
@@ -57,11 +84,11 @@
     box.id='loafPlayer';
     box.setAttribute('role','dialog');
     box.setAttribute('aria-modal','true');
-    box.setAttribute('aria-label',"Doodle's Song");
-    box.innerHTML='<video id="loafVid" playsinline webkit-playsinline preload="metadata" poster="'+POSTER+'" src="'+SRC+'"></video>'+
-      '<div class="loading" id="loafLoading" hidden><img alt="" src="'+POSTER+'"><div class="msg"><div class="lbl">loading…</div></div></div>'+
-      '<div class="tap" id="loafTap" hidden><img alt="" src="'+POSTER+'"><div class="go"><div class="playico">▶</div><div class="lbl">Tap to play</div></div></div>'+
-      '<div class="ended" id="loafEnded" hidden><img alt="" src="'+POSTER+'"><div class="msg"><div class="lbl">Doodle\'s Song</div></div></div>'+
+    box.setAttribute('aria-label', curTitle);
+    box.innerHTML='<video id="loafVid" playsinline webkit-playsinline preload="metadata" poster="'+curPoster+'" src="'+curSrc+'"></video>'+
+      '<div class="loading" id="loafLoading" hidden><img alt="" src="'+curPoster+'"><div class="msg"><div class="lbl">loading…</div></div></div>'+
+      '<div class="tap" id="loafTap" hidden><img alt="" src="'+curPoster+'"><div class="go"><div class="playico">▶</div><div class="lbl">Tap to play</div></div></div>'+
+      '<div class="ended" id="loafEnded" hidden><img alt="" src="'+curPoster+'"><div class="msg"><div class="lbl"></div></div></div>'+
       '<div class="bar">'+
         '<button type="button" id="loafReplay">🔁 Replay</button>'+
         '<button type="button" id="loafBack">🏠 Back to games</button>'+
@@ -71,6 +98,7 @@
     tap=document.getElementById('loafTap');
     ended=document.getElementById('loafEnded');
     loading=document.getElementById('loafLoading');
+    ended.querySelector('.lbl').textContent=curTitle;
     armVideo();
     hideOverlays();
     function gesturePlay(e){ e.preventDefault(); e.stopPropagation(); playNow(); }
@@ -79,7 +107,7 @@
     document.getElementById('loafReplay').addEventListener('pointerdown', gesturePlay, {passive:false});
     document.getElementById('loafBack').addEventListener('click', function(e){ e.stopPropagation(); close(); });
     vid.addEventListener('playing', hideOverlays);
-    vid.addEventListener('play', function(){ /* keep poster+loading until frames actually paint */ if(!vid.paused&&vid.currentTime>0.05) hideOverlays(); });
+    vid.addEventListener('play', function(){ if(!vid.paused&&vid.currentTime>0.05) hideOverlays(); });
     vid.addEventListener('waiting', function(){ if(box&&box.classList.contains('on')&&!vid.ended) showLoading(); });
     vid.addEventListener('ended', function(){ showEnded(); });
     document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='hidden'&&vid&&!vid.paused)try{vid.pause()}catch(e){} });
@@ -87,8 +115,9 @@
   }
 
   /* Must run directly inside a user-gesture handler (no setTimeout). */
-  function playNow(){
+  function playNow(opts){
     mount();
+    if(opts&&(opts.src||opts.poster||opts.title)) applyMedia(opts);
     fadeHub();
     stopJukebox();
     box.classList.add('on');
@@ -111,7 +140,7 @@
   function onTileGesture(e){
     e.preventDefault();
     e.stopPropagation();
-    playNow();
+    playNow({src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
   }
 
   function hook(){
