@@ -23,3 +23,5 @@
 #loafPlayer .bar button{appearance:none;border:0;cursor:pointer;min-height:72px;min-width:220px;padding:0 28px;border-radius:40px;font:900 28px/1 Baloo2Z,system-ui,sans-serif;color:#fff;background:linear-gradient(#ff7ab8,#e44594);border:3px solid #fff;box-shadow:0 6px 0 #b02670,0 8px 18px #0007;-webkit-tap-highlight-color:transparent}
 .alex #loafPlayer .bar button{background:linear-gradient(#ffd24a,#e0a000);color:#3a2200;box-shadow:0 6px 0 #8a5a00,0 8px 18px #0007}
 #loafPlayer .bar button:active{transform:scale(.94);box-shadow:0 3px 0 #b02670}
+
+#loafPlayer .tap[hidden],#loafPlayer .ended[hidden]{display:none !important}
