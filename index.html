@@ -122,7 +122,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 #intro.rm *{animation:none!important;-webkit-animation:none!important;opacity:1!important;transform:none!important;-webkit-transform:none!important}
 #intro.rm .fw,#intro.rm .tw,#intro.rm .fall2,#intro.rm .uni,#intro.rm .tap{display:none}
 @media (orientation:portrait){#intro .msg{font-size:13vw}.th-birthday #intro .msg,#intro.th-birthday .msg{font-size:9vw}#intro .cnt{font-size:9vw}}
-</style><link rel="stylesheet" href="hub/doodle-song.css?v=20261115stream"></head><body class="alex"><div id="app">
+</style><link rel="stylesheet" href="hub/jukebox.css?v=20261115jukebox"><link rel="stylesheet" href="hub/doodle-song.css?v=20261115stream"></head><body class="alex"><div id="app">
 <div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div>
 <button type="button" id="doodleSong" aria-label="Doodle's Song"><span class="badge" aria-hidden="true">🎵</span><img class="art" src="hub/doodles-song.jpg" alt=""><span class="nm">Doodle's Song</span></button>
 <div id="grid"></div></div><div id="ok"></div>
@@ -198,7 +198,7 @@ var HT=(function(){var x={started:false},a=null,on=false,done=false,gn=null,V=.8
  function unui(){if(!btn)return;var b=btn;btn=null;b.style.opacity=0;b.style.pointerEvents='none';setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b)},450)}
  function ok(){if(on||done)return;on=true;x.kickT=Date.now();disarm();try{sessionStorage[KEY]=Date.now()}catch(e){}route();ui()}
  function kick(e){if(done||on){disarm();return}
-  var t=e&&e.target;if(t&&t.closest&&t.closest('.t,#hts,#doodleSong,#loafPlayer')){x.fade(0);return}  /*first tap is a game tile or Doodle's Song: just go, no song*/
+  var t=e&&e.target;if(t&&t.closest&&t.closest('.t,#hts,#jbBtn,#jukebox,#doodleSong,#loafPlayer')){x.fade(0);return}  /*first tap is a game tile, jukebox, or Doodle's Song: just go, no song*/
   try{if(WA.ok)WA.unlock()}catch(er){}
   var off=(Date.now()-t0)/1000;try{a.currentTime=(off<5.5)?off:0}catch(er){}  /*in sync with the cinematic if it is still up, else from the top*/
   try{var p=a.play();if(p&&p.then)p.then(ok,function(){});else ok()}catch(er){}x.kickT=Date.now()}
@@ -544,4 +544,4 @@ try{localStorage.removeItem('kidsBed_'+KID);sessionStorage.removeItem('arcPlayed
 var _cg=closeGame;closeGame=function(){var r=_cg.apply(this,arguments);dot();return r};
 window.__kx={week:week,render:render,openCase:openCase,state:function(){return{bed:!!document.getElementById('bed'),saved:lsg('kidsBed_'+KID),un:unopened()}}};
 })();</script>
-<script src="hub/doodle-song.js?v=20261115stream" defer></script></body></html>
+<script src="hub/jukebox.js?v=20261115jukebox" defer></script><script src="hub/doodle-song.js?v=20261115stream" defer></script></body></html>
