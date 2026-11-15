@@ -11,6 +11,9 @@
   var DANCE_SRC='/doodle-and-zoe/hub/videos/doodle-dance-720p.mp4';
   var DANCE_POSTER='/doodle-and-zoe/hub/videos/doodle-dance-poster.jpg';
   var DANCE_TITLE='The Doodle Dance';
+  var ALEX_SONG_SRC='/doodle-and-zoe/hub/videos/go-alex-go-720p.mp4';
+  var ALEX_SONG_POSTER='/doodle-and-zoe/hub/videos/go-alex-go-poster.jpg';
+  var ALEX_SONG_TITLE='Go, Alex, Go!';
   var curSrc=DEFAULT_SRC, curPoster=DEFAULT_POSTER, curTitle=DEFAULT_TITLE;
   var box, vid, tap, ended, loading;
 
@@ -164,6 +167,7 @@
     mount();
     hookTile(document.getElementById('doodleSong'), {src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
     hookTile(document.getElementById('danceSong'), {src:DANCE_SRC, poster:DANCE_POSTER, title:DANCE_TITLE});
+    hookTile(document.getElementById('alexSong'), {src:ALEX_SONG_SRC, poster:ALEX_SONG_POSTER, title:ALEX_SONG_TITLE});
   }
 
   window.__LOAF={open:playNow,close:close,replay:playNow,playNow:playNow};
