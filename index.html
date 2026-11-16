@@ -68,6 +68,26 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 @keyframes talk{50%{transform:scale(1.08) rotate(4deg)}}
 @keyframes pop{30%{transform:scale(1.12) rotate(-3deg)}100%{transform:scale(1.05)}}
 #ok{position:fixed;right:max(1.5vmin,env(safe-area-inset-right));bottom:max(1vmin,env(safe-area-inset-bottom));font-size:3vmin;opacity:.75}
+#realdoodle{flex:0 0 auto;width:16vmin;margin:0 2.5vmin 3vmin 0;padding:0.8vmin 0.8vmin 3.4vmin;background:#fffdf7;border-radius:0.8vmin;box-shadow:0 0 0 .35vmin #ffe9a8,0 0.7vmin 0 #b8860b,0 1.2vmin 2.4vmin #0005;transform:rotate(6deg);z-index:6;cursor:pointer;position:relative;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#realdoodle img{display:block;width:100%;height:14vmin;object-fit:cover;border-radius:0.3vmin;background:#eee}
+#realdoodle figcaption{position:absolute;left:0;right:0;bottom:0.4vmin;text-align:center;font:700 2.1vmin Baloo2Z,system-ui,sans-serif;color:#5a3300;letter-spacing:.02em}
+@media (max-width:700px){#realdoodle{width:20vmin}#realdoodle img{height:17vmin}}
+@media (orientation:landscape){#realdoodle{width:14vmin;margin:0 2vmin 2vmin 0}#realdoodle img{height:12vmin}#realdoodle figcaption{font-size:1.8vmin}}
+@media (orientation:portrait){#realdoodle{margin:0 0 3vmin 0}}
+#doodleGallery{position:fixed;inset:0;z-index:420;display:none;background:rgba(22,12,0,.92);touch-action:pan-y;overflow:hidden}
+#doodleGallery.on{display:block}
+#doodleGallery .frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-54%);width:min(78vh,86vw);max-height:78vh;background:#fffdf7;padding:1.6vmin 1.6vmin 8vmin;border-radius:1.2vmin;box-shadow:0 0 0 .45vmin #ffe9a8,0 1.2vmin 0 #8a5a00,0 2vmin 4vmin #0008}
+#doodleGallery .frame img{display:block;width:100%;height:min(62vh,70vw);object-fit:contain;background:#1a1008;border-radius:.6vmin}
+#doodleGallery .cap{position:absolute;left:0;right:0;bottom:1.6vmin;text-align:center;font:800 3.2vmin/1 Baloo2Z,system-ui,sans-serif;color:#5a3300}
+#doodleGallery .dots{position:absolute;left:0;right:0;bottom:5.2vmin;display:flex;justify-content:center;gap:1.4vmin}
+#doodleGallery .dot{width:1.8vmin;height:1.8vmin;border-radius:50%;background:#c9a36a;border:.25vmin solid #fff;box-shadow:0 .2vmin 0 #8a5a00;padding:0}
+#doodleGallery .dot.on{background:#ffd24a;transform:scale(1.2)}
+#doodleGallery .nav,#doodleGallery .x{appearance:none;border:0;cursor:pointer;position:absolute;z-index:2;color:#3a2200;background:linear-gradient(#ffd24a,#e0a000);border:.4vmin solid #fff;box-shadow:0 .6vmin 0 #8a5a00,0 .8vmin 1.8vmin #0007;font:900 5vmin/1 Baloo2Z,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+#doodleGallery .nav{top:50%;width:8.5vmin;height:8.5vmin;min-width:72px;min-height:72px;margin-top:-4.2vmin;border-radius:50%}
+#doodleGallery .prev{left:max(1.5vmin,env(safe-area-inset-left))}
+#doodleGallery .next{right:max(1.5vmin,env(safe-area-inset-right))}
+#doodleGallery .x{top:max(1.5vmin,env(safe-area-inset-top));right:max(1.5vmin,env(safe-area-inset-right));min-width:72px;min-height:52px;padding:0 2.4vmin;border-radius:3vmin;font-size:3.2vmin}
+#doodleGallery .nav:active,#doodleGallery .x:active{transform:scale(.94);box-shadow:0 .3vmin 0 #8a5a00}
 @media (orientation:portrait){#app{flex-direction:column;padding:max(4vmin,env(safe-area-inset-top)) max(16vmin,env(safe-area-inset-right)) max(14vmin,env(safe-area-inset-bottom)) max(3vmin,env(safe-area-inset-left))}#host,#sign{width:20vmin;height:20vmin;margin:0 0 3vmin 0}}
 #bd{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;background:#ffe3f3e6;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;overflow:hidden;transition:opacity .6s}
 #bd .k{font-size:38vmin;animation:bob 1.6s ease-in-out infinite}#bd .p{font-size:12vmin;animation:talk .8s ease-in-out infinite}
@@ -123,7 +143,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 #intro.rm .fw,#intro.rm .tw,#intro.rm .fall2,#intro.rm .uni,#intro.rm .tap{display:none}
 @media (orientation:portrait){#intro .msg{font-size:13vw}.th-birthday #intro .msg,#intro.th-birthday .msg{font-size:9vw}#intro .cnt{font-size:9vw}}
 </style><link rel="stylesheet" href="hub/jukebox.css?v=20261115dance"><link rel="stylesheet" href="hub/doodle-song.css?v=20261115fam"></head><body class="alex"><div id="app">
-<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div>
+<div id="host" style="background-image:url(hub/host.png)"></div><div id="sign">🧭</div><figure id="realdoodle" title="Real Doodle"><img src="hub/real-doodle/judgy-loaf.jpg" alt="Real Doodle the cat"><figcaption>Real Doodle</figcaption></figure>
 <div id="songTiles"><button type="button" id="alexSong" aria-label="Go, Alex, Go!"><span class="badge" aria-hidden="true">🚀</span><img class="art" src="hub/go-alex-go.jpg" alt=""><span class="nm">Go, Alex, Go!</span></button><button type="button" id="familySong" aria-label="Dance With Dad"><span class="badge" aria-hidden="true">🕺</span><img class="art" src="hub/dance-with-dad.jpg" alt=""><span class="nm">Dance With Dad</span></button><button type="button" id="doodleSong" aria-label="Doodle's Song"><span class="badge" aria-hidden="true">🎵</span><img class="art" src="hub/doodles-song.jpg" alt=""><span class="nm">Doodle's Song</span></button><button type="button" id="danceSong" aria-label="The Doodle Dance"><span class="badge" aria-hidden="true">💃</span><img class="art" src="hub/doodle-dance.jpg" alt=""><span class="nm">The Doodle Dance</span></button></div>
 <div id="grid"></div></div><div id="ok"></div>
 <script>
@@ -198,7 +218,7 @@ var HT=(function(){var x={started:false},a=null,on=false,done=false,gn=null,V=.8
  function unui(){if(!btn)return;var b=btn;btn=null;b.style.opacity=0;b.style.pointerEvents='none';setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b)},450)}
  function ok(){if(on||done)return;on=true;x.kickT=Date.now();disarm();try{sessionStorage[KEY]=Date.now()}catch(e){}route();ui()}
  function kick(e){if(done||on){disarm();return}
-  var t=e&&e.target;if(t&&t.closest&&t.closest('.t,#hts,#jbBtn,#jukebox,#doodleSong,#danceSong,#alexSong,#familySong,#songTiles,#loafPlayer')){x.fade(0);return}  /*first tap is a game tile, jukebox, or Doodle's Song: just go, no song*/
+  var t=e&&e.target;if(t&&t.closest&&t.closest('.t,#hts,#jbBtn,#jukebox,#doodleSong,#danceSong,#alexSong,#familySong,#songTiles,#loafPlayer,#realdoodle,#doodleGallery')){x.fade(0);return}  /*first tap is a game tile, jukebox, or Doodle's Song: just go, no song*/
   try{if(WA.ok)WA.unlock()}catch(er){}
   var off=(Date.now()-t0)/1000;try{a.currentTime=(off<5.5)?off:0}catch(er){}  /*in sync with the cinematic if it is still up, else from the top*/
   try{var p=a.play();if(p&&p.then)p.then(ok,function(){});else ok()}catch(er){}x.kickT=Date.now()}
@@ -221,15 +241,17 @@ var HT=(function(){var x={started:false},a=null,on=false,done=false,gn=null,V=.8
  document.addEventListener('DOMContentLoaded',function(){if(x.due())x.start(Date.now()-60000)});
  return x})();
 function talk(){var h=document.getElementById('host')||document.getElementById('sign');h.classList.remove('talk');void h.offsetWidth;h.classList.add('talk')}
+function boxSize(el,dim){if(!el)return 0;var s=getComputedStyle(el);if(!s||s.display==='none'||s.visibility==='hidden')return 0;var r=el.getBoundingClientRect();return dim==='h'?r.height+(parseFloat(s.marginTop)||0)+(parseFloat(s.marginBottom)||0):r.width+(parseFloat(s.marginLeft)||0)+(parseFloat(s.marginRight)||0)}
 function lay(){var w=innerWidth,h=innerHeight,n=T.length,port=h>w,vmin=Math.min(w,h)/100,gap=3*vmin;
  var app=document.getElementById('app'),cs=app?getComputedStyle(app):null;
  var pL=cs?parseFloat(cs.paddingLeft):3*vmin,pR=cs?parseFloat(cs.paddingRight):16*vmin,pT=cs?parseFloat(cs.paddingTop):4*vmin,pB=cs?parseFloat(cs.paddingBottom):14*vmin;
- var host=document.getElementById('host')||document.getElementById('sign'),hostW=0,hostH=0,hostM=3*vmin;
- if(host){var hs=getComputedStyle(host);hostW=parseFloat(hs.width)||(port?20:24)*vmin;hostH=parseFloat(hs.height)||hostW}
+ var host=document.getElementById('host')||document.getElementById('sign');
+ var chromeW=boxSize(host,'w')+boxSize(document.getElementById('realdoodle'),'w')+boxSize(document.getElementById('songTiles'),'w');
+ var chromeH=boxSize(host,'h')+boxSize(document.getElementById('realdoodle'),'h')+boxSize(document.getElementById('songTiles'),'h');
  var c=port?2:(n<=4?(w/h>1.9?4:2):(w/h>1.9?5:3));
  if(!port&&n>c&&n%c===1)c+=1; /*don't leave a single leftover tile (Alex's 10-tile grid)*/
  var r=Math.ceil(n/c),aw,ah;
- if(port){aw=w-pL-pR;ah=h-pT-pB-hostH-hostM}else{aw=w-pL-pR-hostW-hostM;ah=h-pT-pB}
+ if(port){aw=w-pL-pR;ah=h-pT-pB-chromeH}else{aw=w-pL-pR-chromeW;ah=h-pT-pB}
  var s=Math.min((aw-(c-1)*gap)/c,(ah-(r-1)*gap)/r,330);if(!(s>=64))s=96;
  g.style.setProperty('--c',c);g.style.setProperty('--s',s+'px')}
 /*continue badge: a game with saved progress on this device (same origin localStorage)*/
@@ -544,4 +566,53 @@ try{localStorage.removeItem('kidsBed_'+KID);sessionStorage.removeItem('arcPlayed
 var _cg=closeGame;closeGame=function(){var r=_cg.apply(this,arguments);dot();return r};
 window.__kx={week:week,render:render,openCase:openCase,state:function(){return{bed:!!document.getElementById('bed'),saved:lsg('kidsBed_'+KID),un:unopened()}}};
 })();</script>
-<script src="hub/jukebox.js?v=20261115fam" defer></script><script src="hub/doodle-song.js?v=20261115fam" defer></script></body></html>
+
+<script>
+/* real-doodle gallery: cat-only photos, tap the polaroid to open, swipe or tap arrows to browse. never show people. */
+(function(){
+  var pics=["hub/real-doodle/judgy-loaf.jpg","hub/real-doodle/couch-loaf.jpg","hub/real-doodle/big-loaf.jpg","hub/real-doodle/paw-face.jpg","hub/real-doodle/tree-snooze.jpg"];
+  var i=0,el=document.getElementById("realdoodle"),box,gimg;
+  if(!el)return;
+  var thumb=el.querySelector("img");
+  pics.forEach(function(src){var im=new Image();im.src=src});
+  function show(n){
+    i=(n+pics.length)%pics.length;
+    if(thumb)thumb.src=pics[i];
+    if(gimg)gimg.src=pics[i];
+    if(!box)return;
+    var dots=box.querySelectorAll(".dot");
+    for(var d=0;d<dots.length;d++) dots[d].classList.toggle("on",d===i);
+  }
+  function mount(){
+    if(box)return;
+    box=document.createElement("div");
+    box.id="doodleGallery";
+    box.setAttribute("role","dialog");
+    box.setAttribute("aria-modal","true");
+    box.setAttribute("aria-label","Real Doodle");
+    var dots="";
+    for(var d=0;d<pics.length;d++) dots+='<button type="button" class="dot'+(d===i?" on":"")+'" data-i="'+d+'" aria-label="Photo '+(d+1)+'"></button>';
+    box.innerHTML='<div class="frame"><img id="doodleGalImg" alt="Real Doodle the cat" src="'+pics[i]+'"><div class="dots">'+dots+'</div><div class="cap">Real Doodle</div></div>'+
+      '<button type="button" class="nav prev" aria-label="Previous photo">‹</button>'+
+      '<button type="button" class="nav next" aria-label="Next photo">›</button>'+
+      '<button type="button" class="x" aria-label="Close">Close</button>';
+    document.body.appendChild(box);
+    gimg=document.getElementById("doodleGalImg");
+    box.querySelector(".prev").addEventListener("click",function(e){e.stopPropagation();show(i-1)});
+    box.querySelector(".next").addEventListener("click",function(e){e.stopPropagation();show(i+1)});
+    box.querySelector(".x").addEventListener("click",function(e){e.stopPropagation();close()});
+    box.querySelector(".dots").addEventListener("click",function(e){var b=e.target.closest(".dot");if(!b)return;e.stopPropagation();show(+b.getAttribute("data-i"))});
+    box.addEventListener("click",function(e){if(e.target===box)close()});
+    var sx=0,sy=0,track=false;
+    function pt(e){return e.changedTouches?e.changedTouches[0]:e}
+    box.addEventListener("pointerdown",function(e){if(e.target.closest("button"))return;track=true;sx=e.clientX;sy=e.clientY},{passive:true});
+    box.addEventListener("pointerup",function(e){if(!track)return;track=false;var dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy))return;show(dx<0?i+1:i-1)},{passive:true});
+    box.addEventListener("touchstart",function(e){var t=pt(e);track=true;sx=t.clientX;sy=t.clientY},{passive:true});
+    box.addEventListener("touchend",function(e){if(!track)return;track=false;var t=pt(e),dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy))return;show(dx<0?i+1:i-1)},{passive:true});
+    document.addEventListener("keydown",function(e){if(!box.classList.contains("on"))return;if(e.key==="Escape")close();if(e.key==="ArrowLeft")show(i-1);if(e.key==="ArrowRight")show(i+1)});
+  }
+  function open(e){if(e){e.preventDefault();e.stopPropagation()}mount();show(i);box.classList.add("on");try{if(window.HT)HT.fade(200)}catch(ex){}}
+  function close(){if(box)box.classList.remove("on")}
+  el.addEventListener("click",open);
+})();
+</script><script src="hub/jukebox.js?v=20261115fam" defer></script><script src="hub/doodle-song.js?v=20261115fam" defer></script></body></html>
