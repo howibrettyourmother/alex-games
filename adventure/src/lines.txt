@@ -1,0 +1,79 @@
+title|Alex and Doodle's Big Adventure!|amy|1.18
+yay|Yay, Alex!|amy|1.22
+star|You found a treasure star!|amy|1.18
+good|Good job, Doodle!|amy|1.2
+allstars|You found all the treasure stars!|amy|1.18
+sticker|You earned a sticker!|amy|1.25
+newitem|Ooh! Something new in the closet!|amy|1.25
+fish|Yum! A fish treat!|amy|1.25
+pet|Doodle loves you, Alex!|amy|1.2
+nap|Shhh. Doodle is napping.|amy|1.25
+oops|Uh oh, Doodle!|amy|1.3
+closet|Dress up time!|amy|1.28
+book|Your sticker book!|amy|1.25
+map|Where should we go?|amy|1.25
+p1|Dad's House!|amy|1.25
+p2|Mom's Apartment!|amy|1.25
+p3|Meadow Brook!|amy|1.18
+p4|The Park!|amy|1.25
+p5|Grandma Gail's Apartment!|amy|1.25
+dadhi|Hey Alex! Have you and Doodle seen my TV remote?|ryan|1.05
+dadty|Thank you, Alex! You found my remote!|ryan|1.05
+momhi|Hi Alex! I lost my sparkly earring.|lessac|1.08
+momty|Thank you, Alex! You found my earring!|lessac|1.08
+teachhi|Oh no! Our class dinosaur is hiding!|kristin|1.08
+teachty|Thank you, Alex! Our dino is back!|kristin|1.08
+duckhi|Where is my baby duckling?|hfc_female|1.3|/workspace/doodle-and-zoe/src/clips/a_duck.mp3
+duckty|Thank you, Alex!|hfc_female|1.3|/workspace/alex-games/adventure/src/clips/a_duck.mp3
+gmahi|Hello, Alex dear! Have you seen my yarn ball?|hfc_female|0.98
+gmaty|Thank you, Alex! Have a cookie!|hfc_female|0.98
+p6|Upland Hills Farm!|amy|1.25
+p7|Raintree Park!|amy|1.25
+p8|Stony Creek Beach!|amy|1.25
+gma2hi|Oh dear! My yarn ball rolled into the leaves!|hfc_female|0.98
+gma2ty|You found my yarn! Thank you, Alex!|hfc_female|0.98
+teach2hi|Brr! Our class dinosaur is hiding in the snow!|kristin|1.08
+teach2ty|You found our dino! Thank you, Alex!|kristin|1.08
+mom2hi|Oh no! I lost my sparkly earring in the sand!|lessac|1.08
+mom2ty|My earring! Thank you, Alex!|lessac|1.08
+p9|Downtown Rochester!|amy|1.25
+meow1|(recording)|rec|1
+meow2|(recording)|rec|1
+meow3|(recording)|rec|1
+meow4|(recording)|rec|1
+meow5|(recording)|rec|1
+purr|(recording)|rec|1
+a_duck|(recording)|rec|1
+a_owl|(recording)|rec|1
+a_dog|(recording)|rec|1
+a_frog|(recording)|rec|1
+n1|1!|kv|1.25
+n2|2!|kv|1.25
+n3|3!|kv|1.25
+n4|4!|kv|1.25
+n5|5!|kv|1.25
+n6|6!|kv|1.25
+n7|7!|kv|1.25
+n8|8!|kv|1.25
+n9|9!|kv|1.25
+n10|10!|kv|1.25
+n11|11!|kv|1.25
+n12|12!|kv|1.25
+n13|13!|kv|1.25
+n14|14!|kv|1.25
+n15|15!|kv|1.25
+n16|16!|kv|1.25
+n17|17!|kv|1.25
+n18|18!|kv|1.25
+n19|19!|kv|1.25
+n20|20!|kv|1.25
+n21|21!|kv|1.25
+n22|22!|kv|1.25
+n23|23!|kv|1.25
+n24|24!|kv|1.25
+n25|25!|kv|1.25
+n26|26!|kv|1.25
+n27|27!|kv|1.25
+n28|28!|kv|1.25
+n29|29!|kv|1.25
+n30|30!|kv|1.25
