@@ -8,15 +8,6 @@
   var DEFAULT_POSTER=(/\/alex-games\//.test(location.pathname)?'/doodle-and-zoe/':'')+'hub/doodles-song-poster.jpg';
   var DEFAULT_TITLE="Doodle's Song";
 
-  var DANCE_SRC='/doodle-and-zoe/hub/videos/doodle-dance-720p.mp4';
-  var DANCE_POSTER='/doodle-and-zoe/hub/videos/doodle-dance-poster.jpg';
-  var DANCE_TITLE='The Doodle Dance';
-  var ALEX_SONG_SRC='/doodle-and-zoe/hub/videos/go-alex-go-720p.mp4';
-  var ALEX_SONG_POSTER='/doodle-and-zoe/hub/videos/go-alex-go-poster.jpg';
-  var ALEX_SONG_TITLE='Go, Alex, Go!';
-  var FAMILY_SONG_SRC='/doodle-and-zoe/hub/videos/dance-with-dad-720p.mp4';
-  var FAMILY_SONG_POSTER='/doodle-and-zoe/hub/videos/dance-with-dad-poster.jpg';
-  var FAMILY_SONG_TITLE='Dance With Dad';
   var curSrc=DEFAULT_SRC, curPoster=DEFAULT_POSTER, curTitle=DEFAULT_TITLE;
   var box, vid, tap, ended, loading;
 
@@ -147,32 +138,7 @@
     if(box)box.classList.remove('on');
   }
 
-  function onTileGesture(e){
-    e.preventDefault();
-    e.stopPropagation();
-    playNow({src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
-  }
-
-  function hookTile(el, opts){
-    if(!el)return;
-    function go(e){
-      e.preventDefault();
-      e.stopPropagation();
-      playNow(opts);
-    }
-    el.addEventListener('pointerdown', go, {passive:false});
-    el.addEventListener('click', function(e){
-      if(box&&box.classList.contains('on')&&vid&&!vid.paused){ e.preventDefault(); e.stopPropagation(); return; }
-      go(e);
-    });
-  }
-  function hook(){
-    mount();
-    hookTile(document.getElementById('doodleSong'), {src:DEFAULT_SRC, poster:DEFAULT_POSTER, title:DEFAULT_TITLE});
-    hookTile(document.getElementById('danceSong'), {src:DANCE_SRC, poster:DANCE_POSTER, title:DANCE_TITLE});
-    hookTile(document.getElementById('alexSong'), {src:ALEX_SONG_SRC, poster:ALEX_SONG_POSTER, title:ALEX_SONG_TITLE});
-    hookTile(document.getElementById('familySong'), {src:FAMILY_SONG_SRC, poster:FAMILY_SONG_POSTER, title:FAMILY_SONG_TITLE});
-  }
+  function hook(){ mount(); }
 
   window.__LOAF={open:playNow,close:close,replay:playNow,playNow:playNow};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded', hook);
