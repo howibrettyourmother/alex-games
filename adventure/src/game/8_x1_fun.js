@@ -6,7 +6,7 @@ const dayKey=d=>{d=d||new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'
 function giftReady(){return SAVE.x.gift.last!==dayKey()}
 function weekKeys(){const d=new Date(),wd=(d.getDay()+6)%7,out=[];for(let i=0;i<7;i++){const q=new Date(d.getFullYear(),d.getMonth(),d.getDate()-wd+i);out.push(dayKey(q))}return out}
 const XL=()=>({land:W>H*1.15,bb:Math.max(64,PT(46))});
-function xHead(title,col){const L=XL(),x0=INL+12+Math.max(200,PT(150))+10,x1=W-INR-8;let sz=L.land?32:Math.min(26,W/14);if(!L.land){X.font='800 '+sz+'px '+FONT;const w=X.measureText(title).width+sz*0.44;if(w>x1-x0)sz=Math.max(14,sz*(x1-x0)/w)}txt(title,L.land?W/2:(x0+x1)/2,TOP+12+L.bb/2,sz,col||'#c2185b',{st:'#fff',sw:5})}
+function xHead(title,col){const L=XL(),x0=INL+12+Math.max(200,PT(150))+10,x1=W-INR-8;let sz=L.land?32:Math.min(26,W/14);if(!L.land){X.font='800 '+sz+'px '+FONT;const w=X.measureText(title).width+sz*0.44;if(w>x1-x0)sz=Math.max(14,sz*(x1-x0)/w)}txt(title,L.land?W/2:(x0+x1)/2,TOP+12+L.bb/2,sz,col||'#0d47a1',{st:'#fff',sw:5})}
 function bigTile(x,y,w,h,ic,lab,c,fn,id,glow){const s=1+(glow?Math.sin(T*5)*0.04:0);X.save();X.translate(x+w/2,y+h/2);X.scale(s,s);X.translate(-x-w/2,-y-h/2);
   X.fillStyle='rgba(120,60,140,0.15)';rrect(x+2,y+5,w,h,24);X.fill();X.fillStyle=c;rrect(x,y,w,h,24);X.fill();if(glow){X.strokeStyle='#fff';X.lineWidth=5;rrect(x+3,y+3,w-6,h-6,22);X.stroke()}
   txt(ic,x+w/2,y+h*0.43,Math.min(w,h)*0.42,'#000');txt(lab,x+w/2,y+h*0.84,Math.min(19,w/7),'#7b3fa0');X.restore();btn(id,x,y,w,h,fn)}
@@ -84,7 +84,7 @@ MGS.shell={init(o){o.m=[];const n=W>H?6:4;for(let i=0;i<n;i++)o.m.push({t:-rr(0,
     drawCat(INL+60,gy+10,{t:T,face:1,st:'idle',acc:catAcc(),s:1})}};
 
 // ---------- Fun Corner (one big new entry on the main menu) ----------
-const FUN=[['🎁','Surprise',()=>openScreen('gift'),'#ffe0b2','Doodle\'s surprise!'],['🌙','Sleepover',()=>openScreen('sleep'),'#d1c4e9','Kitty sleepover!'],['🏠','My House',()=>openScreen('house'),'#ffd6ec','Build a house!'],
+const FUN=[['🎁','Surprise',()=>openScreen('gift'),'#ffe0b2','Doodle\'s surprise!'],['🌙','Sleepover',()=>openScreen('sleep'),'#1565c0','Sleepover!'],['🏠','My House',()=>openScreen('house'),'#90caf9','Build a house!'],
   ['🛁','Pet Care',()=>openScreen('care'),'#b3e5fc','Pet care!'],['🖍️','Color',()=>openScreen('art'),'#fff59d','Color and draw!'],['🧲','Fridge',()=>openScreen('fridge'),'#c8e6c9','The fridge gallery!'],
   ['🎃','Pumpkins',()=>enterPlace(5),'#ffcc80',''],['❄️','Snowy Park',()=>enterPlace(6),'#e3f2fd',''],['🏖️','Beach',()=>enterPlace(7),'#b2ebf2','']];
 SCR.fun={open(){sayT(giftReady()?'Fun Corner! Doodle has a surprise for you! Tap the present!':'Fun Corner! What do you want to do?',2)}};
@@ -99,7 +99,7 @@ const _drawTitle=drawTitle;drawTitle=function(){_drawTitle();if(!giftReady())ret
   X.globalAlpha=0.5+0.3*Math.sin(T*4);circ(x,y,r+8,'#fff59d');X.globalAlpha=1;giftBox(x,y-b,r/30,0);btn('gift',x-r-8,y-r-8,2*r+16,2*r+16,()=>openScreen('gift'));
   if(stT>1.2&&stT<1.26&&!XS._giftSaid){XS._giftSaid=1;sayT('Doodle left you a surprise! Tap the present!',1)}};
 function giftBox(x,y,s,lid){X.save();X.translate(x,y);X.scale(s,s);X.fillStyle='#ff5c9e';rrect(-24,-12,48,36,6);X.fill();X.fillStyle='#ffd54f';X.fillRect(-5,-12,10,36);
-  X.save();X.translate(0,-14-lid*60);X.rotate(-lid*0.6);X.fillStyle='#ff8fc8';rrect(-28,-10,56,14,5);X.fill();X.fillStyle='#ffd54f';X.fillRect(-5,-10,10,14);bow(0,-12,1.3,'#ffd54f');X.restore();X.restore()}
+  X.save();X.translate(0,-14-lid*60);X.rotate(-lid*0.6);X.fillStyle='#1565c0';rrect(-28,-10,56,14,5);X.fill();X.fillStyle='#ffd54f';X.fillRect(-5,-10,10,14);star5(0,-12,8,'#ffd54f');X.restore();X.restore()}
 
 // ---------- Doodle's daily surprise ----------
 const BST=[['🦄','a unicorn'],['🌈','a rainbow'],['🧁','a cupcake'],['🌸','a flower'],['🦋','a butterfly'],['⭐','a star'],['🍓','a strawberry'],['🐠','a fishy'],['🎀','a bow'],['🌙','a moon'],['🍭','a lollipop'],['🐣','a baby chick']];
@@ -111,7 +111,7 @@ function giftPick(){const x=SAVE.x,n=x.gift.n%3;
   let s=BST.find(q=>!x.bst.includes(q[0]));if(!s)s=pick(BST);else x.bst.push(s[0]);return{k:'st',e:s[0],say:'A new sticker! '+s[1]+'!'}}
 SCR.gift={open(){GF={t:0,open:giftReady()?0:2,prize:null};AUD.setTheme('cozy');if(GF.open)sayT('You opened today\'s surprise! Come back tomorrow for another one!',2);else sayT('Tap the present!',2)},close(){GF=null}};
 XS.gift={upd(dt){if(GF){GF.t+=dt;if(GF.open===1)GF.ot+=dt}},
-  draw(){UI=[];softBg('#fff3e0','#ffe0f0');const L=XL(),g=GF;xHead('Surprise!','#e65100');if(!g){bigBack();return}
+  draw(){UI=[];softBg('#fff8e1','#e3f2fd');const L=XL(),g=GF;xHead('Surprise!','#e65100');if(!g){bigBack();return}
     const wkTop=H-Math.max(BOT,8)-Math.min(70,(W-INL-INR-30)/7)-94,top0=TOP+L.bb+30,s=Math.min(3.2,(wkTop-top0)/115,W/120),cx=W/2,cy=wkTop-20*s-10;
     if(g.open===0){const w=Math.sin(T*8)*0.06;X.save();X.translate(cx,cy);X.rotate(w);giftBox(0,0,s,0);X.restore();txt('👆',cx+50*s*0.6,cy+40*s*0.5+Math.sin(T*5)*6,40,'#000');
       btn('open',cx-40*s,cy-50*s,80*s,90*s,()=>{g.open=1;g.ot=0;g.prize=giftPick();const x=SAVE.x;x.gift.last=dayKey();x.gift.days=(x.gift.days||[]).concat([dayKey()]).slice(-40);x.gift.n++;save();checkUnlocks();AUD.SFX.sticker();AUD.setTheme('win');sConf(60);sSpark(cx,cy,30);

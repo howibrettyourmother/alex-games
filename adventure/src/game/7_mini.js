@@ -1,15 +1,15 @@
 // ================= mini-games: one per place, launched from a glowing spot. ~40s, can't lose, always ends with a celebration =================
 const MGSPOT={dad:{k:'laser',x:1440},mom:{k:'bubble',x:920},klub:{k:'dance',x:1580},park:{k:'fish',x:950},gma:{k:'yarn',x:960}};
 const MGINFO={fish:{n:'Fish Catch',say:'Fish Catch! Catch the falling fish!',bg:'#bfe3ff'},laser:{n:'Laser Chase',say:'Laser Chase! Tap the red dot so Doodle can pounce!',bg:'#efe1ff'},
-  yarn:{n:'Yarn Tower',say:'Yarn Tower! Tap to drop the yarn ball!',bg:'#f9e8ff'},dance:{n:'Kitty Dance',say:'Kitty Dance! Tap the glowing paw!',bg:'#e8dcff'},bubble:{n:'Bubble Pop',say:'Bubble Pop! Tap the bubbles!',bg:'#ffe9f3'}};
+  yarn:{n:'Yarn Tower',say:'Yarn Tower! Tap to drop the yarn ball!',bg:'#e3f2fd'},dance:{n:'Dino Dance-Off',say:'Dino Dance-Off! Tap the glowing footprint!',bg:'#c5e1a5'},bubble:{n:'Bubble Pop',say:'Bubble Pop! Tap the bubbles!',bg:'#e3f2fd'}};
 const MGDUR=40,PRAISE=['Great job, Alex!','You did it, Alex!','Wow, Alex! Amazing!','Yay! Super job, Alex!','Awesome, Alex!'],CHEER=['Yay!','Nice!','Wow!','Good kitty!','Hooray!'];
 // little icon per game (map, HUD, spot, end card)
 function mgIcon(k,x,y,s){X.save();X.translate(x,y);X.scale(s,s);
-  if(k==='fish'){ell(0,0,13,7,'#ff9ec7');poly([10,0,19,-7,19,7],'#ff9ec7');circ(-6,-1,1.8,'#5d3a4a')}
-  else if(k==='laser'){circ(0,0,12,'rgba(255,61,127,0.3)');circ(0,0,7,'#ff3d7f');circ(-2,-2,2.4,'#fff')}
+  if(k==='fish'){circ(0,0,12,'#ffc107');circ(0,0,8,'#ff8f00');circ(0,0,4,'#ffe082')}
+  else if(k==='laser'){circ(0,0,12,'rgba(0,200,83,0.3)');circ(0,0,7,'#00c853');circ(-2,-2,2.4,'#fff')}
   else if(k==='yarn'){circ(0,0,12,'#c5a3ff');X.strokeStyle='#fff';X.lineWidth=1.6;for(let i=-1;i<=1;i++){X.beginPath();X.ellipse(0,0,11,5,i*0.9,0,TAU);X.stroke()}}
-  else if(k==='dance'){circ(0,4,8,'#ff8fc8');for(let i=0;i<4;i++)circ(-9+i*6,-6-(i===1||i===2?3:0),3.4,'#ff8fc8');star5(12,-10,4,'#ffd54f')}
-  else if(k==='bubble'){X.beginPath();X.arc(0,0,12,0,TAU);X.fillStyle='rgba(191,227,255,0.6)';X.fill();strokeC('#9ec5ff',2);heartP(0,2,6,'#ff8fc8');circ(-5,-5,2.5,'#fff')}
+  else if(k==='dance'){ell(0,2,10,6,'#2e7d32');ell(-4,-6,5,8,'#43a047');ell(5,-5,5,8,'#1b5e20');circ(2,-8,1.6,'#222');star5(12,-10,4,'#ffd54f')}
+  else if(k==='bubble'){X.beginPath();X.arc(0,0,12,0,TAU);X.fillStyle='rgba(191,227,255,0.6)';X.fill();strokeC('#9ec5ff',2);star5(0,1,6,'#ffd54f');circ(-5,-5,2.5,'#fff')}
   X.restore()}
 // ---------- the glowing spot in each place ----------
 let spot=null;
@@ -35,7 +35,7 @@ function mgTop(){return TOP+Math.max(64,PT(46))+40}// below the back button + ti
 function drawMini(){UI=[];const m=MG;if(!m)return;MGS[m.k].draw(m.o);
   // timer: a little kitty walking along a ribbon of paw prints (no numbers to read)
   const bw=Math.min(W-40,460),bx=W/2-bw/2,by=TOP+Math.max(64,PT(46))+20,f=m.ph==='play'?clamp(m.t/MGDUR,0,1):m.ph==='end'?1:0;
-  X.fillStyle='rgba(255,255,255,0.75)';rrect(bx,by,bw,14,7);X.fill();X.fillStyle='#ff8fc8';rrect(bx,by,Math.max(14,bw*f),14,7);X.fill();circ(bx+bw*f,by+7,11,'#fff');heartP(bx+bw*f,by+9,7,'#ff5c9e');
+  X.fillStyle='rgba(255,255,255,0.75)';rrect(bx,by,bw,14,7);X.fill();X.fillStyle='#ff6f00';rrect(bx,by,Math.max(14,bw*f),14,7);X.fill();circ(bx+bw*f,by+7,11,'#fff');star5(bx+bw*f,by+7,7,'#ffd54f');
   const sw=Math.max(110,PT(80)),sx=W-INR-sw-12,sy=TOP+12;X.fillStyle='rgba(255,255,255,0.88)';rrect(sx,sy,sw,Math.max(56,PT(44)),20);X.fill();mgIcon(m.k,sx+30,sy+Math.max(56,PT(44))/2,1.2);txt(''+m.score,sx+sw-34,sy+Math.max(56,PT(44))/2+1,26,'#c2185b');
   if(m.ph==='intro'){const s=back(m.t*2.5),w=Math.min(W-40,420),h=200;X.save();X.translate(W/2,H/2);X.scale(s,s);X.fillStyle='rgba(255,255,255,0.95)';rrect(-w/2,-h/2,w,h,30);X.fill();mgIcon(m.k,0,-40,3);txt(MGINFO[m.k].n+'!',0,40,34,'#c2185b');X.restore();
     btn('skip',0,0,W,H,()=>{m.ph='play';m.t=0})}
@@ -63,7 +63,7 @@ MGS.fish={init(o){o.cx=W/2;o.tx=W/2;o.items=[];o.sp=0.5;o.idle=0;o.mt=0;o.face=1
   down(p){MG.o.tx=p.x;MG.o.idle=0},move(p){if(minPtrs.size){MG.o.tx=p.x;MG.o.idle=0}},
   draw(o){const gy=mGround(),g=X.createLinearGradient(0,0,0,gy);g.addColorStop(0,'#ffd6ec');g.addColorStop(1,'#cfe8ff');X.fillStyle=g;X.fillRect(0,0,W,gy);
     circ(W-INR-70,mgTop()+50,30,'#fff59d');cloud(W*0.25,mgTop()+70,0.8);cloud(W*0.7,mgTop()+150,0.6);
-    X.fillStyle='#a8e6b4';X.fillRect(0,gy,W,H-gy);X.fillStyle='#8fd6a0';X.fillRect(0,gy,W,6);for(let x=20;x<W;x+=60)circ(x,gy+18+(x%3)*6,4,['#ff8fc8','#fff59d','#c5a3ff'][(x/60|0)%3]);
+    X.fillStyle='#a8e6b4';X.fillRect(0,gy,W,H-gy);X.fillStyle='#8fd6a0';X.fillRect(0,gy,W,6);for(let x=20;x<W;x+=60)circ(x,gy+18+(x%3)*6,4,['#ff6f00','#fff59d','#43a047'][(x/60|0)%3]);
     for(const it of o.items){X.globalAlpha=it.dead?Math.max(0,1-it.dead*2.5):1;if(it.k==='star')drawItem('star',it.x,it.y,T);else{X.save();X.translate(it.x,it.y);X.scale(1.5,1.5);drawItem('fish',0,0,T+it.x);X.restore()}}X.globalAlpha=1;
     drawCat(o.cx,gy,{t:T,face:o.face,st:o.mt>0?'meow':o.mv?'walk':'idle',acc:catAcc(),s:1.3})}};
 const minPtrs=new Set();cv.addEventListener('pointerdown',e=>minPtrs.add(e.pointerId));['pointerup','pointercancel'].forEach(n=>cv.addEventListener(n,e=>minPtrs.delete(e.pointerId)));
@@ -107,7 +107,7 @@ MGS.yarn={init(o){o.stack=[];o.fly=[];o.ci=0;o.ball=null;o.wait=0.3;o.st=0;o.bat
     drawCat(INL+70,gy,{t:T,face:1,st:o.bat>0?'bat':'idle',acc:catAcc(),s:1.1})},
   ball(c){circ(0,0,this.R,c);X.strokeStyle='rgba(255,255,255,0.75)';X.lineWidth=2;for(let i=-1;i<=1;i++){X.beginPath();X.ellipse(0,0,this.R-2,9,i*0.9,0,TAU);X.stroke()}}};
 // ---------- Meadow Brook: Dino Dance (tap the glowing paw) ----------
-const PADC=['#ff8fc8','#b388ff','#80d8ff','#ffd54f'],PADN=[72,76,79,84];
+const PADC=['#e53935','#1565c0','#43a047','#ffd54f'],PADN=[72,76,79,84];
 MGS.dance={init(o){o.glow=-1;o.gT=0;o.next=0.5;o.last=-1;o.dance=0;o.mv=0;o.pads=[];o.press=[0,0,0,0]},
   layout(o){const land=W>H*1.15,s=Math.max(PT(66),Math.min(land?120:110,(W-INL-INR-60)/(land?4:2)-20)),gy=H-Math.max(BOT,8)-16;o.pads=[];
     if(land){const gap=s*0.35,tw=4*s+3*gap;for(let i=0;i<4;i++)o.pads.push({x:W/2-tw/2+i*(s+gap)+s/2,y:gy-s/2,r:s/2})}
@@ -115,8 +115,8 @@ MGS.dance={init(o){o.glow=-1;o.gT=0;o.next=0.5;o.last=-1;o.dance=0;o.mv=0;o.pads
   update(dt,o){o.dance-=dt;for(let i=0;i<4;i++)o.press[i]-=dt;if(o.glow<0){o.next-=dt;if(o.next<=0){let g;do g=(R()*4)|0;while(g===o.last);o.glow=g;o.last=g;o.gT=0}}else{o.gT+=dt;if(o.gT>2.4){o.glow=-1;o.next=0.3}}},
   down(p){const o=MG.o;o.pads.forEach((pd,i)=>{if(Math.hypot(p.x-pd.x,p.y-pd.y)<pd.r+12){o.press[i]=0.18;AUD.SFX.note(PADN[i]);if(i===o.glow){o.glow=-1;o.next=0.35;o.dance=0.7;o.mv++;mgScore(1,pd.x,pd.y-pd.r);sHearts(W/2,this.stageY(o)-80,2)}}})},
   stageY(o){const top=o.pads.length?Math.min(...o.pads.map(p=>p.y-p.r)):H*0.7;return Math.max(mgTop()+150,top-30)},
-  draw(o){this.layout(o);const sy=this.stageY(o);X.fillStyle='#e8dcff';X.fillRect(0,0,W,H);X.fillStyle='#c39bef';for(let x=0;x<W;x+=50){X.beginPath();X.moveTo(x,0);X.quadraticCurveTo(x+25,mgTop()+30,x+50,0);X.fill()}
-    X.fillStyle='#ffd6ec';rrect(INL+10,sy-6,W-INL-INR-20,22,10);X.fill();X.globalAlpha=0.25;for(let i=0;i<3;i++){const x=W*(0.25+i*0.25)+Math.sin(T+i)*30;poly([x-14,mgTop(),x+14,mgTop(),x+70,sy,x-70,sy],'#fff59d')}X.globalAlpha=1;
+  draw(o){this.layout(o);const sy=this.stageY(o);X.fillStyle='#1b5e20';X.fillRect(0,0,W,H);X.fillStyle='#0d47a1';for(let x=0;x<W;x+=50){X.beginPath();X.moveTo(x,0);X.quadraticCurveTo(x+25,mgTop()+30,x+50,0);X.fill()}
+    X.fillStyle='#ff8f00';rrect(INL+10,sy-6,W-INL-INR-20,22,10);X.fill();X.globalAlpha=0.25;for(let i=0;i<3;i++){const x=W*(0.25+i*0.25)+Math.sin(T+i)*30;poly([x-14,mgTop(),x+14,mgTop(),x+70,sy,x-70,sy],'#fff59d')}X.globalAlpha=1;
     const dn=o.dance>0,b=dn?-Math.abs(Math.sin(T*9))*16:-Math.abs(Math.sin(T*4.6))*4;const mv=o.mv%3;
     X.save();X.translate(W/2-(W<500?110:150),sy);drawAlex(0,0,{t:T*1.2,face:1,walk:1,st:'walk',acc:heroAcc()});X.restore();
     drawCat(W/2,sy+b,{t:T,face:dn&&mv===1?-1:1,st:dn?(mv===2?'meow':'air'):'idle',acc:catAcc(),s:1.25});
@@ -124,14 +124,14 @@ MGS.dance={init(o){o.glow=-1;o.gT=0;o.next=0.5;o.last=-1;o.dance=0;o.mv=0;o.pads
     o.pads.forEach((pd,i)=>{const gl=i===o.glow,pr=o.press[i]>0,s=gl?1+Math.sin(T*10)*0.06:1;if(gl){circ(pd.x,pd.y,pd.r*s+14,'rgba(255,245,157,0.85)')}circ(pd.x,pd.y+(pr?3:0),pd.r*s,gl?PADC[i]:'rgba(255,255,255,0.9)');
       const k=pd.r/40,c=gl?'#fff':PADC[i];X.save();X.translate(pd.x,pd.y+(pr?3:0));circ(0,6*k,12*k,c);for(let j=0;j<4;j++)circ((-14+j*9.3)*k,(-10-(j===1||j===2?5:0))*k,5*k,c);X.restore()})}};
 // ---------- Mom's Apartment: Bubble Pop ----------
-const BUBK=['heart','star','fish','flower'];
+const BUBK=['star','bolt','fish','leaf'];
 MGS.bubble={init(o){o.b=[];o.sp=0.2;o.bat=0},
   update(dt,o){o.sp-=dt;o.bat-=dt;if(o.sp<=0&&o.b.length<10){o.sp=rr(0.55,0.8);o.b.push({x:rr(INL+60,W-INR-60),y:H+40,r:rr(30,42),vy:rr(55,85),ph:R()*6,k:pick(BUBK),pop:0})}
     for(const b of o.b){if(b.pop){b.pop+=dt;continue}b.y-=b.vy*dt;b.x+=Math.sin(MG.t*1.5+b.ph)*22*dt}o.b=o.b.filter(b=>b.pop?b.pop<0.25:b.y>mgTop()-20)},
   down(p){const o=MG.o;let best=null,bd=1e9;for(const b of o.b){if(b.pop)continue;const d=Math.hypot(p.x-b.x,p.y-b.y);if(d<Math.max(b.r+14,PT(26))&&d<bd){bd=d;best=b}}if(best){best.pop=0.01;AUD.SFX.pop();o.bat=0.4;mgScore(1,best.x,best.y)}},
-  draw(o){X.fillStyle='#fff3f9';X.fillRect(0,0,W,H);X.fillStyle='#ffe3f0';for(let x=0;x<W;x+=36)X.fillRect(x,0,14,H);const gy=mGround();X.fillStyle='#ecd8f5';X.fillRect(0,gy,W,H-gy);
+  draw(o){X.fillStyle='#e3f2fd';X.fillRect(0,0,W,H);X.fillStyle='#bbdefb';for(let x=0;x<W;x+=36)X.fillRect(x,0,14,H);const gy=mGround();X.fillStyle='#1565c0';X.fillRect(0,gy,W,H-gy);
     DECO.window({x:INL+30,y:mgTop()+30,w:110,h:90});
     for(const b of o.b){if(b.pop){X.globalAlpha=1-b.pop*4;X.beginPath();X.arc(b.x,b.y,b.r*(1+b.pop*3),0,TAU);strokeC('#9ec5ff',3);X.globalAlpha=1;continue}
       X.globalAlpha=0.35;circ(b.x,b.y,b.r,'#cfe8ff');X.globalAlpha=1;X.beginPath();X.arc(b.x,b.y,b.r,0,TAU);strokeC('rgba(150,190,255,0.9)',2.5);ell(b.x-b.r*0.4,b.y-b.r*0.45,b.r*0.22,b.r*0.13,'#fff',-0.6);
-      const s=b.r/36;if(b.k==='heart')heartP(b.x,b.y+4*s,13*s,'#ff8fc8');else if(b.k==='star')star5(b.x,b.y,14*s,'#ffd54f');else if(b.k==='fish'){X.save();X.translate(b.x,b.y);X.scale(1.3*s,1.3*s);drawItem('fish',0,0,0);X.restore()}else{for(let i=0;i<5;i++){const a=i*TAU/5;circ(b.x+Math.cos(a)*7*s,b.y+Math.sin(a)*7*s,5*s,'#c5a3ff')}circ(b.x,b.y,4*s,'#fff59d')}}
+      const s=b.r/36;if(b.k==='bolt'||b.k==='heart'){X.fillStyle='#ffd54f';X.beginPath();X.moveTo(b.x-4*s,b.y-10*s);X.lineTo(b.x+6*s,b.y-2*s);X.lineTo(b.x-2*s,b.y-2*s);X.lineTo(b.x+4*s,b.y+10*s);X.lineTo(b.x-6*s,b.y+2*s);X.lineTo(b.x+2*s,b.y+2*s);X.closePath();X.fill()}else if(b.k==='star')star5(b.x,b.y,14*s,'#ffd54f');else if(b.k==='leaf'){ell(b.x,b.y,8*s,12*s,'#43a047')}else if(b.k==='fish'){X.save();X.translate(b.x,b.y);X.scale(1.3*s,1.3*s);drawItem('fish',0,0,0);X.restore()}else{for(let i=0;i<5;i++){const a=i*TAU/5;circ(b.x+Math.cos(a)*7*s,b.y+Math.sin(a)*7*s,5*s,'#c5a3ff')}circ(b.x,b.y,4*s,'#fff59d')}}
     drawCat(W/2,gy,{t:T,face:1,st:o.bat>0?'bat':'idle',acc:catAcc(),s:1.2})}};

@@ -1,6 +1,6 @@
 // ================= state, save data, Alex physics, Doodle follower, interactions, tasks =================
 let state='title',T=0,stT=0,TS=1,overlay=null,camX=0;
-const ITEMS=[{k:'bow',n:'Pink Bow'},{k:'crown',n:'Crown'},{k:'tutu',n:'Tutu'},{k:'cape',n:'Cape'},{k:'glasses',n:'Heart Sunglasses'},{k:'flower',n:'Flower'},{k:'collar',n:'Bell Collar'},
+const ITEMS=[{k:'bow',n:'Adventure Bandana'},{k:'crown',n:'Crown'},{k:'tutu',n:'Tutu'},{k:'cape',n:'Cape'},{k:'glasses',n:'Cool Shades'},{k:'flower',n:'Leaf Badge'},{k:'collar',n:'Bell Collar'},
   {k:'horn',n:'Unicorn Horn'},{k:'bowtie',n:'Purple Bow Tie'},{k:'trail',n:'Sparkle Trail'},{k:'wings',n:'Fairy Wings'},{k:'sweater',n:'Heart Sweater'},
   {k:'witch',n:'Witch Hat',sea:'hal'},{k:'santa',n:'Santa Hat',sea:'win'},{k:'party',n:'Party Hat',sea:'bday'},{k:'dino',n:'Dino Hood'},{k:'explorer',n:'Explorer Hat'},{k:'pack',n:'Treasure Pack'}];
 // how the new items unlock (all gentle): kitty friends found, different mini-games played; seasonal hats unlock on their own during the season
@@ -8,10 +8,10 @@ const UNLOCK2={bowtie:()=>kitCount()>=1,horn:()=>mgCount()>=1,trail:()=>mgCount(
 const UNLOCK_HINT={bowtie:'Find a kitty friend!',horn:'Play a game!',trail:'Play 2 games!',wings:'Find 3 kitty friends!',sweater:'Play 3 games!',witch:'Comes in October!',santa:'Comes in December!',party:"Comes on Alex's birthday!",collar:'Collect 30 fish!',dino:'Finish Meadow Brook!',explorer:"Help Dad!",pack:"Help Mom!"};
 const UNLOCK={dad:'explorer',mom:'pack',klub:'dino',park:'glasses',gma:'flower'};
 const TOPS=['#ff9cc8','#c39bef','#9fd8ff','#ffe08a','#a8e6c8','#d1a6ff','#ff6fae'],TOPFISH=[0,10,25,40,60,75,90],TUTUS=['#bfe3ff','#ffc1e3','#e1bee7','#fff59d','#c9a8ff','#ffffff'],HBOWS=[null,'#ff5c9e','#b388ff','#ffd54f'],ZEARS=[null,'#ff8fc8','#b388ff','#f2eef0'];
-function defSave(){return{p:{},fish:0,un:{cape:1,bow:1},wear:{cape:1,bow:1},zoe:{top:TOPS[0],tutu:TUTUS[0],bow:HBOWS[1],ears:null},kit:{},mg:{},fl:{},quest:{}}}
+function defSave(){return{p:{},fish:0,un:{cape:1,bow:1},wear:{cape:1},zoe:{top:TOPS[0],tutu:TUTUS[0],bow:HBOWS[1],ears:null},kit:{},mg:{},fl:{},quest:{}}}
 // older saves (v1.2) simply lack the new fields: fill them in without touching what is there
 let SAVE;try{SAVE=Object.assign(defSave(),JSON.parse(LS.get('save','{}')))}catch(e){SAVE=defSave()}
-for(const k of ['kit','mg','fl','un','wear','p'])if(!SAVE[k]||typeof SAVE[k]!=='object')SAVE[k]={};if(!SAVE.zoe||typeof SAVE.zoe!=='object')SAVE.zoe=defSave().zoe;if(typeof SAVE.fish!=='number')SAVE.fish=+SAVE.fish||0;
+for(const k of ['kit','mg','fl','un','wear','p'])if(!SAVE[k]||typeof SAVE[k]!=='object')SAVE[k]={};if(!SAVE.zoe||typeof SAVE.zoe!=='object')SAVE.zoe=defSave().zoe;if(typeof SAVE.fish!=='number')SAVE.fish=+SAVE.fish||0;if(!SAVE.fl.noBow){SAVE.fl.noBow=1;if(SAVE.wear)SAVE.wear.bow=0;save()}
 const kitCount=()=>Object.keys(SAVE.kit).length,mgCount=()=>Object.keys(SAVE.mg).length;
 // returns the items that just unlocked (so the caller can celebrate)
 function checkUnlocks(){const got=[];for(const k in UNLOCK2)if(!SAVE.un[k]&&UNLOCK2[k]()){SAVE.un[k]=1;got.push(k)}if(got.length)save();return got}
@@ -107,7 +107,7 @@ function update(dt){T+=dt;stT+=dt;if(banner){banner.t+=dt;if(banner.t>2.6)banner
   for(const s of stars)if(!s.got&&Math.hypot(s.x-c.x,s.y-(c.y-26))<34)collectStar(s);
   for(const f of fish)if(!f.got&&Math.hypot(f.x-c.x,f.y-(c.y-24))<30){f.got=1;SAVE.fish++;save();AUD.SFX.treat();sparkles(f.x,f.y,6);{const t=performance.now();if(t-(window._fcT||0)>1800)window._fcN=0;window._fcT=t;window._fcN=(window._fcN||0)%10+1;float(String(window._fcN),f.x,f.y-46,'#fff59d');AUD.count(window._fcN,window._fcN===1)}// count each fish: one, two, three...
   float('+1 🐟',f.x,f.y-20,'#ffc1e3');
-    if(SAVE.fish&&SAVE.fish%15===0){float('Fish treats!',c.x,c.y-80,'#fff59d');AUD.SFX.sticker()}if(SAVE.fish===30){SAVE.un.collar=1;save();float('Bell Collar unlocked!',c.x,c.y-100,'#fff59d')}}
+    if(SAVE.fish&&SAVE.fish%15===0){float('Coins!',c.x,c.y-80,'#ffd54f');AUD.SFX.sticker()}if(SAVE.fish===30){SAVE.un.collar=1;save();float('Bell Collar unlocked!',c.x,c.y-100,'#fff59d')}}
   // task item
   if(task.st==='free'&&Math.hypot(task.x-c.x,task.y-(c.y-20))<38){task.st='carried';cat.carry=task.k;AUD.SFX.chime();sparkles(task.x,task.y,10);float('Bring it back!',c.x,c.y-80,'#fff59d')}
   if(task.st==='carried'){if(task.k==='duckling'){task.x+=((c.x-c.face*40)-task.x)*Math.min(1,dt*4);task.y=0}else{task.x=c.x+c.face*24;task.y=c.y-34}

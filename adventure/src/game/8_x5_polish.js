@@ -33,24 +33,24 @@ if(window.__X)window.__X.itemC=i=>{const R0=houseRoom(),it=SAVE.x.house.items[i]
 if(window.__X)window.__X.tapG=(x,y)=>{const r=uiTap({x,y});return [r,SAVE.x.house.items.length,SAVE===window.__D.save]};
 // --- Kitty Dance Party: disco lights, everyone bops to the beat; tap a kitty to make it spin; star button = confetti jump ---
 let DP=null;
-FUN.push(['🪩','Dance Party',()=>openScreen('dance'),'#f8bbd0','Kitty dance party!']);
-SCR.dance={open(){DP={sp:{},jump:0,lights:0};AUD.setTheme('park');sayT('Dance party! Tap a kitty to make it dance!',2)},close(){DP=null;AUD.setTheme('cozy')}};
+FUN.push(['🕺','Dance-Off',()=>openScreen('dance'),'#ff8f00','Dance-Off! Breakdance with Doodle!']);
+SCR.dance={open(){DP={sp:{},jump:0,lights:0};AUD.setTheme('park');sayT('Dance-Off! Tap a friend to breakdance!',2)},close(){DP=null;AUD.setTheme('cozy')}};
 function danceLay(){const L=XL(),P=petList().slice(0,7),n=P.length+1,fy=H*0.86,span=W-INL-INR-120,gap=span/Math.max(n,2),k=Math.min(1.15,(H-TOP-L.bb)/190);
   return P.map((p,i)=>{const j=i<P.length/2?i:i+1;return{p,x:INL+60+gap*(j+0.5),y:fy,s:k}}).concat([{hero:1,x:INL+60+gap*(Math.ceil(P.length/2)+0.5),y:fy,s:k}])}
 XS.dance={upd(dt){if(!DP)return;DP.jump=Math.max(0,DP.jump-dt);for(const k in DP.sp)DP.sp[k]=Math.max(0,DP.sp[k]-dt)},
  draw(){UI=[];if(!DP){bigBack();return}const L=XL(),beat=T*2.2*Math.PI;
-  const g=X.createLinearGradient(0,0,0,H);g.addColorStop(0,'#2a1050');g.addColorStop(1,'#6a1b9a');X.fillStyle=g;X.fillRect(0,0,W,H);
+  const g=X.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0d47a1');g.addColorStop(1,'#1b5e20');X.fillStyle=g;X.fillRect(0,0,W,H);
   // light beams from the disco ball
-  const bx=W/2,by=TOP+30;X.save();X.globalCompositeOperation='lighter';['#ff4f9a','#4fc3f7','#ffd54f','#81c784','#b388ff'].forEach((c,i)=>{const a=Math.PI/2+Math.sin(T*0.9+i*1.3)*0.9;X.fillStyle=c+'33';X.beginPath();X.moveTo(bx,by);X.lineTo(bx+Math.cos(a-0.09)*H*1.4,by+Math.sin(a-0.09)*H*1.4);X.lineTo(bx+Math.cos(a+0.09)*H*1.4,by+Math.sin(a+0.09)*H*1.4);X.closePath();X.fill()});X.restore();
+  const bx=W/2,by=TOP+30;X.save();X.globalCompositeOperation='lighter';['#ff6f00','#4fc3f7','#ffd54f','#81c784','#e53935'].forEach((c,i)=>{const a=Math.PI/2+Math.sin(T*0.9+i*1.3)*0.9;X.fillStyle=c+'33';X.beginPath();X.moveTo(bx,by);X.lineTo(bx+Math.cos(a-0.09)*H*1.4,by+Math.sin(a-0.09)*H*1.4);X.lineTo(bx+Math.cos(a+0.09)*H*1.4,by+Math.sin(a+0.09)*H*1.4);X.closePath();X.fill()});X.restore();
   X.strokeStyle='#ccc';X.lineWidth=3;X.beginPath();X.moveTo(bx,0);X.lineTo(bx,by-26);X.stroke();circ(bx,by,30,'#cfd8dc');for(let i=0;i<14;i++){const a=i*0.9+T*1.5;circ(bx+Math.cos(a)*18,by+Math.sin(a*1.3)*18,5,i%2?'#ffffff':'#90a4ae')}
   // checker dance floor
-  const fy=H*0.86-30;for(let x=0,i=0;x<W;x+=60,i++)for(let y=fy,j=0;y<H;y+=36,j++){const on=((i+j+Math.floor(T*2.2))%3)===0;X.fillStyle=on?['#ff8fc8','#80deea','#fff59d'][(i+j)%3]:'#4a148c';X.fillRect(x,y,60,36)}
+  const fy=H*0.86-30;for(let x=0,i=0;x<W;x+=60,i++)for(let y=fy,j=0;y<H;y+=36,j++){const on=((i+j+Math.floor(T*2.2))%3)===0;X.fillStyle=on?['#ff6f00','#1565c0','#ffd54f'][(i+j)%3]:'#0d47a1';X.fillRect(x,y,60,36)}
   for(const d of danceLay()){const id=d.hero?'hero':d.p.k,sp=DP.sp[id]||0,hop=Math.abs(Math.sin(beat+d.x*0.01))*16*d.s+(DP.jump>0?Math.sin(DP.jump/0.8*Math.PI)*60:0);
     X.save();X.translate(d.x,d.y-hop);X.rotate(sp>0?(1-sp/0.9)*Math.PI*2:Math.sin(beat/2)*0.12);
     if(d.hero){X.scale(d.s*1.15,d.s*1.15);drawAlex(0,0,{t:T*2,face:1,st:'cheer',acc:heroAcc()})}else{const m=d.p.k==='doodle'?0.95:1.45;X.scale(m,m);drawPet(d.p.k,0,0,d.s,sp>0?'meow':'idle')};X.restore();
-    const S=Math.max(110*d.s,PT(72));btn('dk_'+id,d.x-S/2,d.y-S*1.4,S,S*1.5,()=>{DP.sp[id]=0.9;AUD.SFX.meow(Math.floor(R()*3));sHearts(d.x,d.y-90*d.s,5);sSpark(d.x,d.y-60*d.s,10);if(R()<0.6)sayT(d.hero?pick(['Go Alex!','Alex can dance!']):pick([d.p.n+' is dancing!','Wiggle wiggle!','Spin, '+d.p.n+'!']),1)})}
+    const S=Math.max(110*d.s,PT(72));btn('dk_'+id,d.x-S/2,d.y-S*1.4,S,S*1.5,()=>{DP.sp[id]=0.9;AUD.SFX.meow(Math.floor(R()*3));sHearts(d.x,d.y-90*d.s,5);sSpark(d.x,d.y-60*d.s,10);if(R()<0.6)sayT(d.hero?pick(['Go Alex!','Breakdance!']):pick([d.p.n+' is dancing!','Spin move!','Wow, '+d.p.n+'!']),1)})}
   const S=Math.max(96,PT(80)),sx=W-INR-S-16,sy=TOP+12;circ(sx+S/2,sy+S/2,S/2+(1+Math.sin(beat))*3,'#ffd54f');txt('⭐',sx+S/2,sy+S/2+3,S*0.55,'#000');btn('djump',sx,sy,S,S,()=>{DP.jump=0.8;sConf(50);AUD.SFX.boing();sayT(pick(['Everybody jump!','Yay!','Party time!']),1)});
   bigBack()}};
-IDLE_HINT.dance='Tap a kitty to make it dance!';
+IDLE_HINT.dance='Tap a friend to breakdance!';
 if(window.__X)window.__X.DP=()=>DP;
 if(window.__X)window.__X.KITTIES=KITTIES;

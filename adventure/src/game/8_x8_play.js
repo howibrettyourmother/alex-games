@@ -1,10 +1,10 @@
 // ================= v1.7: animal visitors, backpack souvenirs + scrapbook, campout, music maker, cookie decorating, weather play =================
 // ---------- shared: big round picture button (>=72px on iPad) ----------
-function v7btn(id,x,y,r,col,draw,fn,glow){const s=1+(glow?Math.sin(T*5)*0.05:0);X.fillStyle='rgba(120,60,140,0.18)';X.beginPath();X.arc(x+1,y+4,r*s,0,TAU);X.fill();circ(x,y,r*s,'#fff');circ(x,y,(r-5)*s,col);
+function v7btn(id,x,y,r,col,draw,fn,glow){const s=1+(glow?Math.sin(T*5)*0.05:0);X.fillStyle='rgba(13,27,71,0.22)';X.beginPath();X.arc(x+1,y+4,r*s,0,TAU);X.fill();circ(x,y,r*s,'#fff');circ(x,y,(r-5)*s,col);
   if(typeof draw==='string')txt(draw,x,y+2,r*0.95,'#000');else if(draw)draw(x,y,r);btn(id,x-r-4,y-r-4,2*r+8,2*r+8,fn)}
 const V7R=()=>Math.max(PT(72)/2+1,30);// radius: 72px+ diameter on iPad
 // ---------- souvenirs: one in every place and trip, kept in Doodle's backpack ----------
-const SOUV={dad:['🧩','a puzzle piece',"Dad's House"],mom:['💜','a purple heart',"Mom's Apartment"],klub:['🖍️','a crayon','Meadow Brook'],park:['🍂','a pretty leaf','The Park'],gma:['🧶','a yarn ball',"Grandma Gail's"],
+const SOUV={dad:['🧩','a puzzle piece',"Dad's House"],mom:['🧡','an orange heart',"Mom's Apartment"],klub:['🖍️','a crayon','Meadow Brook'],park:['🍂','a pretty leaf','The Park'],gma:['🧶','a yarn ball',"Grandma Gail's"],
   pumpkin:['🌻','a sunflower','Upland Hills Farm'],snow:['🪁','a kite','Raintree Park'],beach:['🪨','a smooth stone','Stony Creek Beach'],downtown:['💌','a postcard','Downtown Rochester'],
   fl1:['🐚','a seashell',"Grandpa Brian's"],fl2:['🦩','a flamingo postcard',"Gammy's House"],colo:['pinecone','a pinecone','Colorado'],camp:['🌟','a wishing star','the Campout']};
 const SOUVK=Object.keys(SOUV);
@@ -105,7 +105,7 @@ XS.campout={upd(dt){if(!CP)return;CP.t+=dt;if(CP.done)CP.fin+=dt;for(const f of 
       const bh=Math.max(60,PT(48));pill(W/2-110,H*0.42+h/2-bh-10,220,bh,'↻ Again','#7986cb',22);btn('cp_again',W/2-110,H*0.42+h/2-bh-10,220,bh,()=>openScreen('campout'))}
     bigBack()}};
 // ---------- Music maker: pentatonic pads (never a wrong note), record + loop playback, dancing kitties ----------
-const PADS=[['🐱','bell',60,'#ffc1e3'],['🐶','pluck',62,'#ffe0b2'],['🐰','flute',64,'#e1bee7'],['🦉','box',67,'#c8e6c9'],['🐥','bell',69,'#fff9c4'],['🎹','box',72,'#bbdefb'],['🎸','pluck',74,'#ffccbc'],['🎺','flute',76,'#b2ebf2'],['🥁','drum',60,'#d1c4e9']];
+const PADS=[['🐱','bell',60,'#90caf9'],['🐶','pluck',62,'#ffe0b2'],['🐰','flute',64,'#81c784'],['🦉','box',67,'#c8e6c9'],['🐥','bell',69,'#fff9c4'],['🎹','box',72,'#bbdefb'],['🎸','pluck',74,'#ffccbc'],['🎺','flute',76,'#b2ebf2'],['🥁','drum',60,'#d1c4e9']];
 let MU=null;
 SCR.music={open(){MU={rec:0,rt:0,ev:[],play:0,pt:0,pi:0,bounce:{},hit:{},t:0};if(Array.isArray(SAVE.x.song.ev))MU.ev=SAVE.x.song.ev.slice(0,64);AUD.setTheme('none');v7say('Music time! Tap the animals and instruments to make music! Tap the red button to record a song!',2)},close(){MU=null;AUD.setTheme('title')}};
 function muNote(i,fromPlay){const P=PADS[i];AUD.SFX.inst(P[2],P[1]);MU.hit[i]=0.35;const ks=Object.keys(MU.bounce);MU.bounce['d']=0.5;MU.lastNote=T;for(const k of parade())MU.bounce[k.k]=0.5;
@@ -114,7 +114,7 @@ function muRecStop(){MU.rec=0;SAVE.x.song={ev:MU.ev.slice(0,64)};save();AUD.SFX.
 XS.music={upd(dt){if(!MU)return;MU.t+=dt;for(const k in MU.bounce)MU.bounce[k]=Math.max(0,MU.bounce[k]-dt);for(const k in MU.hit)MU.hit[k]=Math.max(0,MU.hit[k]-dt);
     if(MU.rec){MU.rt+=dt;if(MU.rt>10||MU.ev.length>=64)muRecStop()}
     if(MU.play&&MU.ev.length){const len=Math.max(1.5,MU.ev[MU.ev.length-1][0]+0.6);MU.pt+=dt;while(MU.pi<MU.ev.length&&MU.ev[MU.pi][0]<=MU.pt){muNote(MU.ev[MU.pi][1],1);MU.pi++}if(MU.pt>=len){MU.pt=0;MU.pi=0}}},
-  draw(){UI=[];softBg('#ede7f6','#fce4ec');const L=XL();xHead('Music Maker','#6a1b9a');if(!MU){bigBack();return}
+  draw(){UI=[];softBg('#e3f2fd','#fff8e1');const L=XL();xHead('Music Maker','#0d47a1');if(!MU){bigBack();return}
     const top=TOP+L.bb+20,bot=H-Math.max(BOT,8)-10,stageH=(bot-top)*(L.land?0.42:0.38),fy=top+stageH;
     // stage + dancing kitties
     X.fillStyle='rgba(255,255,255,0.5)';rrect(INL+12,top,W-INL-INR-24,stageH,24);X.fill();const beat=MU.lastNote&&T-MU.lastNote<0.6;
@@ -153,7 +153,7 @@ function ckCandy(q,px,py,cr){if(q[0]==='gum')circ(px,py,cr,['#ff4081','#7c4dff',
 function ckServe(){const ks=parade(),fr=Object.keys(SAVE.x.vis).map(k=>VIS.find(v=>v[0]===k)).filter(Boolean),opts=[{t:'doodle'}].concat(ks.map(K=>({t:'kit',k:K.k}))).concat(fr.map(A=>({t:'vis',e:A[1],n:A[2]})));
   CK.cust={o:pick(opts),t:0,c:JSON.parse(JSON.stringify(CK.c))};SAVE.x.tray.push(CK.c);if(SAVE.x.tray.length>12)SAVE.x.tray.shift();save();AUD.SFX.knock();v7say('Here comes a customer!',1);
   setTimeout(()=>{if(CK&&CK.cust){AUD.SFX.munch();AUD.SFX.purr(1.2);sConf(30);v7say(pick(['Yum yum! Thank you, Alex!','The best cookie ever!','Mmm! So pretty and yummy!']),2)}},1600);setTimeout(()=>{if(CK){CK.cust=null;CK.c=ckNew();v7say('It went on the cookie tray! Let\'s make another one!',1)}},4200)}
-XS.cookies={upd(dt){if(CK){CK.t+=dt;if(CK.cust)CK.cust.t+=dt}},draw(){UI=[];softBg('#fff3e0','#fce4ec');const L=XL();xHead('Cookie Decorating','#8d6e63');if(!CK){bigBack();return}
+XS.cookies={upd(dt){if(CK){CK.t+=dt;if(CK.cust)CK.cust.t+=dt}},draw(){UI=[];softBg('#fff8e1','#e3f2fd');const L=XL();xHead('Cookie Decorating','#8d6e63');if(!CK){bigBack();return}
   const top=TOP+L.bb+24,bot=H-Math.max(BOT,8)-12,c=CK.c;
   if(CK.tray){const t=SAVE.x.tray,cols=L.land?6:4,cw=(W-INL-INR-40)/cols,r=Math.min(cw*0.38,60);txt('🍪 Cookie Tray',W/2,top+10,26,'#8d6e63');if(!t.length)txt('🍪 ?',W/2,H/2,60,'#bcaaa4');
     t.forEach((q,i)=>{const x=INL+20+cw*((i%cols)+0.5),y=top+50+r+((i/cols)|0)*(r*2+24);drawCookie(q,x,y,r);btn('tr'+i,x-r,y-r,2*r,2*r,()=>{AUD.SFX.munch();sHearts(x,y,4);v7say(pick(['Yummy!','So pretty!','Sprinkles!']),1)})});bigBack();return}
