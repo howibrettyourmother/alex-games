@@ -50,7 +50,7 @@ PLACES.push(
   deco:[{t:'flowers',x:1540,n:4}],
   furn:[{t:'tree',x:320,c:'#2e7d32'},{t:'bench',x:760},{t:'tree',x:1100,c:'#388e3c'},{t:'rock',x:1400},{t:'picnic',x:1640},{t:'tree',x:2760,c:'#1b5e20'}],
   stars:PARKLIKE.stars,fish:PARKLIKE.fish,extras:[{t:'leaves',x:560},{t:'fly',x:2000},{t:'nap',x:770,y:-40,w:110}],
-  task:{who:'moose',x:520,item:'pinecone',ix:2300,iy:0,hi:'v7:Hello Zoe! I am Mister Moose! My little chipmunk friend lost her pinecone. Can you find it?',ty:'v7:The pinecone! Thank you, Alex! The chipmunk is so happy!',say:'Hello Zoe! Can you find the pinecone?',thanks:'Thank you, Alex!'}});
+  task:{who:'moose',x:520,item:'pinecone',ix:2300,iy:0,hi:'v7:Hello Alex! I am Mister Moose! My little chipmunk friend lost her pinecone. Can you find it?',ty:'v7:The pinecone! Thank you, Alex! The chipmunk is so happy!',say:'Hello Alex! Can you find the pinecone?',thanks:'Thank you, Alex!'}});
 const V7I={fl1:PLACES.findIndex(p=>p.k==='fl1'),fl2:PLACES.findIndex(p=>p.k==='fl2'),colo:PLACES.findIndex(p=>p.k==='colo')};
 Object.assign(UNLOCK,{fl1:'sunhat',fl2:'shades',colo:'knit'});
 ITEMS.push({k:'sunhat',n:'Sun Hat',trip:1},{k:'shades',n:'Sunglasses',trip:1},{k:'knit',n:'Knit Hat',trip:1},{k:'boots',n:'Hiking Boots',trip:1});
@@ -125,7 +125,7 @@ MGS.flamingo={init(o){o.glow=0;o.gt=0;o.pop=[]},
 MGS.hike={init(o){o.h=0;o.cx=0.1;o.mk=null;o.pop=[];o.an=0},
   update(dt,o){if(!o.mk)o.mk={u:clamp(o.cx+rr(0.15,0.3),0.08,0.92),t:0};o.mk.t+=dt;for(const q of o.pop)q.t+=dt;o.pop=o.pop.filter(q=>q.t<1.6)},
   path(u){const gy=mGround(),top=mgTop()+50;return{x:INL+40+u*(W-INL-INR-80),y:gy-(gy-top)*0.75*(0.5-0.5*Math.cos(u*Math.PI*2))}},
-  down(p){const o=MG.o;if(!o.mk)return;const q=MGS.hike.path(o.mk.u);if(Math.hypot(p.x-q.x,p.y-q.y)<70){o.cx=o.mk.u;AUD.SFX.hop();mgScore(1,q.x,q.y-30);if(R()<0.5){o.pop.push({x:q.x,y:q.y-60,t:0,k:o.an++%4})}o.mk=null;if(o.cx>0.85){o.cx=0.05;sConf(30);sayT(pick(['We made it to the top!','What a view!','Yay, Zoe!']),1)}}},
+  down(p){const o=MG.o;if(!o.mk)return;const q=MGS.hike.path(o.mk.u);if(Math.hypot(p.x-q.x,p.y-q.y)<70){o.cx=o.mk.u;AUD.SFX.hop();mgScore(1,q.x,q.y-30);if(R()<0.5){o.pop.push({x:q.x,y:q.y-60,t:0,k:o.an++%4})}o.mk=null;if(o.cx>0.85){o.cx=0.05;sConf(30);sayT(pick(['We made it to the top!','What a view!','Yay, Alex!']),1)}}},
   draw(o){const gy=mGround(),top=mgTop()+50,g=X.createLinearGradient(0,0,0,gy);g.addColorStop(0,'#90caf9');g.addColorStop(1,'#e8f5e9');X.fillStyle=g;X.fillRect(0,0,W,H);
     v7mount(W*0.2,W*0.8,gy,(gy-top)*0.95,'#b0bec5',1);X.fillStyle='#7cb342';X.fillRect(0,gy,W,H-gy);X.save();X.translate(0,gy);for(let x=INL+20;x<W;x+=90)v7pine(x,0.5,'#2e7d32');X.restore();
     X.setLineDash([6,10]);X.beginPath();for(let u=0;u<=1;u+=0.02){const q=MGS.hike.path(u);u?X.lineTo(q.x,q.y):X.moveTo(q.x,q.y)}strokeC('rgba(121,85,72,0.7)',6);X.setLineDash([]);

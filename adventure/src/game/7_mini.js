@@ -2,7 +2,7 @@
 const MGSPOT={dad:{k:'laser',x:1440},mom:{k:'bubble',x:920},klub:{k:'dance',x:1580},park:{k:'fish',x:950},gma:{k:'yarn',x:960}};
 const MGINFO={fish:{n:'Fish Catch',say:'Fish Catch! Catch the falling fish!',bg:'#bfe3ff'},laser:{n:'Laser Chase',say:'Laser Chase! Tap the red dot so Doodle can pounce!',bg:'#efe1ff'},
   yarn:{n:'Yarn Tower',say:'Yarn Tower! Tap to drop the yarn ball!',bg:'#f9e8ff'},dance:{n:'Kitty Dance',say:'Kitty Dance! Tap the glowing paw!',bg:'#e8dcff'},bubble:{n:'Bubble Pop',say:'Bubble Pop! Tap the bubbles!',bg:'#ffe9f3'}};
-const MGDUR=40,PRAISE=['Great job, Alex!','You did it, Zoe!','Wow, Zoe! Amazing!','Yay! Super job, Zoe!'],CHEER=['Yay!','Nice!','Wow!','Good kitty!','Hooray!'];
+const MGDUR=40,PRAISE=['Great job, Alex!','You did it, Alex!','Wow, Alex! Amazing!','Yay! Super job, Alex!','Awesome, Alex!'],CHEER=['Yay!','Nice!','Wow!','Good kitty!','Hooray!'];
 // little icon per game (map, HUD, spot, end card)
 function mgIcon(k,x,y,s){X.save();X.translate(x,y);X.scale(s,s);
   if(k==='fish'){ell(0,0,13,7,'#ff9ec7');poly([10,0,19,-7,19,7],'#ff9ec7');circ(-6,-1,1.8,'#5d3a4a')}
@@ -80,7 +80,7 @@ MGS.laser={init(o){o.cat={x:W*0.3,y:mGround(),j:null,face:1,st:'idle'};o.dot={x:
   draw(o){const [a]=this.band(),fy=a-30;X.fillStyle='#efe1ff';X.fillRect(0,0,W,fy);for(let y=mgTop()+10;y<fy-20;y+=40)for(let x=((y/40)%2)*20;x<W;x+=40)circ(x,y,3.5,'#e2ccff');
     X.fillStyle='#fff';X.fillRect(0,fy-12,W,12);X.fillStyle='#e5c09a';X.fillRect(0,fy,W,H-fy);X.fillStyle='rgba(0,0,0,0.06)';for(let x=0;x<W;x+=90)X.fillRect(x,fy,2,H-fy);
     X.save();X.translate(W-INR-150,fy);X.scale(0.7,0.7);FURN.couch.draw({x:0});X.restore();
-    const c=o.cat,d=o.dot,zx=INL+50;X.save();X.translate(0,mGround()+10);drawZoe(zx,{t:T,face:1,happy:1,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears,party:SEASON.bday});X.restore();
+    const c=o.cat,d=o.dot,zx=INL+50;X.save();X.translate(0,mGround()+10);drawAlex(zx,0,{t:T,face:1,acc:heroAcc()});X.restore();
     X.globalAlpha=0.25;X.beginPath();X.moveTo(zx+18,mGround()-40);X.lineTo(d.x,d.y);strokeC('#ff3d7f',2);X.globalAlpha=1;
     const g=0.6+0.4*Math.sin(T*10);circ(d.x,d.y,20*g+6,'rgba(255,61,127,0.18)');circ(d.x,d.y,10,'rgba(255,61,127,0.45)');circ(d.x,d.y,6,'#ff3d7f');circ(d.x-2,d.y-2,2,'#fff');
     drawCat(c.x,c.y,{t:T,face:c.face,st:c.st,acc:catAcc(),s:1.15})}};
@@ -118,7 +118,7 @@ MGS.dance={init(o){o.glow=-1;o.gT=0;o.next=0.5;o.last=-1;o.dance=0;o.mv=0;o.pads
   draw(o){this.layout(o);const sy=this.stageY(o);X.fillStyle='#e8dcff';X.fillRect(0,0,W,H);X.fillStyle='#c39bef';for(let x=0;x<W;x+=50){X.beginPath();X.moveTo(x,0);X.quadraticCurveTo(x+25,mgTop()+30,x+50,0);X.fill()}
     X.fillStyle='#ffd6ec';rrect(INL+10,sy-6,W-INL-INR-20,22,10);X.fill();X.globalAlpha=0.25;for(let i=0;i<3;i++){const x=W*(0.25+i*0.25)+Math.sin(T+i)*30;poly([x-14,mgTop(),x+14,mgTop(),x+70,sy,x-70,sy],'#fff59d')}X.globalAlpha=1;
     const dn=o.dance>0,b=dn?-Math.abs(Math.sin(T*9))*16:-Math.abs(Math.sin(T*4.6))*4;const mv=o.mv%3;
-    X.save();X.translate(W/2-(W<500?110:150),sy);drawZoe(0,{t:T*1.2,face:1,walk:1,happy:1,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears,party:SEASON.bday});X.restore();
+    X.save();X.translate(W/2-(W<500?110:150),sy);drawAlex(0,0,{t:T*1.2,face:1,walk:1,st:'walk',acc:heroAcc()});X.restore();
     drawCat(W/2,sy+b,{t:T,face:dn&&mv===1?-1:1,st:dn?(mv===2?'meow':'air'):'idle',acc:catAcc(),s:1.25});
     parade().slice(0,4).forEach((K,i)=>blitKit(K.k,'sit',0,W/2+(W<500?80:110)+i*(W<500?28:46),sy-Math.abs(Math.sin(T*4.6+i))*8,-1,W<500?0.75:1));
     o.pads.forEach((pd,i)=>{const gl=i===o.glow,pr=o.press[i]>0,s=gl?1+Math.sin(T*10)*0.06:1;if(gl){circ(pd.x,pd.y,pd.r*s+14,'rgba(255,245,157,0.85)')}circ(pd.x,pd.y+(pr?3:0),pd.r*s,gl?PADC[i]:'rgba(255,255,255,0.9)');

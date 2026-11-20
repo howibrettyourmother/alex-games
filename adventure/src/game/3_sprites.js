@@ -1,4 +1,4 @@
-// ================= sprites: Doodle the cat, Zoe, friendly grown-ups, items =================
+// ================= sprites: Doodle the cat, Alex the hero, friendly grown-ups, items =================
 const OR='#f5a142',ORD='#dc7f2a',WH='#fffaf3',PN='#ff9fb8';
 function sl(w,c){X.lineWidth=w;X.strokeStyle=c;X.lineCap='round';X.lineJoin='round';X.stroke()}
 function bow(x,y,s,c){X.save();X.translate(x,y);X.scale(s,s);poly([0,0,-12,-8,-12,8],c);poly([0,0,12,-8,12,8],c);circ(0,0,4,'#fff');X.restore()}
@@ -128,24 +128,9 @@ function accHead(A,hx,hy,s,t){if(A.party){partyHat(hx+2,hy-14,1,0.15);return}
   if(A.sunhat){X.save();X.translate(hx+2,hy-14);ell(0,0,24,6,'#ffe082');ell(0,-6,13,10,'#ffd54f');X.fillStyle='#ff8fc8';X.fillRect(-13,-5,26,4);circ(10,-5,3.5,'#ff5c9e');X.restore()}
   if(A.knit){X.save();X.translate(hx+2,hy-14);X.fillStyle='#4fc3f7';X.beginPath();X.arc(0,0,15,Math.PI,0);X.fill();X.fillStyle='#fff';rrect(-16,-3,32,7,3);X.fill();X.strokeStyle='#29b6f6';X.lineWidth=1.5;for(let i=-9;i<=9;i+=6){X.beginPath();X.moveTo(i,-4);X.lineTo(i,-13+Math.abs(i)*0.3);X.stroke()}circ(0,-17,6,'#fff');X.restore()}
   if(A.crown)crown(hx-2,hy-20,0.9);if(A.bow)bow(hx+10,hy-17,0.85,'#ff5c9e');if(A.flower){for(let i=0;i<5;i++){const a=i*TAU/5;circ(hx-10+Math.cos(a)*4,hy-16+Math.sin(a)*4,3.2,'#c5a3ff')}circ(hx-10,hy-16,2.4,'#fff59d')}}
-// Zoe: light brown ponytail, pink unicorn sweatshirt, light blue tutu, gray floppy bunny
-function drawZoe(x,o){const f=o.face||1,t=o.t||0,walk=o.walk,pet=o.pet>0,top=o.top||'#ff9cc8',tutu=o.tutu||'#bfe3ff',sk='#f7d5bf',hair='#a8754a';X.save();X.translate(x,0);X.scale(f,1);
-  ell(0,2,26,5,'rgba(80,40,90,0.15)');const b=walk?Math.abs(Math.sin(t*9))*3:0,cr=pet?14:0;X.translate(0,-b+cr);
-  const lg=walk?Math.sin(t*9)*7:0;X.beginPath();X.moveTo(-5,-36);X.lineTo(-5+lg,-4-cr);X.moveTo(5,-36);X.lineTo(5-lg,-4-cr);sl(6,sk);ell(-5+lg+2,-3-cr,6,3.5,'#ff8fc8');ell(5-lg+2,-3-cr,6,3.5,'#ff8fc8');
-  for(let i=0;i<6;i++)ell(-18+i*7.2,-38,9,8,i%2?tutu:'rgba(255,255,255,0.85)');ell(0,-42,20,7,tutu);
-  X.fillStyle=top;rrect(-15,-76,30,38,10);X.fill();circ(1,-58,7,'#fff');poly([4,-64,9,-74,7,-62],'#ffd54f');circ(-3,-60,3,'#c5a3ff');circ(-4,-55,3,'#80deea');circ(3,-58,1.2,'#333');
-  // bunny (gray, floppy ears) hugged on the far arm
-  X.save();X.translate(-12,-52);ell(0,6,9,11,'#c9c4c6');circ(0,-8,8,'#d5d0d2');ell(-6,-4,3,9,'#bdb6b8',0.6);ell(6,-6,3,10,'#bdb6b8',-0.4);circ(-2,-9,1.2,'#333');circ(3,-9,1.2,'#333');circ(0.5,-6,1.6,'#a1887f');X.restore();
-  X.beginPath();X.moveTo(-12,-70);X.quadraticCurveTo(-20,-56,-8,-48);sl(6,top);
-  const ar=pet?0.9:walk?Math.sin(t*9)*0.4:0.15;X.save();X.translate(12,-70);X.rotate(ar);X.beginPath();X.moveTo(0,0);X.lineTo(4,22);sl(6,top);circ(4,25,4,sk);X.restore();
-  // head + ponytail
-  const pt=Math.sin(t*(walk?9:2))*4;X.beginPath();X.moveTo(-10,-100);X.quadraticCurveTo(-26,-96,-24+pt*0.5,-80);sl(9,hair);circ(-11,-100,3.5,'#ff8fc8');
-  circ(0,-94,16,sk);X.fillStyle=hair;X.beginPath();X.arc(0,-96,17,Math.PI*1.02,TAU*1.0);X.fill();X.beginPath();X.ellipse(5,-104,12,6,-0.2,0,TAU);X.fill();
-  if(o.happy>0){X.beginPath();X.arc(-2,-94,2.6,Math.PI*1.1,Math.PI*1.9);sl(2,'#4a3030');X.beginPath();X.arc(8,-94,2.6,Math.PI*1.1,Math.PI*1.9);sl(2,'#4a3030')}else{circ(-2,-94,2.4,'#4a3030');circ(8,-94,2.4,'#4a3030');circ(-1.3,-95,0.9,'#fff');circ(8.7,-95,0.9,'#fff')}
-  ell(-6,-88,3.4,2,'rgba(255,130,160,0.5)');ell(12,-88,3.4,2,'rgba(255,130,160,0.5)');X.beginPath();X.arc(4,-88,4,0.3,Math.PI-0.3);sl(1.8,'#c2185b');
-  if(o.ears){poly([-15,-104,-12,-122,-3,-111],o.ears);poly([-12.5,-107,-11,-117,-6,-111],'#fff0f6');poly([3,-111,12,-122,15,-104],o.ears);poly([6,-111,11,-117,12.5,-107],'#fff0f6')}
-  if(o.bow)bow(-8,-110,0.7,o.bow);if(o.party)partyHat(4,-110,1,0.2);X.restore()}
-// ---------- kitty friends: small side-view cats, drawn once per pose into the sprite cache ----------
+// Alex is ALWAYS the playable hero. Any leftover drawZoe() call is redirected so Zoe can never appear as the player.
+function drawZoe(x,o){o=o||{};drawAlex(x,0,Object.assign({t:o.t||0,face:o.face||1,walk:!!o.walk,st:o.walk?'walk':'idle',acc:heroAcc(),s:o.s},o,{acc:heroAcc()}))}
+// ---------- kitty friends// ---------- kitty friends: small side-view cats, drawn once per pose into the sprite cache ----------
 function drawKit(K,pose,fr,o){o=o||{};X.save();X.scale(K.s,K.s);const B=K.c,D=K.d,Wb=K.w,sit=pose==='sit',ph=fr?1:0;
   ell(0,1,24,4.5,'rgba(80,40,90,0.15)');
   if(sit){X.beginPath();X.moveTo(-14,-6);X.quadraticCurveTo(-34,-2,-30,-24);sl(K.fluff?13:8,B)}else{const tw=fr?5:-3;X.beginPath();X.moveTo(-20,-24);X.quadraticCurveTo(-38,-30,-36,-50+tw);sl(K.fluff?13:8,B)}
@@ -188,7 +173,7 @@ function drawNPC(k,x,o){const t=o.t||0,wave=o.wave>0;X.save();X.translate(x,0);e
 // Alex: 7-year-old adventurer (brown hair, blue A shirt, jeans, red cape). (x,y)=feet. Faces right.
 function heroAcc(){const a=Object.assign({},SAVE.wear||{});if(typeof SEASON!=='undefined'&&SEASON.bday)a.party=1;if(a.cape==null)a.cape=1;return a}
 function drawAlex(x,y,o){o=o||{};const f=o.face||1,t=o.t||0,A=o.acc||heroAcc(),walk=!!o.walk||o.st==='walk',air=o.st==='air';
-  const w=Math.sin(t*9)*(walk?1:0)*(air?0.3:1);X.save();X.translate(x,y);X.scale(f*(o.s||1),o.s||1);
+  const w=Math.sin(t*9)*(walk?1:0)*(air?0.3:1),pop=o.pop||0;X.save();X.translate(x,y);X.scale(f*(o.s||1)*(1+pop*0.15),(o.s||1)*(1-pop*0.2));
   ell(0,1,16,4.5,'rgba(80,40,90,0.18)');
   // cape (default on)
   if(A.cape!==0&&A.cape!==undefined?A.cape:1){const sway=Math.sin(t*6)*5+(walk?w*6:0);X.fillStyle='#e53935';X.beginPath();X.moveTo(-6,-46);X.quadraticCurveTo(-28-sway,-28,-24+sway*0.3,-4);X.lineTo(-2,-12);X.closePath();X.fill();X.fillStyle='#c62828';X.beginPath();X.moveTo(-6,-46);X.quadraticCurveTo(-18-sway*0.6,-30,-16,-8);X.lineTo(-2,-12);X.closePath();X.fill()}
@@ -201,9 +186,11 @@ function drawAlex(x,y,o){o=o||{};const f=o.face||1,t=o.t||0,A=o.acc||heroAcc(),w
   X.fillStyle='#ffd54f';X.font='900 13px '+FONT;X.textAlign='center';X.textBaseline='middle';X.fillText('A',0,-28);
   // backpack
   if(A.pack){X.fillStyle='#6d4c41';rrect(10,-44,9,22,3);X.fill();X.fillStyle='#ffd54f';X.fillRect(12,-36,5,3)}
-  // arms
-  X.fillStyle='#f1c27d';X.fillRect(-16,-40,6,16+w*2);X.fillRect(10,-40,6,16-w*2);
-  X.fillStyle='#1e88e5';X.fillRect(-16,-40,6,7);X.fillRect(10,-40,6,7);
+  // arms (cheer = both up, wave = one arm wiggle, cape = flourish)
+  const pose=o.st||'';
+  if(pose==='cheer'||pose==='cape'){X.fillStyle='#1e88e5';X.fillRect(-18,-62,6,24);X.fillRect(12,-62,6,24);X.fillStyle='#f1c27d';X.fillRect(-18,-68,6,8);X.fillRect(12,-68,6,8)}
+  else if(pose==='wave'){const up=Math.sin(t*14)*7;X.fillStyle='#f1c27d';X.fillRect(-16,-40,6,16);X.fillStyle='#1e88e5';X.fillRect(-16,-40,6,7);X.fillStyle='#1e88e5';X.fillRect(12,-58+up,6,22);X.fillStyle='#f1c27d';X.fillRect(12,-64+up,6,8)}
+  else{X.fillStyle='#f1c27d';X.fillRect(-16,-40,6,16+w*2);X.fillRect(10,-40,6,16-w*2);X.fillStyle='#1e88e5';X.fillRect(-16,-40,6,7);X.fillRect(10,-40,6,7)}
   // head
   const hy=-58;circ(0,hy,13,'#f1c27d');
   // hair

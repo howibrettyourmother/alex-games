@@ -1,4 +1,4 @@
-// ================= state, save data, cat physics, Zoe, interactions, tasks =================
+// ================= state, save data, Alex physics, Doodle follower, interactions, tasks =================
 let state='title',T=0,stT=0,TS=1,overlay=null,camX=0;
 const ITEMS=[{k:'bow',n:'Pink Bow'},{k:'crown',n:'Crown'},{k:'tutu',n:'Tutu'},{k:'cape',n:'Cape'},{k:'glasses',n:'Heart Sunglasses'},{k:'flower',n:'Flower'},{k:'collar',n:'Bell Collar'},
   {k:'horn',n:'Unicorn Horn'},{k:'bowtie',n:'Purple Bow Tie'},{k:'trail',n:'Sparkle Trail'},{k:'wings',n:'Fairy Wings'},{k:'sweater',n:'Heart Sweater'},
@@ -49,11 +49,14 @@ function paw(){if(kitPaw()||spotPaw())return;const c=nearEx('cup',70);if(c&&!c.s
   const b=nearEx('blanket',40);if(b){setSt('bisc');AUD.SFX.purr(1.4);return}
   const n=nearEx('nap',40);if(n){sleep();return}
   const ck=nearEx('cookie',70);if(ck){hearts(ck.x,ck.y-20,5);AUD.SFX.treat();bubble(giver.x,-150,'Cookies for good kitties!','npc');return}
-  const a=['meow','bat','meow','flop'][pawCycle++%4];setSt(a);if(a==='meow')AUD.SFX.meow();else if(a==='flop'){AUD.SFX.purr(1);hearts(cat.x,cat.y-40,3)}else AUD.SFX.pat()}
+  const a=['cheer','wave','cape'][pawCycle++%3];setSt(a);
+  if(a==='cheer'){AUD.SFX.hop();hearts(cat.x,cat.y-70,6);bubble(cat.x,cat.y-110,pick(['Yeah!','I got this!','Adventure time!']),'hero')}
+  else if(a==='wave'){AUD.SFX.squeak();bubble(cat.x,cat.y-110,pick(['Hi!','Hello!']),'hero')}
+  else{AUD.SFX.hop();sparkles(cat.x,cat.y-50,10);bubble(cat.x,cat.y-110,pick(['Cape power!','Whoosh!']),'hero')}}
 function sleep(){setSt('sleep');cat.vx=0;AUD.SFX.purr(2);if(R()<0.6)say('nap',2)}
 function pounce(lf){if(lf.st>0)return;lf.st=1.5;AUD.SFX.rustle();burst(lf.x,-12,26,['#ffb74d','#ff8a65','#ffd54f','#f48fb1'],220,6);setSt('air');cat.vy=Math.min(cat.vy,-380);cat.ground=null;
   if(task.st==='hidden'&&Math.abs(task.x-lf.x)<40){task.st='free';sparkles(task.x,-20,12);AUD.SFX.chime();bubble(task.x,-60,'Peep!','duckling')}}
-function collectStar(s){s.got=1;const d=pdata(pl.k);if(!d.stars.includes(s.j))d.stars.push(s.j);save();AUD.SFX.chime();sparkles(s.x,s.y,18);hearts(s.x,s.y,3);float('★ '+d.stars.length+'/5',s.x,s.y-30,'#fff59d');
+function collectStar(s){s.got=1;const d=pdata(pl.k);if(!d.stars.includes(s.j))d.stars.push(s.j);save();AUD.SFX.chime();sparkles(s.x,s.y,28);hearts(s.x,s.y,6);burst(s.x,s.y,16,['#ffd54f','#fff59d','#fff','#ff8fc8'],200,6);float('★ '+d.stars.length+'/5',s.x,s.y-30,'#fff59d');if(zoe)zoe.happy=1.6;if(cat)cat.pop=1;
   if(d.stars.length>=5)say('allstars',3);else if(!AUD.count(d.stars.length))say('star',3);checkDone()}// one line per star, never stacked
 function deliver(){task.st='done';const d=pdata(pl.k);d.task=1;save();say(pl.task.ty,3);AUD.SFX.sticker();hearts(giver.x,-140,10);sparkles(giver.x,-100,16);bubble(giver.x,-170,pl.task.thanks,'npc');giver.wave=3;cat.carry=null;zoe.happy=2;setTimeout(checkDone,1800)}
 function checkDone(){const d=pdata(pl.k);if(d.sticker||d.stars.length<5||!d.task)return;d.sticker=1;const it=UNLOCK[pl.k];SAVE.un[it]=1;SAVE.wear[it]=1;save();
@@ -71,12 +74,12 @@ function update(dt){T+=dt;stT+=dt;if(banner){banner.t+=dt;if(banner.t>2.6)banner
   const cozy=['sleep','bisc','flop','purr','loaf','bigloaf','judgy','pawface','treesnooze','limp','sticker'];
   const busy=cozy.indexOf(c.st)>=0||c.st==='meow'||c.st==='bat';
   if(busy&&(Math.abs(ix)>0.2||c.buf>0)){if(cozy.indexOf(c.st)>=0)setSt('idle')}
-  if((c.st==='meow'||c.st==='bat')&&c.sT>0.55)setSt('idle');if(c.st==='flop'&&c.sT>3.5)setSt('idle');if(c.st==='purr'&&c.sT>2.2)setSt('idle');
+  if((c.st==='meow'||c.st==='bat'||c.st==='cheer'||c.st==='wave'||c.st==='cape')&&c.sT>0.7)setSt('idle');if(c.st==='flop'&&c.sT>3.5)setSt('idle');if(c.st==='purr'&&c.sT>2.2)setSt('idle');
   if((c.st==='loaf'||c.st==='bigloaf'||c.st==='judgy'||c.st==='sticker')&&c.sT>5)setSt('idle');
   if((c.st==='pawface'||c.st==='treesnooze'||c.st==='limp')&&c.sT>4.8)setSt('idle');
   const still=cozy.indexOf(c.st)>=0;
   // horizontal: snappy with light inertia
-  const onG=c.ground!=null,tv=still?0:ix*270;c.vx+=(tv-c.vx)*Math.min(1,dt*(onG?14:7));if(Math.abs(ix)>0.15)c.face=ix>0?1:-1;
+  const onG=c.ground!=null,tv=still?0:ix*310;c.vx+=(tv-c.vx)*Math.min(1,dt*(onG?16:8));c.pop=Math.max(0,(c.pop||0)-dt*5);if(Math.abs(ix)>0.15)c.face=ix>0?1:-1;
   // jump: buffered, coyote time, one extra air jump (forgiving)
   c.coy=onG?0.13:c.coy-dt;c.buf-=dt;c.drop-=dt;
   if(c.buf>0&&!still){if(onG||c.coy>0){if(iy>0.6&&c.ground&&c.ground!=='floor'){c.drop=0.28;c.dropP=c.ground;c.ground=null;c.vy=60}else{c.vy=-720;AUD.SFX.hop()}c.ground=null;c.coy=0;c.buf=0;c.jumps=1;setSt('air')}
@@ -86,8 +89,8 @@ function update(dt){T+=dt;stT+=dt;if(banner){banner.t+=dt;if(banner.t>2.6)banner
   if(c.ground&&c.ground!=='floor'){const g=c.ground;if(c.x<g.x1-4||c.x>g.x2+4){c.ground=null}else{c.y=surfY(g,c.x);if(g.slide){c.vx+=420*dt*Math.sign(g.y2-g.y1)*(g.x2>g.x1?1:-1);c.vx=Math.min(c.vx,420)}}}
   if(!c.ground){c.vy=Math.min(c.vy+1700*dt,900);c.y+=c.vy*dt;
     if(c.vy>=0){let best=null,by=1e9;for(const p of plats){if(c.drop>0&&p===c.dropP)continue;if(c.x<p.x1||c.x>p.x2)continue;const sy=surfY(p,c.x);if(py<=sy+3&&c.y>=sy&&sy<by){by=sy;best=p}}
-      if(best){c.y=by;c.vy=0;c.ground=best;c.jumps=0;AUD.SFX.land();if(c.st==='air')setSt('idle')}else if(c.y>=0){c.y=0;c.vy=0;c.ground='floor';c.jumps=0;AUD.SFX.land();if(c.st==='air')setSt('idle')}}}
-  if(!still&&c.st!=='meow'&&c.st!=='bat'){const ns=!c.ground?'air':Math.abs(c.vx)>25?'walk':'idle';if(ns!==c.st)setSt(ns)}
+      if(best){c.y=by;c.vy=0;c.ground=best;c.jumps=0;AUD.SFX.land();c.pop=1;burst(c.x,c.y+2,8,['#d7ccc8','#fff59d','#ffe0b2'],80,3);if(c.st==='air')setSt('idle');if(R()<0.08){AUD.SFX.squeak();float(pick(['Toot!','Boing!','Pffft!']),c.x,c.y-70,'#c5e1a5')}}else if(c.y>=0){c.y=0;c.vy=0;c.ground='floor';c.jumps=0;AUD.SFX.land();c.pop=1;burst(c.x,2,8,['#d7ccc8','#fff59d','#ffe0b2'],80,3);if(c.st==='air')setSt('idle');if(R()<0.08){AUD.SFX.squeak();float(pick(['Toot!','Boing!','Pffft!']),c.x,c.y-70,'#c5e1a5')}}}}
+  if(!still&&c.st!=='meow'&&c.st!=='bat'&&c.st!=='cheer'&&c.st!=='wave'&&c.st!=='cape'){const ns=!c.ground?'air':Math.abs(c.vx)>25?'walk':'idle';if(ns!==c.st)setSt(ns)}
   c.idle=(c.st==='idle')?c.idle+dt:0;
   // Doodle (the follower) takes cat-naps; Alex stays on his feet
   if(c.st==='bisc'||c.st==='sleep'||c.st==='loaf'||c.st==='bigloaf'||c.st==='judgy'||c.st==='pawface'||c.st==='treesnooze'||c.st==='limp'||c.st==='sticker'||c.st==='purr')setSt('idle');
@@ -104,7 +107,7 @@ function update(dt){T+=dt;stT+=dt;if(banner){banner.t+=dt;if(banner.t>2.6)banner
   for(const s of stars)if(!s.got&&Math.hypot(s.x-c.x,s.y-(c.y-26))<34)collectStar(s);
   for(const f of fish)if(!f.got&&Math.hypot(f.x-c.x,f.y-(c.y-24))<30){f.got=1;SAVE.fish++;save();AUD.SFX.treat();sparkles(f.x,f.y,6);{const t=performance.now();if(t-(window._fcT||0)>1800)window._fcN=0;window._fcT=t;window._fcN=(window._fcN||0)%10+1;float(String(window._fcN),f.x,f.y-46,'#fff59d');AUD.count(window._fcN,window._fcN===1)}// count each fish: one, two, three...
   float('+1 🐟',f.x,f.y-20,'#ffc1e3');
-    const k=TOPFISH.indexOf(SAVE.fish);if(k>0){float('New outfit color!',c.x,c.y-80,'#fff59d');AUD.SFX.sticker()}if(SAVE.fish===30){SAVE.un.collar=1;save();float('Bell Collar unlocked!',c.x,c.y-100,'#fff59d')}}
+    if(SAVE.fish&&SAVE.fish%15===0){float('Fish treats!',c.x,c.y-80,'#fff59d');AUD.SFX.sticker()}if(SAVE.fish===30){SAVE.un.collar=1;save();float('Bell Collar unlocked!',c.x,c.y-100,'#fff59d')}}
   // task item
   if(task.st==='free'&&Math.hypot(task.x-c.x,task.y-(c.y-20))<38){task.st='carried';cat.carry=task.k;AUD.SFX.chime();sparkles(task.x,task.y,10);float('Bring it back!',c.x,c.y-80,'#fff59d')}
   if(task.st==='carried'){if(task.k==='duckling'){task.x+=((c.x-c.face*40)-task.x)*Math.min(1,dt*4);task.y=0}else{task.x=c.x+c.face*24;task.y=c.y-34}

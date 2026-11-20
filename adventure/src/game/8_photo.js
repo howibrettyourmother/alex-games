@@ -1,7 +1,7 @@
-// ================= Photo Booth: pose Doodle, Zoe and the kitties, add a backdrop, frame and stickers, then save to Photos =================
+// ================= Photo Booth: pose Doodle, Alex and the kitties, add a backdrop, frame and stickers, then save to Photos =================
 const PBG=['hearts','stars','park','rainbow'],PFR=['none','hearts','gold','flowers','paws'],PSTK=['heart','star','rainbow','crown','flower','bow'],POSES=['idle','loaf','bigloaf','judgy','pawface','treesnooze','limp','sticker','meow','flop','sleep','purr'];
 let PH=null;
-function photoOpen(){const items=[{t:'zoe',x:78,y:262,s:1.25,face:1},{t:'cat',x:170,y:262,s:1.25,face:1,pose:0}];parade().forEach((K,i)=>items.push({t:'kit',k:K.k,x:40+i*55,y:292,s:0.95,face:i%2?-1:1}));
+function photoOpen(){const items=[{t:'alex',x:78,y:262,s:1.25,face:1},{t:'cat',x:170,y:262,s:1.25,face:1,pose:0}];parade().forEach((K,i)=>items.push({t:'kit',k:K.k,x:40+i*55,y:292,s:0.95,face:i%2?-1:1}));
   PH={bg:SEASON.k&&SEASON.k!=='spring'&&SEASON.k!=='summer'?4:0,fr:1,items,drag:null,snap:0,flash:0,prev:null,blob:null,file:null,pend:false,msg:''};AUD.setTheme('cozy');sayT('Photo booth! Make a cute picture!',3)}
 const pbgList=()=>SEASON.k&&SEASON.k!=='spring'&&SEASON.k!=='summer'?PBG.concat([SEASON.k]):PBG;
 const pstkList=()=>PSTK.concat([SEASON.k==='hal'?'pumpkin':SEASON.k==='win'?'snowflake':SEASON.k==='bday'?'cake':'paw']);
@@ -26,7 +26,7 @@ function drawFrame(k){if(k==='none')return;X.lineWidth=14;X.strokeStyle=k==='gol
   else if(k==='paws')for(let i=0;i<7;i++)for(const y of [10,290]){const x=22+i*43;circ(x,y+2,4.5,'#ff8fc8');for(let j=0;j<3;j++)circ(x-5+j*5,y-4,2.2,'#ff8fc8')}}
 function drawPhoto(hq){drawBackdrop(pbgList()[PH.bg]);const its=PH.items.filter(i=>i.t!=='stk').sort((a,b)=>a.y-b.y).concat(PH.items.filter(i=>i.t==='stk'));
   for(const it of its){X.save();X.translate(it.x,it.y);
-    if(it.t==='zoe'){X.scale(it.s*it.face,it.s);drawZoe(0,{t:hq?0.5:T,face:1,happy:1,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears,party:SEASON.bday})}
+    if(it.t==='zoe'||it.t==='alex'||it.t==='hero'){X.scale(it.s*it.face,it.s);drawAlex(0,0,{t:hq?0.5:T,face:1,acc:heroAcc()})}
     else if(it.t==='cat'){drawCat(0,0,{t:hq?0.5:T,face:it.face,st:POSES[it.pose],acc:catAcc(),s:it.s})}
     else if(it.t==='kit'){if(hq){X.scale(it.face*it.s,it.s);drawKit(KIT(it.k),'sit',0,{party:SEASON.bday})}else blitKit(it.k,'sit',0,0,0,it.face,it.s)}
     else drawStk(it.k,it.s);X.restore()}
@@ -54,19 +54,19 @@ function drawPhotoScreen(){UI=[];const P=PH,L=photoLayout();softBg('#ffe0f0','#e
 function photoTool(k,i){const P=PH;AUD.SFX.click();if(k==='bg'){P.bg=i;sayT(['Hearts!','Starry night!','The park!','Rainbow!','Party time!'][Math.min(i,4)],1)}else if(k==='fr'){P.fr=i}
   else if(i>=pstkList().length){P.items=P.items.filter(q=>q.t!=='stk');AUD.SFX.whoosh()}else{const n=P.items.filter(q=>q.t==='stk').length;if(n>=12)P.items.splice(P.items.findIndex(q=>q.t==='stk'),1);P.items.push({t:'stk',k:pstkList()[i],x:rr(50,250),y:rr(40,140),s:1.2});AUD.SFX.pop()}}
 function photoHit(p){const L=photoLayout(),k=300/L.ps,x=(p.x-L.px)*k,y=(p.y-L.py)*k;if(x<0||y<0||x>300||y>300)return null;
-  for(let i=PH.items.length-1;i>=0;i--){const it=PH.items[i],h=it.t==='stk'?24*it.s:it.t==='kit'?60*it.s:it.t==='zoe'?110*it.s:60*it.s,w=it.t==='stk'?26*it.s:it.t==='kit'?30*it.s:it.t==='zoe'?24*it.s:42*it.s;
+  for(let i=PH.items.length-1;i>=0;i--){const it=PH.items[i],h=it.t==='stk'?24*it.s:it.t==='kit'?60*it.s: (it.t==='zoe'||it.t==='alex'||it.t==='hero')?110*it.s:60*it.s,w=it.t==='stk'?26*it.s:it.t==='kit'?30*it.s:it.t==='zoe'?24*it.s:42*it.s;
     const cy=it.t==='stk'?it.y:it.y-h/2;if(Math.abs(x-it.x)<w+8&&Math.abs(y-cy)<h/2+(it.t==='stk'?it.s*24:8))return{it,x,y,ox:it.x-x,oy:it.y-y}}return{it:null,x,y}}
 SCR.photo={open:photoOpen,close(){PH=null},
   down(p,id){if(!PH||PH.prev)return;const h=photoHit(p);if(h&&h.it){PH.drag={id,it:h.it,ox:h.ox,oy:h.oy,mv:0,sx:p.x,sy:p.y};const i=PH.items.indexOf(h.it);if(h.it.t==='stk'){PH.items.splice(i,1);PH.items.push(h.it)}}},
   move(p,id){const d=PH&&PH.drag;if(!d||d.id!==id)return;const L=photoLayout(),k=300/L.ps;if(Math.hypot(p.x-d.sx,p.y-d.sy)>8)d.mv=1;if(!d.mv)return;d.it.x=clamp((p.x-L.px)*k+d.ox,10,290);d.it.y=clamp((p.y-L.py)*k+d.oy,30,300)},
   up(p,id){const d=PH&&PH.drag;if(!d||d.id!==id)return;PH.drag=null;if(d.mv)return;const it=d.it;
-    if(it.t==='cat'){it.pose=(it.pose+1)%POSES.length;AUD.SFX.meow(it.pose%3);if(POSES[it.pose]==='purr')AUD.SFX.purr(1)}else if(it.t==='zoe'){it.face=-it.face;AUD.SFX.squeak()}else if(it.t==='kit'){it.face=-it.face;AUD.SFX.meow(2)}else{it.s=it.s>1.6?0.9:it.s+0.35;AUD.SFX.pop()}},
+    if(it.t==='cat'){it.pose=(it.pose+1)%POSES.length;AUD.SFX.meow(it.pose%3);if(POSES[it.pose]==='purr')AUD.SFX.purr(1)}else if(it.t==='zoe'||it.t==='alex'||it.t==='hero'){it.face=-it.face;AUD.SFX.squeak()}else if(it.t==='kit'){it.face=-it.face;AUD.SFX.meow(2)}else{it.s=it.s>1.6?0.9:it.s+0.35;AUD.SFX.pop()}},
   back(){if(PH&&PH.prev){PH.prev=null;return true}return false}};
 function photoSnap(){const P=PH;if(P.snap>0||P.prev)return;P.snap=1.1;sayT('Say cheese!',3);AUD.SFX.chime()}
 function updPhoto(dt){const P=PH;if(!P)return;if(P.flash>0)P.flash-=dt*2.5;if(P.snap>0){P.snap-=dt;if(P.snap<=0){P.snap=0;photoTake()}}}
-function photoTake(){const P=PH,N=900,c=document.createElement('canvas');c.width=N;c.height=N;const x=c.getContext('2d'),keep=X;X=x;try{X.scale(N/300,N/300);drawPhoto(true);X.font='800 9px '+FONT;X.globalAlpha=0.6;txt("Doodle & Zoe ✨ "+new Date().toLocaleDateString(),150,284,8,'#7b3fa0',{st:'#fff',sw:2})}catch(e){console.warn(e)}finally{X=keep}
-  P.flash=1;AUD.SFX.shutter();P.prev=c;P.blob=null;P.file=null;P.msg='';sSpark(W/2,H/2,16);setTimeout(()=>sayT('Great picture, Zoe!',2),500);
-  try{c.toBlob(b=>{if(!b||PH!==P)return;P.blob=b;try{P.file=new File([b],'doodle-and-zoe-'+Date.now()+'.png',{type:'image/png'})}catch(e){P.file=null}},'image/png')}catch(e){P.msg='x'}}
+function photoTake(){const P=PH,N=900,c=document.createElement('canvas');c.width=N;c.height=N;const x=c.getContext('2d'),keep=X;X=x;try{X.scale(N/300,N/300);drawPhoto(true);X.font='800 9px '+FONT;X.globalAlpha=0.6;txt("Alex & Doodle ✨ "+new Date().toLocaleDateString(),150,284,8,'#7b3fa0',{st:'#fff',sw:2})}catch(e){console.warn(e)}finally{X=keep}
+  P.flash=1;AUD.SFX.shutter();P.prev=c;P.blob=null;P.file=null;P.msg='';sSpark(W/2,H/2,16);setTimeout(()=>sayT('Great picture, Alex!',2),500);
+  try{c.toBlob(b=>{if(!b||PH!==P)return;P.blob=b;try{P.file=new File([b],'alex-and-doodle-'+Date.now()+'.png',{type:'image/png'})}catch(e){P.file=null}},'image/png')}catch(e){P.msg='x'}}
 function drawPhotoPreview(){const P=PH;btn('block',0,0,W,H,()=>{});X.fillStyle='rgba(90,40,110,0.55)';X.fillRect(0,0,W,H);const land=W>H*1.15,bh=Math.max(60,PT(48)),ps=Math.min(W-40,H-TOP-Math.max(BOT,8)-bh*2-60,land?H-160:500),px=W/2-ps/2,py=TOP+bh+30;
   X.fillStyle='#fff';rrect(px-10,py-10,ps+20,ps+20,20);X.fill();X.drawImage(P.prev,px,py,ps,ps);
   const bw=Math.min(240,(W-60)/2),by=py+ps+20;pill(W/2-bw-8,by,bw,bh,P.blob?'💾 Save':'…','#66bb6a',22);btn('save',W/2-bw-8,by,bw,bh,()=>{if(P.blob){P.pend=lastPT==='touch'?'touch':'mouse';AUD.SFX.sticker()}});
@@ -75,9 +75,9 @@ function drawPhotoPreview(){const P=PH;btn('block',0,0,W,H,()=>{});X.fillStyle='
   const bx=INL+12,bby=TOP+12,bw2=Math.max(200,PT(150));pill(bx,bby,bw2,bh,'✕ Back','#ff5c9e',22);btn('prevBack',bx-6,bby-6,bw2+12,bh+12,()=>{P.prev=null})}
 // the share sheet needs a real user activation, which iOS grants on touchend/click (not pointerdown): run it there
 function photoShare(){const P=PH;if(!P||!P.blob)return;const f=P.file;
-  try{if(f&&navigator.canShare&&navigator.share&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Doodle & Zoe"}).then(()=>{P.msg='saved'}).catch(e=>{if(!e||e.name!=='AbortError')photoDownload()});return}}catch(e){}
+  try{if(f&&navigator.canShare&&navigator.share&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Alex & Doodle"}).then(()=>{P.msg='saved'}).catch(e=>{if(!e||e.name!=='AbortError')photoDownload()});return}}catch(e){}
   photoDownload()}
-function photoDownload(){const P=PH;try{const u=URL.createObjectURL(P.blob),a=document.createElement('a');a.href=u;a.download='doodle-and-zoe-'+Date.now()+'.png';a.rel='noopener';document.body.appendChild(a);a.click();P.msg='saved';setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},5000)}catch(e){}}
+function photoDownload(){const P=PH;try{const u=URL.createObjectURL(P.blob),a=document.createElement('a');a.href=u;a.download='alex-and-doodle-'+Date.now()+'.png';a.rel='noopener';document.body.appendChild(a);a.click();P.msg='saved';setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},5000)}catch(e){}}
 let lastPT='mouse';addEventListener('pointerdown',e=>{lastPT=e.pointerType||'mouse'},{capture:true});
 addEventListener('touchend',()=>{if(PH&&PH.pend==='touch'){PH.pend=false;photoShare()}},{capture:true});
 ['pointerup','click'].forEach(ev=>addEventListener(ev,e=>{if(PH&&PH.pend==='mouse'){PH.pend=false;photoShare()}},{capture:true}));

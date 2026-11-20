@@ -93,7 +93,7 @@ XS.campout={upd(dt){if(!CP)return;CP.t+=dt;if(CP.done)CP.fin+=dt;for(const f of 
     const mx=fx+40,my=gy-90;X.beginPath();X.moveTo(fx+130,gy-30);X.lineTo(mx,my);sl(5,'#8d6e63');const mc=['#ffffff','#ffe0b2','#ffcc80','#d7a86e'][Math.min(3,c.mar)];rrect(mx-14,my-12,28,22,8);X.fillStyle=mc;X.fill();
     if(c.smore>0){const sx=fx+150,sy=gy-26;X.fillStyle='#d7a86e';rrect(sx-24,sy-4,48,10,3);X.fill();X.fillStyle='#fff3e0';rrect(sx-20,sy-12,40,9,4);X.fill();X.fillStyle='#6d4c41';X.fillRect(sx-22,sy-16,44,5);X.fillStyle='#d7a86e';rrect(sx-24,sy-26,48,10,3);X.fill()}
     if(!c.smore){X.globalAlpha=0.3+0.2*Math.sin(T*4);circ(fx,gy-50,70,'#fff59d');X.globalAlpha=1}
-    X.save();X.translate(0,gy);drawZoe(fx-130,{t:T,face:1,happy:1,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears});X.restore();if(!c.done){X.save();X.translate(0,gy);drawCat(fx-60,0,{t:T,st:'idle',face:1,acc:catAcc(),s:1});X.restore()}
+    X.save();X.translate(0,gy);drawAlex(fx-130,0,{t:T,face:1,acc:heroAcc()});X.restore();if(!c.done){X.save();X.translate(0,gy);drawCat(fx-60,0,{t:T,st:'idle',face:1,acc:catAcc(),s:1});X.restore()}
     // fireflies
     c.ff.forEach((f,i)=>{const x0f=INL+40+f.u*(W-INL-INR-80)+Math.sin(f.ph*0.7)*10,x=L.land?x0f:W*0.33+(x0f-INL)*0.62,y=gy*0.56+f.v*(gy*0.1)+Math.cos(f.ph)*6,on=f.lit>0||Math.sin(f.ph*2)>0.6;X.globalAlpha=f.lit?0.6:on?0.45:0.15;circ(x,y,f.lit?22:14,'#eeff41');X.globalAlpha=1;circ(x,y,5,f.lit?'#f4ff81':'#c6ff00');
       btn('ff'+i,x-38,y-38,76,76,()=>{if(!f.lit){f.lit=1;c.ffn++;AUD.SFX.inst(76+[0,2,4,7,9][i%5],'bell');sSpark(x,y,8);v7say(c.ffn===5?'Five fireflies! So glowy!':pick(['Glow!','Twinkle!','A firefly!']),1);cpCheck()}})});
@@ -204,8 +204,8 @@ XS.weather={upd(dt){const w=WX;if(!w)return;w.t+=dt;w.jump=Math.max(0,w.jump-dt)
       if(w.sk>=4){circ(-9,-94,3.5,'#263238');circ(9,-94,3.5,'#263238');poly([-4,-86,4,-86,0,-81],'#ff8a65');X.beginPath();X.moveTo(-6,-86);X.lineTo(-24,-90);X.moveTo(6,-86);X.lineTo(24,-90);strokeC('#90a4ae',1.5);X.fillStyle='#ff5c9e';rrect(-26,-68,52,10,5);X.fill();X.fillRect(10,-62,10,24);if(w.k==='sun'){X.fillStyle='#263238';rrect(-18,-100,14,9,3);X.fill();rrect(4,-100,14,9,3);X.fill()}}
       X.restore();btn('sk',kx-80,gy-170,160,180,()=>{if(w.sk>=4){AUD.SFX.meow(1);sHearts(kx,gy-150,4);v7say('Meow! Hi, snow kitty!',1);return}if(w.k!=='snow'){v7say('We need snow! Tap the snowflake!',2);return}w.sk++;AUD.SFX.pat();sSpark(kx,gy-60,10);
         v7say(['A big snowball!','A snowy head!','Kitty ears!','You built a snow kitty! Hooray!'][w.sk-1],2);if(w.sk===4){sConf(60);AUD.SFX.sticker()}})}
-    // Doodle and Zoe watch (Doodle hops into puddles)
-    const jx=w.jump>0?pX[w.jx]:W*0.36,jh=w.jump>0?Math.sin((0.6-w.jump)/0.6*Math.PI)*60:0;X.save();X.translate(0,gy);drawZoe(W*0.3-60,{t:T,face:1,happy:1,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears});X.restore();
+    // Doodle and Alex watch (Doodle hops into puddles)
+    const jx=w.jump>0?pX[w.jx]:W*0.36,jh=w.jump>0?Math.sin((0.6-w.jump)/0.6*Math.PI)*60:0;X.save();X.translate(0,gy);drawAlex(W*0.3-60,0,{t:T,face:1,acc:heroAcc()});X.restore();
     X.save();X.translate(0,0);drawCat(jx,gy-jh,{t:T,face:1,st:w.jump>0?'air':'idle',acc:catAcc(),s:1});X.restore();
     // weather buttons
     const br=Math.max(V7R(),44),bx=W-INR-20-br;[['sun','☀️','#fff59d','Sunny day!'],['rain','🌧️','#b3e5fc','Rainy day! Splash in the puddles!'],['snow','❄️','#e3f2fd','Snowy day! Let\'s build a snow kitty!']].forEach(([k,e,c,s],i)=>{

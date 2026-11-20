@@ -15,14 +15,23 @@ const PG={E(x,cx,cy,rx,ry,r){x.beginPath();x.ellipse(cx,cy,rx,ry,r||0,0,TAU);x.s
     x.beginPath();x.moveTo(400,236);x.bezierCurveTo(440,250,450,400,330,410);x.stroke();
     E(x,256,350,120,110);E(x,256,370,62,72);E(x,200,455,42,26);E(x,312,455,42,26)}};
 const PAGES=[['Doodle',x=>{PG.catFace(x,256,280,1.35,1);PG.C(x,70,70,30);PG.C(x,450,460,26)}],
-  ['Zoe',x=>{const E=PG.E,C=PG.C,P=PG.P,L=PG.L;E(x,256,250,190,200);E(x,256,280,140,150);P(x,[120,200,180,120,330,110,395,200,300,165,210,170]);
-    E(x,80,330,40,90);E(x,432,330,40,90);E(x,205,270,24,30);E(x,307,270,24,30);C(x,210,262,8);C(x,312,262,8);E(x,170,330,22,14);E(x,342,330,22,14);
-    x.beginPath();x.arc(256,330,45,0.15*Math.PI,0.85*Math.PI);x.stroke();L(x,[256,295,248,312,262,312]);
-    P(x,[256,85,170,40,170,130]);P(x,[256,85,342,40,342,130]);C(x,256,85,22);x.beginPath();x.moveTo(140,420);x.lineTo(110,500);x.lineTo(402,500);x.lineTo(372,420);x.stroke()}],
+  ['Alex',x=>{const E=PG.E,C=PG.C,P=PG.P,L=PG.L;
+    // short hair, round head, A-shirt, cape, jeans — Alex's cartoon look, not a ponytail
+    E(x,256,200,70,70);P(x,[200,170,200,130,230,155,256,118,282,155,312,130,312,170]); // hair bumps
+    E(x,236,195,10,12);E(x,276,195,10,12);C(x,236,195,4);C(x,276,195,4);
+    x.beginPath();x.arc(256,220,22,0.15*Math.PI,0.85*Math.PI);x.stroke();
+    P(x,[200,270,200,400,312,400,312,270]); // shirt
+    P(x,[230,320,256,290,282,320,256,350]); // letter A
+    P(x,[200,270,150,390,200,390]);P(x,[312,270,362,390,312,390]); // cape + arm
+    P(x,[214,400,214,500,246,500,246,400]);P(x,[266,400,266,500,298,500,298,400]);
+    C(x,70,70,28);C(x,450,80,22)}],
   ['Kitty',x=>{PG.catBody(x);PG.catFace(x,256,175,0.95,0)}],
-  ['Doodle and Zoe',x=>{PG.catFace(x,150,320,0.72,1);const E=PG.E,C=PG.C,P=PG.P;E(x,370,320,105,115);E(x,370,345,78,82);P(x,[285,290,320,230,420,225,455,290,400,265,330,270]);
-    C(x,345,335,9);C(x,395,335,9);x.beginPath();x.arc(370,370,24,0.15*Math.PI,0.85*Math.PI);x.stroke();
-    x.beginPath();x.moveTo(256,130);x.bezierCurveTo(200,60,120,110,256,200);x.bezierCurveTo(392,110,312,60,256,130);x.stroke();C(x,80,80,24);C(x,440,90,20);C(x,256,470,22)}],
+  ['Doodle and Alex',x=>{PG.catFace(x,150,320,0.72,1);const E=PG.E,C=PG.C,P=PG.P,L=PG.L;
+    E(x,370,250,48,48);P(x,[330,228,332,198,350,218,370,188,390,218,408,198,410,228]);
+    C(x,356,248,5);C(x,384,248,5);x.beginPath();x.arc(370,262,16,0.15*Math.PI,0.85*Math.PI);x.stroke();
+    P(x,[338,300,338,390,402,390,402,300]);P(x,[358,340,370,322,382,340,370,358]);
+    P(x,[338,300,310,370,338,370]);P(x,[346,390,346,455,368,455,368,390]);P(x,[372,390,372,455,394,455,394,390]);
+    C(x,80,80,24);C(x,440,90,20);C(x,256,470,22)}],
   ['Blank page',null]];
 function pageInk(x,f,sc,lw){x.save();x.scale(sc,sc);x.strokeStyle='#2a1e32';x.lineWidth=lw;x.lineCap='round';x.lineJoin='round';try{f(x)}catch(e){console.error(e)}x.restore()}
 let AR=null;

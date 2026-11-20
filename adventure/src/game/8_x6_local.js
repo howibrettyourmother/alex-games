@@ -78,8 +78,8 @@ XS.downtown={upd(dt){if(!DT)return;DT.t+=dt;if(DT.p)DT.p.t+=dt;const d=DT.tx-DT.
   // sidewalk + street
   X.fillStyle='#cfd8dc';X.fillRect(-40,G,DT_LEN+80,40);X.fillStyle='#b0bec5';for(let x=0;x<DT_LEN;x+=60)X.fillRect(x,G,2,40);X.fillStyle='#90a4ae';X.fillRect(-40,G+40,DT_LEN+80,8);
   X.fillStyle='#546e7a';X.fillRect(-40,G+48,DT_LEN+80,H);X.fillStyle='#fff59d';for(let x=0;x<DT_LEN;x+=90)X.fillRect(x,G+90,46,6);
-  // Zoe + Doodle on the sidewalk
-  X.save();X.translate(DT.x,G+30);X.scale(0.95,0.95);X.save();X.scale(DT.face,1);drawZoe(-30,{t:T,face:1,walk:DT.walk,top:SAVE.zoe.top,tutu:SAVE.zoe.tutu,bow:SAVE.zoe.bow,ears:SAVE.zoe.ears,happy:1});X.restore();drawCat(DT.face*-85,0,{t:T,face:DT.face,st:DT.walk?'walk':'idle',acc:catAcc(),s:0.85});X.restore();
+  // Alex + Doodle on the sidewalk
+  X.save();X.translate(DT.x,G+30);X.scale(0.95,0.95);X.save();X.scale(DT.face,1);drawAlex(-30,0,{t:T,face:1,walk:DT.walk,st:DT.walk?'walk':'idle',acc:heroAcc()});X.restore();drawCat(DT.face*-85,0,{t:T,face:DT.face,st:DT.walk?'walk':'idle',acc:catAcc(),s:0.85});X.restore();
   X.restore();
   // stamp row (shops visited)
   const d=dtSave(),n=SHOPS.filter(s=>d[s.k]).length,ss=26;for(let i=0;i<SHOPS.length;i++){const x=W/2-(SHOPS.length*(ss+6))/2+i*(ss+6)+ss/2,y=TOP+12+l.L.bb/2;circ(x,y,ss/2,d[SHOPS[i].k]?'#ffd54f':'rgba(255,255,255,0.6)');txt(d[SHOPS[i].k]?SHOPS[i].ic:'',x,y+1,15,'#000')}

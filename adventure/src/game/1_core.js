@@ -46,8 +46,8 @@ const toG=e=>({x:e.clientX/SC,y:e.clientY/SC});
 // one low row of controls pinned to the bottom corners (clear of the home bar / safe area):
 // LEFT/RIGHT arrows ~92pt across (r = 46pt / SC), JUMP ~88pt, PAW ~72pt. Drawn semi-transparent; hit zones a bit larger than the art.
 const ROWPAD=14;
-function jumpBtn(){const r=clamp(44/SC,30,44);return{x:W-INR-r-18,y:H-Math.max(BOT,8)-r-ROWPAD,r}}
-function pawBtn(){const j=jumpBtn(),r=clamp(36/SC,26,36);return{x:j.x-j.r-r-20,y:j.y+j.r-r,r}}
+function jumpBtn(){const r=clamp(48/SC,34,50);return{x:W-INR-r-16,y:H-Math.max(BOT,8)-r-ROWPAD,r}}
+function pawBtn(){const j=jumpBtn(),r=clamp(40/SC,30,42);return{x:j.x-j.r-r-18,y:j.y+j.r-r,r}}
 function arrowBtns(){const pb=pawBtn(),r=Math.min(clamp(46/SC,30,44),(pb.x-pb.r-14-INL-18-20)/4),y=H-Math.max(BOT,8)-clamp(46/SC,30,44)-ROWPAD+(clamp(46/SC,30,44)-r),lx=INL+r+18,rx=lx+r*2+20;return{L:{x:lx,y,r},R:{x:rx,y,r},zx:Math.min(rx+r+26,pb.x-pb.r-12),zy:y-r-24}}
 // top edge of the control row (game units)
 function ctrlTop(){const ar=clamp(46/SC,30,44),jr=clamp(44/SC,30,44);return H-Math.max(BOT,8)-ROWPAD-2*Math.max(ar,jr)}
@@ -65,8 +65,8 @@ cv.addEventListener('pointerdown',e=>{e.preventDefault();const p=toG(e);
   for(const b of HUDB)if(inR(p,b)){b.fn();return}
   let role='none';
   let ad=0;
-  if(nearB(p,pawBtn(),10)){pawQ=1;role='btn'}
-  else if(nearB(p,jumpBtn(),16)){role='jump';jumpQ=1}
+  if(nearB(p,pawBtn(),14)){pawQ=1;role='btn'}
+  else if(nearB(p,jumpBtn(),20)){role='jump';jumpQ=1}
   else if((ad=arrowAt(p))){role='arrow'}
   else if(tapWorld(p)){role='btn'}
   else if(p.x<W*0.5&&joy.id==null){role='joy';joy.id=e.pointerId;joy.ox=p.x;joy.oy=p.y;joy.dx=joy.dy=0}

@@ -1,5 +1,5 @@
 // ================= UI: map, menus, sticker book, closet, kitty collection, HUD, controls, render =================
-const VERSION='1.7.1 (Oct 21 2026)';let UI=[],HUDB=[],retTo='title';const ICONM=/[?&]icon=1/.test(Q);
+const VERSION='1.8.0 (Nov 20 2026)';let UI=[],HUDB=[],retTo='title';const ICONM=/[?&]icon=1/.test(Q);
 function btn(id,x,y,w,h,fn){const b={id,x,y,w,h,fn};UI.push(b);return b}
 // last-drawn button wins (it is the one on top)
 function uiTap(p){for(let i=UI.length-1;i>=0;i--){const b=UI[i];if(inR(p,b)){if(b.id!=='block'&&b.id!=='stage')AUD.SFX.click();b.fn();return true}}return false}
@@ -59,7 +59,7 @@ function drawTitle(){UI=[];softBg('#c8f0d8','#d6ecff');const L=mapLayout(),land=
     const K=KITTIES.find(q=>q.p===P.k);if(K&&SAVE.kit[K.k]){X.save();X.translate(p.x-r*0.72,p.y-r*0.38);blitKit(K.k,'sit',0,0,0,1,0.42);X.restore()}
     txt(P.n,p.x,p.y+r+16,land?17:16,'#6a1b9a');txt('★ '+d.stars.length+'/5'+(d.task?'  ♥':'')+(pdata(P.k).gem?'  💎':''),p.x,p.y+r+35,14,'#2e7d32');
     btn('place'+i,p.x-r,p.y-r,r*2,r*2+44,()=>enterPlace(i))});
-  // Doodle, Zoe and the kitty parade on the map (when there is room)
+  // Alex, Doodle and the kitty parade on the map (when there is room)
   const dz=land?{x:W*0.88,y:L.rowY-8}:H>740?{x:W*0.5,y:L.rowY-30}:null;
   if(dz){X.save();X.translate(dz.x,dz.y);X.scale(0.85,0.85);drawAlex(-36,0,{t:T,face:1,acc:heroAcc()});drawCat(36,0,{t:T,st:'idle',acc:catAcc()});
     parade().forEach((K,i)=>blitKit(K.k,'sit',0,(land?-110:84)+(land?-i*40:i*38),0,land?1:-1,0.9));X.restore()}
@@ -76,7 +76,7 @@ function drawBook(){UI=[];softBg('#f3e5ff','#ffe0f0');const land=W>H*1.15;txt('M
   PLACES.forEach((P,i)=>{const c=i%cols,rw=(i/cols)|0,n=Math.min(cols,NP-rw*cols),x=W/2+(c-(n-1)/2)*cw,y=TOP+(land?(NP>5?H*0.3:H*0.42):(NP>6?205:235))+rw*(r*2+(NP>5?66:76)),d=pdata(P.k);sticker(P.k,x,y,r,d.sticker);txt(P.n,x,y+r+18,16,'#6a1b9a');txt('★'+d.stars.length+'/5 '+(d.task?'✓ helped':'○ help'),x,y+r+38,13,'#ab47bc');
     const m=MGSPOT[P.k],g=SAVE.mg[m.k];if(g){circ(x-r*0.7,y-r*0.7,16,'#fff');mgIcon(m.k,x-r*0.7,y-r*0.7,0.9)}});
   bigBack()}
-// ---------- closet (tabs: Doodle / Zoe) ----------
+// ---------- closet (tabs: Alex / Doodle) ----------
 let closetTab=0;
 function itemIcon(k){if(k==='bow')bow(0,-8,1.3,'#ff5c9e');else if(k==='crown')crown(0,-4,1.3);else if(k==='tutu'){for(let j=0;j<5;j++)ell(-14+j*7,-6,8,7,j%2?'#ffc1e3':'#e1bee7')}else if(k==='cape'){poly([-12,-22,12,-22,18,8,-18,8],'#b388ff');star5(0,-6,5,'#fff59d')}
   else if(k==='glasses'){heartP(-9,-8,9,'#ff5c9e');heartP(9,-8,9,'#ff5c9e')}else if(k==='flower'){for(let j=0;j<5;j++){const a=j*TAU/5;circ(Math.cos(a)*7,-8+Math.sin(a)*7,5,'#c5a3ff')}circ(0,-8,4,'#fff59d')}
@@ -91,15 +91,14 @@ function drawCloset(){UI=[];softBg('#ffe0f0','#efe0ff');const land=W>H*1.15,bb=M
   if(SAVE.wear.trail&&SAVE.un.trail&&R()<0.15)sSpark(pr.x+10*pr.s,pr.y-20*pr.s,1);drawCat(40,0,{t:T,st:'idle',acc:catAcc(),s:1.1});X.restore();
   const x0=land?W*0.42:INL+12,x1=W-INR-12,cw=x1-x0;let y=land?head:pr.y+18;
   const tw=Math.min(180,(cw-12)/2),th=Math.max(52,PT(44));[['🦸 Alex',0],['🐱 Doodle',1]].forEach(([l,i])=>{const x=x0+cw/2-tw-6+i*(tw+12);pill(x,y,tw,th,l,closetTab===i?'#1e88e5':'#d8b4e8',20);btn('tab'+i,x,y,tw,th,()=>{closetTab=i;sayT(i?'Doodle!':'Alex!',2)})});y+=th+16;
-  if(closetTab===0){const s=Math.max(PT(46),Math.min(land?96:64,(cw-6*(land?4:7))/(land?5:8))),cols=Math.max(1,Math.floor((cw+6)/(s+6))),list=ITEMS.filter(it=>!it.sea||SAVE.un[it.k]||it.sea===SEASON.k).concat(ITEMS.filter(it=>it.sea&&!SAVE.un[it.k]&&it.sea!==SEASON.k));
-    list.forEach((it,i)=>{const c=i%cols,r=(i/cols)|0,n=Math.min(cols,list.length-r*cols),x=x0+cw/2-(n*s+(n-1)*6)/2+c*(s+6),yy=y+r*(s+6),on=SAVE.wear[it.k],un=SAVE.un[it.k];X.fillStyle=on&&un?'#ff8fc8':'rgba(255,255,255,0.85)';rrect(x,yy,s,s,14);X.fill();
-      if(un){X.save();X.translate(x+s/2,yy+s*0.62);const k=s/54;X.scale(k,k);itemIcon(it.k);X.restore()}else{X.globalAlpha=0.3;X.save();X.translate(x+s/2,yy+s*0.62);X.scale(s/54,s/54);itemIcon(it.k);X.restore();X.globalAlpha=1;txt('🔒',x+s-12,yy+12,13,'#999')}
-      btn('it_'+it.k,x,yy,s,s,()=>{if(!un){AUD.SFX.boing();sayT(UNLOCK_HINT[it.k]||'Keep playing!',2);return}SAVE.wear[it.k]=on?0:1;save();AUD.SFX.sticker();AUD.SFX.meow(1);if(!on)sayT(it.n+'!',1)})})}
-  else{const rows=[['Shirt',TOPS,'top',TOPFISH],['Tutu',TUTUS,'tutu'],['Hair Bow',HBOWS,'bow'],['Kitty Ears',ZEARS,'ears']],lw0=land?86:70,ss=Math.max(PT(44),Math.min(land?66:50,(cw-lw0-8*7)/7)),above=lw0+7*(ss+8)>cw,lw=above?Math.max(0,(cw-7*(ss+8)+8)/2):lw0;
-    for(const [lab,arr,key,need] of rows){if(above){txt(lab,x0+cw/2,y+4,14,'#ab47bc');y+=16}else txt(lab,x0+lw/2,y+ss/2,14,'#ab47bc');arr.forEach((c,i)=>{const x=x0+lw+i*(ss+8),lk=need&&SAVE.fish<need[i],on=(SAVE.zoe[key]||null)===c;X.fillStyle=on?'#7b3fa0':'#fff';rrect(x-3,y-3,ss+6,ss+6,14);X.fill();X.fillStyle=c||'#fff';rrect(x,y,ss,ss,11);X.fill();
-      if(key==='ears'&&c){poly([x+ss*0.2,y+ss*0.75,x+ss*0.28,y+ss*0.2,x+ss*0.48,y+ss*0.6],'#fff0f6');poly([x+ss*0.52,y+ss*0.6,x+ss*0.72,y+ss*0.2,x+ss*0.8,y+ss*0.75],'#fff0f6')}
-      if(!c)txt('✕',x+ss/2,y+ss/2,18,'#bbb');if(lk){X.fillStyle='rgba(255,255,255,0.7)';rrect(x,y,ss,ss,11);X.fill();txt('🐟'+need[i],x+ss/2,y+ss/2,12,'#7b3fa0')}
-      btn(key+i,x-3,y-3,ss+6,ss+6,()=>{if(lk){AUD.SFX.boing();sayT('Collect more fish treats!',2);return}SAVE.zoe[key]=c;save();AUD.SFX.sticker()})});y+=ss+14}}
+  const ALEX_GEAR=['cape','dino','explorer','pack','witch','santa','party','pirate','helm','astro','visor','goggs','laser','truck','rocket','mech','detroit'];
+  const list0=ITEMS.filter(it=>!it.sea||SAVE.un[it.k]||it.sea===SEASON.k).concat(ITEMS.filter(it=>it.sea&&!SAVE.un[it.k]&&it.sea!==SEASON.k));
+  const list=list0.filter(it=>closetTab===0?ALEX_GEAR.indexOf(it.k)>=0:ALEX_GEAR.indexOf(it.k)<0);
+  const s=Math.max(PT(46),Math.min(land?96:64,(cw-6*(land?4:7))/(land?5:8))),cols=Math.max(1,Math.floor((cw+6)/(s+6)));
+  if(!list.length){txt(closetTab?'New outfits for Doodle are hiding in the worlds!':'New adventure gear is hiding in the worlds!',x0+cw/2,y+40,16,'#7b3fa0')}
+  list.forEach((it,i)=>{const c=i%cols,r=(i/cols)|0,n=Math.min(cols,list.length-r*cols),x=x0+cw/2-(n*s+(n-1)*6)/2+c*(s+6),yy=y+r*(s+6),on=SAVE.wear[it.k],un=SAVE.un[it.k];X.fillStyle=on&&un?'#ff8fc8':'rgba(255,255,255,0.85)';rrect(x,yy,s,s,14);X.fill();
+    if(un){X.save();X.translate(x+s/2,yy+s*0.62);const k=s/54;X.scale(k,k);itemIcon(it.k);X.restore()}else{X.globalAlpha=0.3;X.save();X.translate(x+s/2,yy+s*0.62);X.scale(s/54,s/54);itemIcon(it.k);X.restore();X.globalAlpha=1;txt('🔒',x+s-12,yy+12,13,'#999')}
+    btn('it_'+it.k,x,yy,s,s,()=>{if(!un){AUD.SFX.boing();sayT(UNLOCK_HINT[it.k]||'Keep playing!',2);return}SAVE.wear[it.k]=on?0:1;save();AUD.SFX.sticker();AUD.SFX.meow(1);if(!on)sayT(it.n+'!',1)})})
   const pw=Math.max(150,PT(110));pill(W-INR-pw-12,TOP+12,pw,bb,'📷 Photo','#ba68c8',22);btn('toPhoto',W-INR-pw-12,TOP+12,pw,bb,()=>openScreen('photo'));
   bigBack()}
 // ---------- menu (from the 🐾 button while playing) ----------
@@ -135,13 +134,16 @@ function drawWorld(){drawScene(pl);const gy=GY();X.save();X.translate(-camX,gy);
   drawCat(zoe.x,0,{t:zoe.t,face:zoe.face,st:zoe.walk?'walk':'idle',acc:catAcc(),s:0.95});
   if(task.st==='free')drawItem(task.k,task.x,task.y+(task.k==='duckling'||task.k==='dino'?0:Math.sin(T*3)*3),T);
   if(typeof drawQuest==='function')drawQuest();
-  drawAlex(cat.x,cat.y,{t:cat.t,face:cat.face,st:cat.st,walk:Math.abs(cat.vx)>25,acc:heroAcc()});
+  drawAlex(cat.x,cat.y,{t:cat.t,face:cat.face,st:cat.st,walk:Math.abs(cat.vx)>25,acc:heroAcc(),pop:cat.pop||0});
   if(task.st==='carried')drawItem(task.k,task.x,task.y,T);
   for(const p of parts){const a=1-p.t/p.life;X.globalAlpha=Math.max(0,a);if(p.heart)heartP(p.x,p.y,p.r,p.c);else if(p.star)star5(p.x,p.y,p.r*(0.6+a*0.4),p.c,p.t*4);else if(p.conf){X.save();X.translate(p.x,p.y);X.rotate(p.rot);X.fillStyle=p.c;X.fillRect(-p.r,-p.r*0.4,p.r*2,p.r*0.8);X.restore()}else circ(p.x,p.y,p.r,p.c)}X.globalAlpha=1;
   for(const f of floats){X.globalAlpha=Math.max(0,1-f.t/1.4);txt(f.s,f.x,f.y,18,f.c);X.globalAlpha=1}
   for(const b of bubbles){const bx=b.who==='zoe'?zoe.x:b.who==='npc'?giver.x:b.who==='hero'?cat.x:b.x;drawBubble(Object.assign({},b,{x:bx}))}
   X.restore();
   if(task.st==='carried'){const sx=giver.x-camX;if(sx<0||sx>W){const l=sx<0,ax=l?INL+30:W-INR-30,ay=gy-90+Math.sin(T*5)*4;circ(ax,ay,22,'rgba(255,255,255,0.9)');poly(l?[ax-12,ay,ax+6,ay-10,ax+6,ay+10]:[ax+12,ay,ax-6,ay-10,ax-6,ay+10],'#ff5c9e')}}
+  // off-screen star / help hints so a 7-year-old always knows where to go
+  for(const s of stars)if(!s.got){const sx=s.x-camX;if(sx<-30||sx>W+30){const l=sx<0,ax=l?INL+26:W-INR-26,ay=clamp(gy+s.y,TOP+90,ctrlTop()-24),pulse=1+Math.sin(T*5)*0.08;circ(ax,ay,16*pulse,'rgba(255,255,255,0.9)');star5(ax,ay,9*pulse,'#ffd54f')}}
+  if(task&&task.st!=='done'&&task.st!=='carried'){const tx=(task.st==='free'?task.x:giver.x)-camX;if(tx<-40||tx>W+40){const l=tx<0,ax=l?INL+26:W-INR-26,ay=gy-130+Math.sin(T*4)*3;circ(ax,ay,15,'rgba(255,255,255,0.9)');txt(task.st==='free'?'!':'♥',ax,ay+1,16,'#ff5c9e')}}
   drawSeasonFx();drawSeasonPlay()}
 function nearHint(){return kitHint()||(spot&&spot.near)||nearEx('cup',70)||nearEx('leaves',60)||nearEx('yarn',60)||nearEx('blanket',40)||nearEx('nap',40)||nearEx('cookie',70)||(Math.abs(zoe.x-cat.x)<80&&cat.y>-80)}
 function hudLayout(){const s=tB(),x=INL+10+76,y=TOP+10,rx=W-INR-s-10;let SP=W<520?22:26,FW=W<520?74:96;const K=KITTIES.find(q=>q.p===pl.k);
@@ -162,7 +164,11 @@ function drawHUD(){HUDB=[];const L=hudLayout(),s=L.s,y=L.y,x=L.x;
     const k=b.r*0.42;poly([b.x+dr*k*1.1,yy,b.x-dr*k*0.6,yy-k,b.x-dr*k*0.6,yy+k],on?'#fff':'#ff5c9e')}
   const j=jumpBtn(),pr=jumpHeld>0;X.globalAlpha=pr?0.95:0.55;circ(j.x,j.y+(pr?3:0),j.r,pr?'#ff5c9e':'#ff8fc8');poly([j.x,j.y-j.r*0.5,j.x-j.r*0.32,j.y-j.r*0.1,j.x+j.r*0.32,j.y-j.r*0.1],'#fff');txt('JUMP',j.x,j.y+j.r*0.3,Math.max(12,j.r*0.32),'#fff');
   const pb=pawBtn(),hint=nearHint(),pg=hint?1+Math.sin(T*6)*0.06:1;X.globalAlpha=hint?0.9:0.55;if(hint)circ(pb.x,pb.y,pb.r*pg+6,'rgba(255,245,157,0.7)');circ(pb.x,pb.y,pb.r*pg,'#b388ff');const pk=pb.r/40;circ(pb.x,pb.y+5*pk,11*pk,'#fff');for(let i=0;i<4;i++)circ(pb.x+(-13+i*8.6)*pk,pb.y+(-9-(i===1||i===2?4:0))*pk,4.6*pk,'#fff');X.globalAlpha=1;
-  if(banner){const a=Math.min(1,banner.t*4,(2.6-banner.t)*3);X.globalAlpha=Math.max(0,a);const w=Math.min(W-40,360),by=TOP+s+(L.kitRow?s+24:22);X.fillStyle='#fff';rrect(W/2-w/2,by,w,54,27);X.fill();txt('✨ '+banner.s+' ✨',W/2,by+28,24,'#c2185b');X.globalAlpha=1}}
+  if(banner){const a=Math.min(1,banner.t*4,(2.6-banner.t)*3);X.globalAlpha=Math.max(0,a);const w=Math.min(W-40,360),by=TOP+s+(L.kitRow?s+24:22);X.fillStyle='#fff';rrect(W/2-w/2,by,w,54,27);X.fill();txt('✨ '+banner.s+' ✨',W/2,by+28,24,'#c2185b');X.globalAlpha=1}
+  else if(task){const d=pdata(pl.k),needS=d.stars.length<5,needT=task.st!=='done';if(needS||needT){const msg=needS&&needT?'Find 5 stars and help out!':needS?'Find the missing stars!':'Bring them what they lost!';
+    const by=TOP+s+(L.kitRow?s+16:10),w=Math.min(W-80,320);X.globalAlpha=0.92;X.fillStyle='rgba(255,255,255,0.88)';rrect(W/2-w/2,by,w,28,14);X.fill();txt(msg,W/2,by+15,14,'#6a1b9a');X.globalAlpha=1}}
+  if(!LS.get('ctrlTip')&&stT<8){const A=arrowBtns(),j=jumpBtn(),pb=pawBtn();txt('Walk', (A.L.x+A.R.x)/2, A.L.y-A.L.r-12, 13, '#fff',{st:'#7b3fa0',sw:4});txt('Jump', j.x, j.y-j.r-12, 13, '#fff',{st:'#7b3fa0',sw:4});txt('Play', pb.x, pb.y-pb.r-12, 13, '#fff',{st:'#7b3fa0',sw:4})}
+  else if(stT>8&&!LS.get('ctrlTip'))LS.set('ctrlTip','1')}
 function drawDone(){UI=[];X.fillStyle='rgba(90,40,110,0.45)';X.fillRect(0,0,W,H);const bh=Math.max(52,PT(46)),s=back(overlay.t*2.2),w=Math.min(W-40,420),h=Math.min(H-20,250+2*bh+30),x=W/2-w/2,y=H/2-h/2;X.save();X.translate(W/2,H/2);X.scale(s,s);X.translate(-W/2,-H/2);
   X.fillStyle='#fff';rrect(x,y,w,h,28);X.fill();txt('You earned a sticker!',W/2,y+40,26,'#c2185b');sticker(pl.k,W/2-70,y+120,52,1);
   X.save();X.translate(W/2+70,y+160);drawCat(0,0,{t:T,st:'idle',acc:{[overlay.item]:1}});X.restore();const it=ITEMS.find(i=>i.k===overlay.item);txt('New adventure gear: '+it.n+'!',W/2,y+210,18,'#7b3fa0');
