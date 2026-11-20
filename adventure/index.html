@@ -197,8 +197,17 @@ const AUD=(()=>{
     const s=C.createBufferSource();s.buffer=b;s.connect(voiceBus);s.start(t+0.02);curSrc=s;curEnd=t+0.02+b.duration+0.2;curPrio=prio;stats.voice++;stats.last=k;stats.said.push(k);
     musicDuck.gain.cancelScheduledValues(t);musicDuck.gain.setTargetAtTime(0.28,t,0.04);musicDuck.gain.setTargetAtTime(1,curEnd,0.2);
     sfxBus.gain.cancelScheduledValues(t);sfxBus.gain.setTargetAtTime(0.38,t,0.04);sfxBus.gain.setTargetAtTime(0.62,curEnd,0.2);return true}
-  // ---------- free text -> recorded Piper phrase clips (play/v/<id>.mp3, lazy-loaded; never speechSynthesis) ----------
+  // ---------- free text: ElevenLabs pack for known lines; animal recs stay; no Piper v/ stitching ----------
   const vbuf={},tKeys=[];let tTimer=0,tN=0;
+  function packSayText(text){
+    if(!window.KVX)return false;
+    const raw=String(text||'').trim();
+    const tl=raw.toLowerCase().replace(/[^a-z0-9' !?]+/g,' ').replace(/\s+/g,' ').trim();
+    if(/^(hi alex!?|hey alex!?|hello!?|hi!?)$/.test(tl)){KVX.say('a_hi');return true;}
+    if(raw.length<48 && /\b(yay|yes|great job|you did it|awesome|nice job|woohoo|all right|good job|you win)\b/.test(tl)){KVX.praise();return true;}
+    if(raw.length<40 && /\b(oops|try again|uh oh|uh-oh)\b/.test(tl)){KVX.praise('try');return true;}
+    return false;
+  }
   function vwords(s){s=String(s).replace(/\u2019/g,"'").toLowerCase().replace(/[^a-z0-9' ]+/g,' ').replace(/(^| )'|'( |$)/g,' ');return s.split(' ').filter(function(x){return x})}
   const ANS={meow:'m',meows:'m',mew:'m',mews:'m',purr:'purr',purrs:'purr',quack:'a_duck',quacks:'a_duck',woof:'a_dog',woofs:'a_dog',ribbit:'a_frog',ribbits:'a_frog',hoot:'a_owl',hoots:'a_owl',hoo:'a_owl'};
   function plan(text){const w0=vwords(text),w=[],sx=[];w0.forEach(function(x){const a=ANS[x];if(a){if(sx.indexOf(a)<0)sx.push(a)}else w.push(x)});const out=[];let i=0;const B=typeof PHR!=='undefined'?PHR:{};
@@ -206,7 +215,10 @@ const AUD=(()=>{
       for(;j>i;j--){const k=w.slice(i,j).join(' ');if(B[k]){hit=B[k];break}}
       if(hit){out.push('v:'+hit);i=j}else{stats.miss=stats.miss||[];if(stats.miss.length<50)stats.miss.push(w[i]);i++}}sx.forEach(function(a){out.push('s:'+(a==='m'?'meow'+(1+Math.floor(Math.random()*5)):a))});return out}
   function loadV(id){if(vbuf[id])return vbuf[id];vbuf[id]=fetch('v/'+id+'.mp3').then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(ab){return new Promise(function(res,rej){const p=C.decodeAudioData(ab,res,rej);p&&p.catch&&p.catch(rej)})}).catch(function(){delete vbuf[id];return null});return vbuf[id]}
-  function sayText(text,prio){prio=prio||1;if(!ok())return false;const p=plan(text);if(!p.length)return false;const key='t:'+p.join('+'),my=++tN;
+  function sayText(text,prio){prio=prio||1;if(!ok())return false;
+    try{if(packSayText(text))return true}catch(e){}
+    const p=plan(text).filter(function(k){return k.charAt(0)==='s'||k.charAt(0)==='n'});
+    if(!p.length)return false;const key='t:'+p.join('+'),my=++tN;
     const fire=function(tries){if(C&&now()<curEnd-0.05&&prio<3){if(prio>=2&&tries<40&&my===tN){clearTimeout(tTimer);tTimer=setTimeout(function(){fire(tries+1)},100)}return}say(key,prio)};
     if(clips[key]){fire(0);return true}
     Promise.all(p.map(function(k){return k.charAt(0)==='n'?Promise.resolve(clips[k]||null):k.charAt(0)==='s'?Promise.resolve(clips[k.slice(2)]?{sfx:clips[k.slice(2)]}:null):loadV(k.slice(2))})).then(function(bs){bs=bs.filter(function(b){return b});
@@ -215,7 +227,7 @@ const AUD=(()=>{
       const sr=C.sampleRate,gap=Math.round(sr*0.05);let len=0;bs.forEach(function(b){len+=b.length+gap});const out=C.createBuffer(1,len,sr),d=out.getChannelData(0);let o=0;
       bs.forEach(function(b){d.set(b.getChannelData(0),o);o+=b.length+gap});clips[key]=out;tKeys.push(key);if(tKeys.length>80)delete clips[tKeys.shift()];
       stats.text=(stats.text||0)+1;if(my===tN||prio>=2)fire(0)}).catch(function(){});return true}
-  function prefetch(text){try{plan(text).forEach(function(k){if(k.charAt(0)==='v')loadV(k.slice(2))})}catch(e){}}
+  function prefetch(text){/* piper phrase prefetch disabled */}
   setInterval(()=>{if(queue.length&&C&&now()>=curEnd){const q=queue.shift();say(q.k,q.prio,true)}},60);
   // ---------- music: ORIGINAL chiptune themes (8 bars of 8th notes each; written for this game) ----------
   const NN={c:0,'c#':1,d:2,'d#':3,e:4,f:5,'f#':6,g:7,'g#':8,a:9,'a#':10,b:11};
@@ -267,7 +279,9 @@ const AUD=(()=>{
   {const sm=SFX.meow,sp=SFX.purr,sq=SFX.quack,sh=SFX.hoot,MW=['meow1','meow2','meow3','meow4','meow5'];
    SFX.meow=k=>{try{if(!rec(MW[k==null?(R()*5)|0:k%5]))sm(k)}catch(e){}};SFX.purr=d=>{try{if(!rec('purr',(d||1.2)+0.6,0.8))sp(d)}catch(e){}};
    SFX.quack=()=>{try{if(!rec('a_duck',1.4))sq()}catch(e){}};SFX.hoot=()=>{try{if(!rec('a_owl'))sh()}catch(e){}}}
-  return{unlock,SFX,say,num,count,sayText,prefetch,plan,setTheme,setMuted,get muted(){return muted},get unlocked(){return unlocked&&!!C},get running(){return !!C&&C.state==='running'},get clipCount(){return Object.keys(clips).length},get theme(){return theme},stats,get speaking(){return C&&now()<curEnd}};
+  function speakingNow(){return !!(C&&now()<curEnd)||!!(window.__kvxSpk);}
+  try{const g=window;const prev=g.__vSpk;g.__vSpk=function(){return !!(speakingNow()||(typeof prev==='function'&&prev()))};}catch(e){}
+  return{unlock,SFX,say,num,count,sayText,prefetch,plan,setTheme,setMuted,get muted(){return muted},get unlocked(){return unlocked&&!!C},get running(){return !!C&&C.state==='running'},get clipCount(){return Object.keys(clips).length},get theme(){return theme},get ctx(){return C},get musicGain(){return musicDuck},stats,get speaking(){return speakingNow()}};
 })();
 
 (document.fonts&&document.fonts.load?document.fonts.load('800 20px Baloo2Z'):Promise.resolve()).catch(()=>{}).then(()=>{
@@ -365,7 +379,7 @@ const SPEAK=(()=>{let on=LS.get('voice','1')!=='0',lastT='',lastAt=0;
   function say(text,prio){prio=prio||1;if(!on||typeof AUD==='undefined'||!AUD.unlocked||AUD.muted)return false;
     const t=performance.now();if(text===lastT&&t-lastAt<1500)return false;lastT=text;lastAt=t;if(SPOKEN.length<200)SPOKEN.push(text);return AUD.sayText(text,prio)}
   function setOn(v){on=!!v;LS.set('voice',on?'1':'0')}
-  return{say,setOn,get on(){return on},get ok(){return true},get voice(){return 'piper-amy'},get unlocked(){return typeof AUD!=='undefined'&&AUD.unlocked}}})();
+  return{say,setOn,get on(){return on},get ok(){return true},get voice(){return 'alex-el'},get unlocked(){return typeof AUD!=='undefined'&&AUD.unlocked}}})();
 const sayT=(s,p)=>SPEAK.say(s,p);
 
 // ================= places: cozy scenes with furniture platforms, drawn once into cached chunks =================
@@ -2607,32 +2621,32 @@ function creatCount(){return Object.keys(boy().creat).length}
 // ---------- world places (stars, help-quest, sticker and chest all work like home places) ----------
 const BOYLIKE={stars:[[280,-180],[820,-250],[1400,-120],[1980,-280],[2520,-60]],fish:[[90,-30],[340,-90],[620,-40],[980,-110],[1280,-70],[1600,-130],[1880,-40],[2140,-100],[2380,-50],[2550,-30]]};
 PLACES.push(
- {k:'dino',n:'Dino Jungle',th:'park',w:2800,col:'#8bc34a',secs:[{x0:0,x1:2800,out:'dino'}],vac:{hi:'Dino Jungle! Giant friendly dinosaurs and a lost taco!'},
+ {k:'dino',n:'Dino Jungle',th:'dino',w:2800,col:'#8bc34a',secs:[{x0:0,x1:2800,out:'dino'}],vac:{hi:'Dino Jungle! Giant friendly dinosaurs and a lost taco!'},
   deco:[],
   furn:[{t:'tree',x:280,c:'#1b5e20'},{t:'rock',x:700},{t:'tree',x:1180,c:'#145a24'},{t:'picnic',x:1600},{t:'rock',x:2100},{t:'tree',x:2680,c:'#1b5e20'}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'leaves',x:540},{t:'leaves',x:1500},{t:'fly',x:1900},{t:'nap',x:1610,y:-40,w:110}],
   task:{who:'trex',x:520,item:'taco',ix:2300,iy:0,hi:'v7:Roar! I am T-Rex Tim! I dropped my taco in the ferns! Can you find it, Alex?',ty:'v7:My taco! You are a dino hero, Alex!',say:'Roar! Can you find my taco?',thanks:'My taco! Thank you, Alex!'}},
- {k:'volc',n:'Volcano Valley',th:'park',w:2800,col:'#ff7043',secs:[{x0:0,x1:2800,out:'volc'}],vac:{hi:'Volcano Valley! The lava is really hot cheese! Toot-toot!'},
+ {k:'volc',n:'Volcano Valley',th:'volc',w:2800,col:'#ff7043',secs:[{x0:0,x1:2800,out:'volc'}],vac:{hi:'Volcano Valley! The lava is really hot cheese! Toot-toot!'},
   deco:[],
   furn:[{t:'rock',x:360},{t:'rock',x:980},{t:'picnic',x:1400},{t:'rock',x:1880},{t:'rock',x:2460}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:800,y:0},{t:'cup',x:1700,y:0},{t:'leaves',x:1200}],
   task:{who:'explorer',x:480,item:'cork',ix:2200,iy:0,hi:'v7:Hi Alex! Mount Toot keeps burping cheese lava! Can you find the giant cork?',ty:'v7:The cork! That should plug the burps! Thank you, Alex!',say:'Can you find the giant cork?',thanks:'The cork! Thank you, Alex!'}},
- {k:'space',n:'Space Station',th:'cozy',w:3000,col:'#5c6bc0',secs:[{x0:0,x1:3000,out:'space'}],vac:{hi:'Space Station Zoom! Rockets, lasers and moon cheese!'},
+ {k:'space',n:'Space Station',th:'space',w:3000,col:'#5c6bc0',secs:[{x0:0,x1:3000,out:'space'}],vac:{hi:'Space Station Zoom! Rockets, lasers and moon cheese!'},
   deco:[],
   furn:[{t:'bench',x:600},{t:'rock',x:1100},{t:'picnic',x:1680},{t:'bench',x:2300},{t:'rock',x:2760}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'fly',x:800},{t:'fly',x:2000},{t:'nap',x:1690,y:-40,w:110}],
   task:{who:'astro',x:500,item:'cheese',ix:2400,iy:0,hi:'v7:Hi Alex! I am Captain Zoom! The moon cheese floated away! Can you grab it?',ty:'v7:Moon cheese! You did it, Alex! One small step!',say:'Can you grab the moon cheese?',thanks:'Moon cheese! Thank you, Alex!'}},
- {k:'pirate',n:'Pirate Cove',th:'park',w:2800,col:'#26a69a',secs:[{x0:0,x1:2800,out:'pirate'}],vac:{hi:'Pirate Cove! Treasure, a goofy parrot and a golden pizza!'},
+ {k:'pirate',n:'Pirate Cove',th:'pirate',w:2800,col:'#26a69a',secs:[{x0:0,x1:2800,out:'pirate'}],vac:{hi:'Pirate Cove! Treasure, a goofy parrot and a golden pizza!'},
   deco:[{t:'flowers',x:200,n:3}],
   furn:[{t:'tree',x:300,c:'#43a047'},{t:'bench',x:800},{t:'rock',x:1300},{t:'picnic',x:1700},{t:'tree',x:2300,c:'#2e7d32'},{t:'rock',x:2660}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'leaves',x:600},{t:'ducks',x:2100},{t:'nap',x:1710,y:-40,w:110}],
   task:{who:'capn',x:540,item:'pizza',ix:2150,iy:0,hi:'v7:Ahoy Alex! Captain Tootbeard here! I lost my golden Detroit pizza! Help a pirate out!',ty:'v7:My pizza! Square slices, the Detroit way! Thank you, Alex!',say:'Ahoy! Can you find my golden pizza?',thanks:'My pizza! Thank you, Alex!'}},
- {k:'castle',n:'Spooky Castle',th:'cozy',w:2800,col:'#7e57c2',secs:[{x0:0,x1:2800,out:'castle'}],vac:{hi:'Spooky Castle! Friendly ghosts and a missing rubber chicken! Nothing scary!'},
+ {k:'castle',n:'Spooky Castle',th:'castle',w:2800,col:'#7e57c2',secs:[{x0:0,x1:2800,out:'castle'}],vac:{hi:'Spooky Castle! Friendly ghosts and a missing rubber chicken! Nothing scary!'},
   deco:[{t:'picture',x:400,k:'heart',y:-240}],
   furn:[{t:'bench',x:620},{t:'rock',x:1100},{t:'picnic',x:1600},{t:'bench',x:2140},{t:'rock',x:2580}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:900,y:0},{t:'yarn',x:1800,vx:40},{t:'nap',x:1610,y:-40,w:110}],
   task:{who:'ghost',x:500,item:'chicken',ix:2350,iy:0,hi:'v7:Boo! Just kidding, I am Boo-Boo the ghost! I lost my rubber chicken! It honks!',ty:'v7:My rubber chicken! Honk honk! You are the bravest, Alex!',say:'Boo! Can you find my rubber chicken?',thanks:'My rubber chicken! Thank you, Alex!'}},
- {k:'robot',n:'Robot Factory',th:'home',w:2800,col:'#90a4ae',secs:[{x0:0,x1:2800,out:'robot'}],vac:{hi:'Robot Factory! Beep boop! A loose sprocket is on the loose!'},
+ {k:'robot',n:'Robot Factory',th:'robot',w:2800,col:'#90a4ae',secs:[{x0:0,x1:2800,out:'robot'}],vac:{hi:'Robot Factory! Beep boop! A loose sprocket is on the loose!'},
   deco:[],
   furn:[{t:'bench',x:500},{t:'rock',x:1000},{t:'picnic',x:1500},{t:'bench',x:2040},{t:'rock',x:2500}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:800,y:0},{t:'yarn',x:1700,vx:-30},{t:'nap',x:1510,y:-40,w:110}],
@@ -2909,7 +2923,7 @@ const BOSSES=[
   {k:'robot',n:'Mega Toaster 9000',ic:'🍞',line:'Insert bread! I mean, butter me!',hit:'Pop! Toast!',win:'The toaster pops a mountain of toast! You win, Alex!',need:5,item:'🧈'}
 ];
 let BS=null;
-function bossOpen(k){if(!worldOpen(k)&&!pdata(k).sticker){boySay('Explore that world first!',2);return}const spec=BOSSES.find(b=>b.k===k);BS={...spec,hp:0,t:0,pop:0,over:0,fin:0,shake:0};openScreen('boss');boySay(spec.line,3);AUD.setTheme('win')}
+function bossOpen(k){if(!worldOpen(k)&&!pdata(k).sticker){boySay('Explore that world first!',2);return}const spec=BOSSES.find(b=>b.k===k);BS={...spec,hp:0,t:0,pop:0,over:0,fin:0,shake:0};openScreen('boss');boySay(spec.line,3);AUD.setTheme('boss')}
 SCR.bosses={open(){boySay('Pick a silly boss! You cannot lose!',2)}};
 SCR.boss={open(){if(!BS)BS={...BOSSES[0],hp:0,t:0,pop:0,over:0,fin:0,shake:0}},close(){BS=null;AUD.setTheme('title')},
   down(p){if(!BS||BS.over)return;BS.hp++;BS.pop=1;BS.shake=0.25;AUD.SFX.hop();sSpark(W/2,H*0.42,14);boySay(BS.hit,1);if(BS.hp>=BS.need)bossWin()}};
@@ -3044,4 +3058,31 @@ b.addEventListener('touchstart',down,{passive:false});b.addEventListener('touche
 b.addEventListener('mousedown',down);b.addEventListener('mouseup',up);b.addEventListener('mouseleave',function(e){if(on)up(e)});
 ['pointerdown','pointerup','click'].forEach(function(n){b.addEventListener(n,stop)});
 function add(){document.body.appendChild(b);document.body.appendChild(hint);watchOffl()}if(document.body)add();else addEventListener('DOMContentLoaded',add)})();</script>
+
+<script>/*bgm*/window.BGM_CFG={"id":"alex-doodle-adventure","base":"music/","v":"20261120el","intro":"intro","tracks":{"title":[48.0,1.0],"home":[48.0,1.0],"dino":[48.0,1.0],"volc":[48.0,1.0],"space":[48.0,1.0],"pirate":[48.0,1.0],"castle":[48.0,1.0],"robot":[48.0,1.0],"boss":[48.0,1.0]},"map":{"park":"home","cozy":"home","lull":"home","win":"home"},"pos":"left:10px;top:58px","poll":function(){var muted=false,speaking=!!(window.__vSpk&&window.__vSpk()),th="title";try{if(window.AUD){muted=!!AUD.muted;th=AUD.theme||th;if(AUD.speaking)speaking=true}}catch(e){}if(th==="none"||th==="off")return{area:"",muted:muted,speaking:speaking};return{area:th,muted:muted,speaking:speaking}}};</script>
+<script src="music/bgm.js?v=20261120el" defer></script>
+<script src="audio/pack.js?v=20261120el"></script>
+<script>
+(function(){
+  function musicGain(){try{if(window.AUD&&AUD.musicGain)return AUD.musicGain;}catch(e){}return null;}
+  function getCtx(){try{if(window.AUD&&AUD.ctx)return AUD.ctx;}catch(e){}return null;}
+  if(window.KVX) KVX.init({base:'audio/', getCtx:getCtx, musicGain:musicGain, kid:'alex', v:'20261120el', preload:['sfx/ui_click','sfx/correct','sfx/win','sfx/pop','sfx/jump','voice/alex/a_hi']});
+  function wrap(obj,name,sfx){if(!obj||typeof obj[name]!=='function')return;var orig=obj[name];obj[name]=function(){try{if(window.KVX){KVX.sfx(sfx);return;}}catch(e){}try{return orig.apply(this,arguments);}catch(e){}};}
+  function hookSfx(){
+    var S=window.AUD&&AUD.SFX; if(!S)return;
+    [['click','ui_click'],['pop','pop'],['boing','boing'],['whoosh','whoosh'],['fanfare','win'],['cheer','win'],['jump','jump'],['hop','jump'],['hop2','jump'],['land','land'],['chime','correct'],['check','correct'],['sticker','star'],['treat','collect'],['honey','collect'],['splash','splash'],['beep','ui_click'],['sparkle','sparkle']].forEach(function(p){wrap(S,p[0],p[1]);});
+  }
+  hookSfx(); setTimeout(hookSfx,400); setTimeout(hookSfx,1200);
+  var _say=window.AUD&&AUD.say;
+  if(typeof _say==='function'){
+    AUD.say=function(k,p,q){
+      try{
+        if(window.KVX&&(k==='great'||k==='gj'||k==='yay'||k==='yes'||k==='awesome'||k==='legend')){KVX.praise();return true;}
+        if(window.KVX&&(k==='try'||k==='hint'||k==='oops'||k==='hi'||k==='hello')){if(k==='hi'||k==='hello'){KVX.say('a_hi');return true;}KVX.praise('try');return true;}
+      }catch(e){}
+      return _say.apply(AUD,arguments);
+    };
+  }
+})();
+</script>
 </body></html>

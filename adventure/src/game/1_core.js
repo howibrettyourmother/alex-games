@@ -91,5 +91,5 @@ const SPEAK=(()=>{let on=LS.get('voice','1')!=='0',lastT='',lastAt=0;
   function say(text,prio){prio=prio||1;if(!on||typeof AUD==='undefined'||!AUD.unlocked||AUD.muted)return false;
     const t=performance.now();if(text===lastT&&t-lastAt<1500)return false;lastT=text;lastAt=t;if(SPOKEN.length<200)SPOKEN.push(text);return AUD.sayText(text,prio)}
   function setOn(v){on=!!v;LS.set('voice',on?'1':'0')}
-  return{say,setOn,get on(){return on},get ok(){return true},get voice(){return 'piper-amy'},get unlocked(){return typeof AUD!=='undefined'&&AUD.unlocked}}})();
+  return{say,setOn,get on(){return on},get ok(){return true},get voice(){return 'alex-el'},get unlocked(){return typeof AUD!=='undefined'&&AUD.unlocked}}})();
 const sayT=(s,p)=>SPEAK.say(s,p);

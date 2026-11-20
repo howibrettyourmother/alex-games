@@ -21,32 +21,32 @@ function creatCount(){return Object.keys(boy().creat).length}
 // ---------- world places (stars, help-quest, sticker and chest all work like home places) ----------
 const BOYLIKE={stars:[[280,-180],[820,-250],[1400,-120],[1980,-280],[2520,-60]],fish:[[90,-30],[340,-90],[620,-40],[980,-110],[1280,-70],[1600,-130],[1880,-40],[2140,-100],[2380,-50],[2550,-30]]};
 PLACES.push(
- {k:'dino',n:'Dino Jungle',th:'park',w:2800,col:'#8bc34a',secs:[{x0:0,x1:2800,out:'dino'}],vac:{hi:'Dino Jungle! Giant friendly dinosaurs and a lost taco!'},
+ {k:'dino',n:'Dino Jungle',th:'dino',w:2800,col:'#8bc34a',secs:[{x0:0,x1:2800,out:'dino'}],vac:{hi:'Dino Jungle! Giant friendly dinosaurs and a lost taco!'},
   deco:[],
   furn:[{t:'tree',x:280,c:'#1b5e20'},{t:'rock',x:700},{t:'tree',x:1180,c:'#145a24'},{t:'picnic',x:1600},{t:'rock',x:2100},{t:'tree',x:2680,c:'#1b5e20'}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'leaves',x:540},{t:'leaves',x:1500},{t:'fly',x:1900},{t:'nap',x:1610,y:-40,w:110}],
   task:{who:'trex',x:520,item:'taco',ix:2300,iy:0,hi:'v7:Roar! I am T-Rex Tim! I dropped my taco in the ferns! Can you find it, Alex?',ty:'v7:My taco! You are a dino hero, Alex!',say:'Roar! Can you find my taco?',thanks:'My taco! Thank you, Alex!'}},
- {k:'volc',n:'Volcano Valley',th:'park',w:2800,col:'#ff7043',secs:[{x0:0,x1:2800,out:'volc'}],vac:{hi:'Volcano Valley! The lava is really hot cheese! Toot-toot!'},
+ {k:'volc',n:'Volcano Valley',th:'volc',w:2800,col:'#ff7043',secs:[{x0:0,x1:2800,out:'volc'}],vac:{hi:'Volcano Valley! The lava is really hot cheese! Toot-toot!'},
   deco:[],
   furn:[{t:'rock',x:360},{t:'rock',x:980},{t:'picnic',x:1400},{t:'rock',x:1880},{t:'rock',x:2460}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:800,y:0},{t:'cup',x:1700,y:0},{t:'leaves',x:1200}],
   task:{who:'explorer',x:480,item:'cork',ix:2200,iy:0,hi:'v7:Hi Alex! Mount Toot keeps burping cheese lava! Can you find the giant cork?',ty:'v7:The cork! That should plug the burps! Thank you, Alex!',say:'Can you find the giant cork?',thanks:'The cork! Thank you, Alex!'}},
- {k:'space',n:'Space Station',th:'cozy',w:3000,col:'#5c6bc0',secs:[{x0:0,x1:3000,out:'space'}],vac:{hi:'Space Station Zoom! Rockets, lasers and moon cheese!'},
+ {k:'space',n:'Space Station',th:'space',w:3000,col:'#5c6bc0',secs:[{x0:0,x1:3000,out:'space'}],vac:{hi:'Space Station Zoom! Rockets, lasers and moon cheese!'},
   deco:[],
   furn:[{t:'bench',x:600},{t:'rock',x:1100},{t:'picnic',x:1680},{t:'bench',x:2300},{t:'rock',x:2760}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'fly',x:800},{t:'fly',x:2000},{t:'nap',x:1690,y:-40,w:110}],
   task:{who:'astro',x:500,item:'cheese',ix:2400,iy:0,hi:'v7:Hi Alex! I am Captain Zoom! The moon cheese floated away! Can you grab it?',ty:'v7:Moon cheese! You did it, Alex! One small step!',say:'Can you grab the moon cheese?',thanks:'Moon cheese! Thank you, Alex!'}},
- {k:'pirate',n:'Pirate Cove',th:'park',w:2800,col:'#26a69a',secs:[{x0:0,x1:2800,out:'pirate'}],vac:{hi:'Pirate Cove! Treasure, a goofy parrot and a golden pizza!'},
+ {k:'pirate',n:'Pirate Cove',th:'pirate',w:2800,col:'#26a69a',secs:[{x0:0,x1:2800,out:'pirate'}],vac:{hi:'Pirate Cove! Treasure, a goofy parrot and a golden pizza!'},
   deco:[{t:'flowers',x:200,n:3}],
   furn:[{t:'tree',x:300,c:'#43a047'},{t:'bench',x:800},{t:'rock',x:1300},{t:'picnic',x:1700},{t:'tree',x:2300,c:'#2e7d32'},{t:'rock',x:2660}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'leaves',x:600},{t:'ducks',x:2100},{t:'nap',x:1710,y:-40,w:110}],
   task:{who:'capn',x:540,item:'pizza',ix:2150,iy:0,hi:'v7:Ahoy Alex! Captain Tootbeard here! I lost my golden Detroit pizza! Help a pirate out!',ty:'v7:My pizza! Square slices, the Detroit way! Thank you, Alex!',say:'Ahoy! Can you find my golden pizza?',thanks:'My pizza! Thank you, Alex!'}},
- {k:'castle',n:'Spooky Castle',th:'cozy',w:2800,col:'#7e57c2',secs:[{x0:0,x1:2800,out:'castle'}],vac:{hi:'Spooky Castle! Friendly ghosts and a missing rubber chicken! Nothing scary!'},
+ {k:'castle',n:'Spooky Castle',th:'castle',w:2800,col:'#7e57c2',secs:[{x0:0,x1:2800,out:'castle'}],vac:{hi:'Spooky Castle! Friendly ghosts and a missing rubber chicken! Nothing scary!'},
   deco:[{t:'picture',x:400,k:'heart',y:-240}],
   furn:[{t:'bench',x:620},{t:'rock',x:1100},{t:'picnic',x:1600},{t:'bench',x:2140},{t:'rock',x:2580}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:900,y:0},{t:'yarn',x:1800,vx:40},{t:'nap',x:1610,y:-40,w:110}],
   task:{who:'ghost',x:500,item:'chicken',ix:2350,iy:0,hi:'v7:Boo! Just kidding, I am Boo-Boo the ghost! I lost my rubber chicken! It honks!',ty:'v7:My rubber chicken! Honk honk! You are the bravest, Alex!',say:'Boo! Can you find my rubber chicken?',thanks:'My rubber chicken! Thank you, Alex!'}},
- {k:'robot',n:'Robot Factory',th:'home',w:2800,col:'#90a4ae',secs:[{x0:0,x1:2800,out:'robot'}],vac:{hi:'Robot Factory! Beep boop! A loose sprocket is on the loose!'},
+ {k:'robot',n:'Robot Factory',th:'robot',w:2800,col:'#90a4ae',secs:[{x0:0,x1:2800,out:'robot'}],vac:{hi:'Robot Factory! Beep boop! A loose sprocket is on the loose!'},
   deco:[],
   furn:[{t:'bench',x:500},{t:'rock',x:1000},{t:'picnic',x:1500},{t:'bench',x:2040},{t:'rock',x:2500}],
   stars:BOYLIKE.stars,fish:BOYLIKE.fish,extras:[{t:'cup',x:800,y:0},{t:'yarn',x:1700,vx:-30},{t:'nap',x:1510,y:-40,w:110}],
@@ -323,7 +323,7 @@ const BOSSES=[
   {k:'robot',n:'Mega Toaster 9000',ic:'🍞',line:'Insert bread! I mean, butter me!',hit:'Pop! Toast!',win:'The toaster pops a mountain of toast! You win, Alex!',need:5,item:'🧈'}
 ];
 let BS=null;
-function bossOpen(k){if(!worldOpen(k)&&!pdata(k).sticker){boySay('Explore that world first!',2);return}const spec=BOSSES.find(b=>b.k===k);BS={...spec,hp:0,t:0,pop:0,over:0,fin:0,shake:0};openScreen('boss');boySay(spec.line,3);AUD.setTheme('win')}
+function bossOpen(k){if(!worldOpen(k)&&!pdata(k).sticker){boySay('Explore that world first!',2);return}const spec=BOSSES.find(b=>b.k===k);BS={...spec,hp:0,t:0,pop:0,over:0,fin:0,shake:0};openScreen('boss');boySay(spec.line,3);AUD.setTheme('boss')}
 SCR.bosses={open(){boySay('Pick a silly boss! You cannot lose!',2)}};
 SCR.boss={open(){if(!BS)BS={...BOSSES[0],hp:0,t:0,pop:0,over:0,fin:0,shake:0}},close(){BS=null;AUD.setTheme('title')},
   down(p){if(!BS||BS.over)return;BS.hp++;BS.pop=1;BS.shake=0.25;AUD.SFX.hop();sSpark(W/2,H*0.42,14);boySay(BS.hit,1);if(BS.hp>=BS.need)bossWin()}};
