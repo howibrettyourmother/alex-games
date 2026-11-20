@@ -31,9 +31,9 @@ function enterPlace(i){PI=i;pl=PLACES[i];plats=buildPlace(pl);const d=pdata(pl.k
 function goMap(){state='title';overlay=null;resetInput();AUD.setTheme('title');stT=0}
 // ---------- fx ----------
 function burst(x,y,n,cols,sp,r){for(let i=0;i<n&&parts.length<160;i++){const a=R()*TAU,v=rr(0.3,1)*(sp||160);parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:rr(0.5,0.9),r:rr(2,r||5),c:pick(cols)})}}
-function hearts(x,y,n){for(let i=0;i<n&&parts.length<160;i++)parts.push({x:x+rr(-14,14),y,vx:rr(-30,30),vy:rr(-110,-60),t:0,life:rr(0.9,1.4),r:rr(6,10),c:pick(['#ff8fc8','#ff5c9e','#c5a3ff']),heart:1})}
-function sparkles(x,y,n){for(let i=0;i<n&&parts.length<160;i++){const a=R()*TAU,v=rr(40,160);parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:rr(0.5,1),r:rr(4,8),c:pick(['#fff59d','#ffffff','#ffd54f','#ffc1e3']),star:1})}}
-function confetti(n){for(let i=0;i<n&&parts.length<160;i++)parts.push({x:camX+rr(0,W),y:-GY()-10,vx:rr(-40,40),vy:rr(60,180),t:0,life:rr(1.6,3),r:rr(3,6),c:pick(['#ffd23f','#ff5d8f','#4fc3f7','#81c784','#ff8a26','#b388ff']),conf:1,rot:rr(0,6)})}
+function hearts(x,y,n){for(let i=0;i<n&&parts.length<160;i++)parts.push({x:x+rr(-14,14),y,vx:rr(-30,30),vy:rr(-110,-60),t:0,life:rr(0.9,1.4),r:rr(6,10),c:pick(['#ffd54f','#ff6f00','#43a047','#1565c0']),star:1})}
+function sparkles(x,y,n){for(let i=0;i<n&&parts.length<160;i++){const a=R()*TAU,v=rr(40,160);parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:rr(0.5,1),r:rr(4,8),c:pick(['#fff59d','#ffffff','#ffd54f','#4fc3f7']),star:1})}}
+function confetti(n){for(let i=0;i<n&&parts.length<160;i++)parts.push({x:camX+rr(0,W),y:-GY()-10,vx:rr(-40,40),vy:rr(60,180),t:0,life:rr(1.6,3),r:rr(3,6),c:pick(['#ffd23f','#e53935','#4fc3f7','#81c784','#ff8a26','#1565c0']),conf:1,rot:rr(0,6)})}
 function float(s,x,y,c){if(floats.length<10)floats.push({s,x,y,t:0,c:c||'#fff'})}
 function bubble(x,y,s,who){bubbles=bubbles.filter(b=>b.who!==who);bubbles.push({x,y,s,t:0,who})}
 // ---------- actions ----------
@@ -106,7 +106,7 @@ function update(dt){T+=dt;stT+=dt;if(banner){banner.t+=dt;if(banner.t>2.6)banner
   // collectibles
   for(const s of stars)if(!s.got&&Math.hypot(s.x-c.x,s.y-(c.y-26))<34)collectStar(s);
   for(const f of fish)if(!f.got&&Math.hypot(f.x-c.x,f.y-(c.y-24))<30){f.got=1;SAVE.fish++;save();AUD.SFX.treat();sparkles(f.x,f.y,6);{const t=performance.now();if(t-(window._fcT||0)>1800)window._fcN=0;window._fcT=t;window._fcN=(window._fcN||0)%10+1;float(String(window._fcN),f.x,f.y-46,'#fff59d');AUD.count(window._fcN,window._fcN===1)}// count each fish: one, two, three...
-  float('+1 🐟',f.x,f.y-20,'#ffc1e3');
+  float('+1 🪙',f.x,f.y-20,'#ffd54f');
     if(SAVE.fish&&SAVE.fish%15===0){float('Coins!',c.x,c.y-80,'#ffd54f');AUD.SFX.sticker()}if(SAVE.fish===30){SAVE.un.collar=1;save();float('Bell Collar unlocked!',c.x,c.y-100,'#fff59d')}}
   // task item
   if(task.st==='free'&&Math.hypot(task.x-c.x,task.y-(c.y-20))<38){task.st='carried';cat.carry=task.k;AUD.SFX.chime();sparkles(task.x,task.y,10);float('Bring it back!',c.x,c.y-80,'#fff59d')}

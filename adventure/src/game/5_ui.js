@@ -1,5 +1,5 @@
 // ================= UI: map, menus, sticker book, closet, kitty collection, HUD, controls, render =================
-const VERSION='1.9.0 (Nov 20 2026)';let UI=[],HUDB=[],retTo='title';const ICONM=/[?&]icon=1/.test(Q);
+const VERSION='1.9.1 (Nov 20 2026)';let UI=[],HUDB=[],retTo='title';const ICONM=/[?&]icon=1/.test(Q);
 function btn(id,x,y,w,h,fn){const b={id,x,y,w,h,fn};UI.push(b);return b}
 // last-drawn button wins (it is the one on top)
 function uiTap(p){for(let i=UI.length-1;i>=0;i--){const b=UI[i];if(inR(p,b)){if(b.id!=='block'&&b.id!=='stage')AUD.SFX.click();b.fn();return true}}return false}
@@ -33,7 +33,7 @@ function sConf(n){for(let i=0;i<n&&scr.length<120;i++)scr.push({x:rr(0,W),y:-10,
 function updScr(dt){for(const p of scr){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.k===2){p.vx*=0.95;p.vy=p.vy*0.95+60*dt}else if(p.k===3)p.rot+=dt*4}scr=scr.filter(p=>p.t<p.life)}
 function drawScr(){for(const p of scr){X.globalAlpha=Math.max(0,1-p.t/p.life);if(p.k===1)heartP(p.x,p.y,p.r,p.c);else if(p.k===2)star5(p.x,p.y,p.r,p.c,p.t*4);else{X.save();X.translate(p.x,p.y);X.rotate(p.rot);X.fillStyle=p.c;X.fillRect(-p.r,-p.r*0.4,p.r*2,p.r*0.8);X.restore()}}X.globalAlpha=1}
 // sparkle trail (dress-up item): a few sparkles behind Doodle while he moves
-let trailT=0;function updTrail(dt){if(!SAVE.wear.trail||!SAVE.un.trail)return;trailT-=dt;if(trailT<=0&&(Math.abs(cat.vx)>40||!cat.ground)&&parts.length<70){trailT=0.05;parts.push({x:cat.x-cat.face*20+rr(-6,6),y:cat.y-rr(10,34),vx:rr(-20,20),vy:rr(-30,10),t:0,life:rr(0.4,0.7),r:rr(3,6),c:pick(['#fff59d','#ffc1e3','#e1bee7','#fff']),star:1})}}
+let trailT=0;function updTrail(dt){if(!SAVE.wear.trail||!SAVE.un.trail)return;trailT-=dt;if(trailT<=0&&(Math.abs(cat.vx)>40||!cat.ground)&&parts.length<70){trailT=0.05;parts.push({x:cat.x-cat.face*20+rr(-6,6),y:cat.y-rr(10,34),vx:rr(-20,20),vy:rr(-30,10),t:0,life:rr(0.4,0.7),r:rr(3,6),c:pick(['#fff59d','#ff6f00','#4fc3f7','#fff']),star:1})}}
 // ---------- place icons for the map + stickers ----------
 function placeIcon(k,x,y,s){X.save();X.translate(x,y);X.scale(s,s);
   if(k==='dad'){X.fillStyle='#9fd8ff';X.fillRect(-18,-6,36,26);poly([-24,-4,0,-24,24,-4],'#7aa7e8');X.fillStyle='#fff59d';X.fillRect(-6,6,12,14);X.fillStyle='#fff';X.fillRect(-15,0,8,8);X.fillRect(7,0,8,8)}
@@ -97,7 +97,7 @@ function drawCloset(){UI=[];softBg('#e3f2fd','#fff8e1');const land=W>H*1.15,bb=M
   const s=Math.max(PT(46),Math.min(land?96:64,(cw-6*(land?4:7))/(land?5:8))),cols=Math.max(1,Math.floor((cw+6)/(s+6)));
   if(!list.length){txt(closetTab?'New outfits for Doodle are hiding in the worlds!':'New adventure gear is hiding in the worlds!',x0+cw/2,y+40,16,'#0d47a1')}
   list.forEach((it,i)=>{const c=i%cols,r=(i/cols)|0,n=Math.min(cols,list.length-r*cols),x=x0+cw/2-(n*s+(n-1)*6)/2+c*(s+6),yy=y+r*(s+6),on=SAVE.wear[it.k],un=SAVE.un[it.k];X.fillStyle=on&&un?'#ffcc02':'rgba(255,255,255,0.85)';rrect(x,yy,s,s,14);X.fill();
-    if(un){X.save();X.translate(x+s/2,yy+s*0.62);const k=s/54;X.scale(k,k);itemIcon(it.k);X.restore()}else{X.globalAlpha=0.3;X.save();X.translate(x+s/2,yy+s*0.62);X.scale(s/54,s/54);itemIcon(it.k);X.restore();X.globalAlpha=1;txt('🔒',x+s-12,yy+12,13,'#999')}
+    if(un){X.save();X.translate(x+s/2,yy+s*0.62);const k=s/54;X.scale(k,k);itemIcon(it.k);X.restore()}else{X.save();X.filter='grayscale(1)';X.globalAlpha=0.45;X.translate(x+s/2,yy+s*0.62);X.scale(s/54,s/54);itemIcon(it.k);X.restore();txt('🔒',x+s-12,yy+12,13,'#999')}
     btn('it_'+it.k,x,yy,s,s,()=>{if(!un){AUD.SFX.boing();sayT(UNLOCK_HINT[it.k]||'Keep playing!',2);return}SAVE.wear[it.k]=on?0:1;save();AUD.SFX.sticker();AUD.SFX.meow(1);if(!on)sayT(it.n+'!',1)})})
   const pw=Math.max(150,PT(110));pill(W-INR-pw-12,TOP+12,pw,bb,'📷 Photo','#ff6f00',22);btn('toPhoto',W-INR-pw-12,TOP+12,pw,bb,()=>openScreen('photo'));
   bigBack()}

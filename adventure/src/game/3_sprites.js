@@ -2,7 +2,7 @@
 const OR='#f5a142',ORD='#dc7f2a',WH='#fffaf3',PN='#ff9fb8';
 function sl(w,c){X.lineWidth=w;X.strokeStyle=c;X.lineCap='round';X.lineJoin='round';X.stroke()}
 function bow(x,y,s,c){X.save();X.translate(x,y);X.scale(s,s);poly([0,0,-12,-8,-12,8],c);poly([0,0,12,-8,12,8],c);circ(0,0,4,'#fff');X.restore()}
-function crown(x,y,s){X.save();X.translate(x,y);X.scale(s,s);poly([-12,4,-12,-8,-6,-2,0,-12,6,-2,12,-8,12,4],'#ffd54f');circ(0,-12,2.4,'#ff8fc8');circ(-12,-8,2,'#b39ddb');circ(12,-8,2,'#80deea');X.restore()}
+function crown(x,y,s){X.save();X.translate(x,y);X.scale(s,s);poly([-12,4,-12,-8,-6,-2,0,-12,6,-2,12,-8,12,4],'#ffd54f');circ(0,-12,2.4,'#ff6f00');circ(-12,-8,2,'#43a047');circ(12,-8,2,'#1565c0');X.restore()}
 // Doodle: chunky orange-and-white tabby (real markings): white muzzle+chest+blaze, orange ears/head patch, pink nose, white paws, striped orange tail. Faces right; (x,y)=feet.
 function drawCat(x,y,o){const f=o.face||1,st=o.st||'idle',t=o.t||0,A=o.acc||{};X.save();X.translate(x,y);X.scale(f*(o.s||1),o.s||1);
   ell(0,1,30,5,'rgba(80,40,90,0.15)');
@@ -101,7 +101,7 @@ function drawCat(x,y,o){const f=o.face||1,st=o.st||'idle',t=o.t||0,A=o.acc||{};X
     X.beginPath();X.moveTo(lx,-18);X.lineTo(lx+dx,-4-lift);sl(10,i%2?ORD:OR);if(A.boots){const bx=lx+dx+1,by=-3-lift;X.fillStyle='#8d6e63';rrect(bx-5.5,by-9,10,10,3);X.fill();ell(bx+1.5,by,7,4,'#6d4c41');X.fillStyle='#ffcc80';X.fillRect(bx-5.5,by-10,10,3)}else ell(lx+dx+1,-3-lift,6.5,5,WH)}
   // body (chunky loaf-able torso, big white bib)
   ell(0,-22,36,22,OR);ell(8,-14,24,13,WH);for(let i=0;i<4;i++){X.beginPath();X.arc(-18+i*10,-36,8,Math.PI*1.2,Math.PI*1.8);sl(3.4,ORD)}
-  if(A.sweater){ell(0,-25,29,17,'#f8a5c8');for(let i=0;i<3;i++){X.beginPath();X.moveTo(-22+i*4,-12-i*2);X.lineTo(22-i*4,-12-i*2);sl(1.6,'rgba(255,255,255,0.6)')}heartP(4,-24,7,'#fff');heartP(4,-24,4.5,'#ff5c9e')}
+  if(A.sweater){ell(0,-25,29,17,'#f8a5c8');for(let i=0;i<3;i++){X.beginPath();X.moveTo(-22+i*4,-12-i*2);X.lineTo(22-i*4,-12-i*2);sl(1.6,'rgba(255,255,255,0.6)')}star5(4,-24,7,'#fff59d');star5(4,-24,4.5,'#ffd54f')}
   if(A.tutu){for(let i=0;i<7;i++)ell(-20+i*7,-18,8,6,i%2?'#ffc1e3':'#e1bee7');}
   if(A.collar){X.beginPath();X.arc(22,-36,13,0.6,2.4);sl(4,'#1565c0');circ(22,-23,3.2,'#ffd54f')}
   if(A.bowtie)bow(22,-26,0.75,'#1565c0');
@@ -121,12 +121,12 @@ function drawCat(x,y,o){const f=o.face||1,st=o.st||'idle',t=o.t||0,A=o.acc||{};X
   if(A.glasses){X.fillStyle='#212121';rrect(hx-13,hy-5,11,8,3);X.fill();rrect(hx+4,hy-5,11,8,3);X.fill();X.beginPath();X.moveTo(hx-2,hy-2);X.lineTo(hx+4,hy-2);sl(1.8,'#212121')}
   if(A.shades){X.fillStyle='#263238';rrect(hx-13,hy-5,11,8,3);X.fill();rrect(hx+4,hy-5,11,8,3);X.fill();X.beginPath();X.moveTo(hx-2,hy-2);X.lineTo(hx+4,hy-2);sl(1.8,'#263238');X.fillStyle='rgba(255,255,255,0.6)';X.fillRect(hx-11,hy-4,3,2);X.fillRect(hx+6,hy-4,3,2)}
   accHead(A,hx,hy,1,t);X.restore()}
-function partyHat(x,y,s,rot){X.save();X.translate(x,y);X.rotate(rot||0);X.scale(s,s);poly([-9,0,9,0,0,-24],'#ff8fc8');X.beginPath();X.moveTo(-6,-6);X.lineTo(6,-8);X.moveTo(-3,-14);X.lineTo(4,-15);sl(2.4,'#fff59d');circ(0,-25,3.6,'#b388ff');X.restore()}
+function partyHat(x,y,s,rot){X.save();X.translate(x,y);X.rotate(rot||0);X.scale(s,s);poly([-9,0,9,0,0,-24],'#ff6f00');X.beginPath();X.moveTo(-6,-6);X.lineTo(6,-8);X.moveTo(-3,-14);X.lineTo(4,-15);sl(2.4,'#fff59d');circ(0,-25,3.6,'#1565c0');X.restore()}
 function accHead(A,hx,hy,s,t){if(A.party){partyHat(hx+2,hy-14,1,0.15);return}
-  if(A.horn){X.save();X.translate(hx+3,hy-15);X.rotate(0.25);poly([-5,0,5,0,0,-22],'#fff3b0');X.beginPath();X.moveTo(-4,-4);X.lineTo(4,-7);X.moveTo(-3,-10);X.lineTo(3,-13);X.moveTo(-2,-16);X.lineTo(2,-18);sl(1.6,'#ff8fc8');X.restore();circ(hx-6,hy-15,3,'#c5a3ff');circ(hx+12,hy-15,3,'#ffc1e3')}
-  if(A.witch){X.save();X.translate(hx+1,hy-15);X.rotate(-0.12);ell(0,0,18,4.5,'#7e57c2');poly([-10,-1,10,-1,4,-26],'#9575cd');poly([4,-26,8,-24,14,-30],'#9575cd');X.fillStyle='#ff8fc8';X.fillRect(-10,-6,20,4);star5(-2,-14,3.4,'#fff59d');X.restore()}
-  if(A.santa){X.save();X.translate(hx+1,hy-15);X.rotate(0.1);poly([-12,0,12,0,10,-14,-6,-20],'#ff6fa8');poly([-6,-20,10,-14,18,-6],'#ff6fa8');circ(19,-5,4,'#fff');X.fillStyle='#fff';rrect(-14,-4,28,7,3.5);X.fill();X.restore()}
-  if(A.sunhat){X.save();X.translate(hx+2,hy-14);ell(0,0,24,6,'#ffe082');ell(0,-6,13,10,'#ffd54f');X.fillStyle='#ff8fc8';X.fillRect(-13,-5,26,4);circ(10,-5,3.5,'#ff5c9e');X.restore()}
+  if(A.horn){X.save();X.translate(hx+3,hy-15);X.rotate(0.25);poly([-5,0,5,0,0,-22],'#fff3b0');X.beginPath();X.moveTo(-4,-4);X.lineTo(4,-7);X.moveTo(-3,-10);X.lineTo(3,-13);X.moveTo(-2,-16);X.lineTo(2,-18);sl(1.6,'#ff6f00');X.restore();circ(hx-6,hy-15,3,'#43a047');circ(hx+12,hy-15,3,'#1565c0')}
+  if(A.witch){X.save();X.translate(hx+1,hy-15);X.rotate(-0.12);ell(0,0,18,4.5,'#263238');poly([-10,-1,10,-1,4,-26],'#37474f');poly([4,-26,8,-24,14,-30],'#37474f');X.fillStyle='#ffd54f';X.fillRect(-10,-6,20,4);star5(-2,-14,3.4,'#fff59d');X.restore()}
+  if(A.santa){X.save();X.translate(hx+1,hy-15);X.rotate(0.1);poly([-12,0,12,0,10,-14,-6,-20],'#e53935');poly([-6,-20,10,-14,18,-6],'#c62828');circ(19,-5,4,'#fff');X.fillStyle='#fff';rrect(-14,-4,28,7,3.5);X.fill();X.restore()}
+  if(A.sunhat){X.save();X.translate(hx+2,hy-14);ell(0,0,24,6,'#ffe082');ell(0,-6,13,10,'#ffd54f');X.fillStyle='#ff6f00';X.fillRect(-13,-5,26,4);circ(10,-5,3.5,'#1565c0');X.restore()}
   if(A.knit){X.save();X.translate(hx+2,hy-14);X.fillStyle='#4fc3f7';X.beginPath();X.arc(0,0,15,Math.PI,0);X.fill();X.fillStyle='#fff';rrect(-16,-3,32,7,3);X.fill();X.strokeStyle='#29b6f6';X.lineWidth=1.5;for(let i=-9;i<=9;i+=6){X.beginPath();X.moveTo(i,-4);X.lineTo(i,-13+Math.abs(i)*0.3);X.stroke()}circ(0,-17,6,'#fff');X.restore()}
   if(A.crown)crown(hx-2,hy-20,0.9);if(A.bow){X.fillStyle='#c62828';X.beginPath();X.moveTo(hx-16,hy+8);X.lineTo(hx+2,hy-6);X.lineTo(hx+16,hy+8);X.lineTo(hx+10,hy+14);X.lineTo(hx-2,hy+4);X.lineTo(hx-12,hy+14);X.closePath();X.fill();X.fillStyle='#ffd54f';X.fillRect(hx-4,hy+2,6,5)};if(A.flower){for(let i=0;i<5;i++){const a=i*TAU/5;circ(hx-10+Math.cos(a)*4,hy-16+Math.sin(a)*4,3.2,'#c5a3ff')}circ(hx-10,hy-16,2.4,'#fff59d')}}
 // Alex is ALWAYS the playable hero. Any leftover drawZoe() call is redirected so Zoe can never appear as the player.
@@ -201,16 +201,26 @@ function drawAlex(x,y,o){o=o||{};const f=o.face||1,t=o.t||0,A=o.acc||heroAcc(),w
   if(pose==='cheer'||pose==='cape'){X.fillStyle=AX.hood;X.fillRect(-18,-62,6,24);X.fillRect(12,-62,6,24);X.fillStyle=AX.skin;X.fillRect(-18,-68,6,8);X.fillRect(12,-68,6,8)}
   else if(pose==='wave'){const up=Math.sin(t*14)*7;X.fillStyle=AX.skin;X.fillRect(-16,-40,6,16);X.fillStyle=AX.hood;X.fillRect(-16,-40,6,7);X.fillRect(12,-58+up,6,22);X.fillStyle=AX.skin;X.fillRect(12,-64+up,6,8)}
   else{X.fillStyle=AX.skin;X.fillRect(-16,-40,6,16+w*2);X.fillRect(10,-40,6,16-w*2);X.fillStyle=AX.hood;X.fillRect(-16,-40,6,8);X.fillRect(10,-40,6,8)}
-  // head
-  const hy=-58;circ(0,hy,13,AX.skin);
-  // messy, spiky dark hair
-  X.fillStyle=AX.hair;X.beginPath();X.arc(0,hy-3,13.8,Math.PI,TAU);X.fill();
-  [[-13,hy-6,-16,hy-18,-6,hy-10],[-7,hy-14,-8,hy-24,0,hy-14],[-1,hy-16,3,hy-26,8,hy-14],[6,hy-12,14,hy-22,14,hy-6],[10,hy-6,16,hy-14,14,hy-2],[-14,hy-1,-18,hy-10,-10,hy-6],[1,hy-18,6,hy-28,9,hy-16]].forEach(s=>poly(s,AX.hair));
-  // large warm brown eye, grin, freckles
-  ell(5.2,hy-0.6,3.4,3.8,'#fff');circ(5.4,hy-0.3,2.1,AX.eye);circ(6,hy-1,0.8,'#fff');
-  X.strokeStyle='#3a2b2b';X.lineWidth=1.5;X.beginPath();X.arc(4,hy+5.2,4,0.25,2.5);X.stroke();
-  ell(-8,hy+3,2.4,1.5,'rgba(255,130,160,0.35)');
-  circ(-5,hy+4.2,0.7,'rgba(140,80,40,0.55)');circ(-2.5,hy+5.2,0.55,'rgba(140,80,40,0.45)');circ(1.5,hy+5,0.55,'rgba(140,80,40,0.45)');
+  // head — front-facing (or 3/4), TWO big friendly cartoon eyes in every pose. Flip-facing keeps both eyes visible.
+  const hy=-58;circ(0,hy,14,AX.skin);
+  ell(-13.4,hy+1.6,3.4,4.2,AX.skin);ell(13.4,hy+1.6,3.4,4.2,AX.skin);
+  // messy, spiky dark hair sits on top of the head; forehead and face stay open
+  X.fillStyle=AX.hair;X.beginPath();X.arc(0,hy-5,14.4,Math.PI*1.08,-0.08);X.fill();
+  [[-14,hy-8,-18,hy-22,-6,hy-12],[-8,hy-16,-10,hy-28,0,hy-16],[-1,hy-17,3,hy-30,9,hy-16],[6,hy-14,16,hy-26,14,hy-8],[11,hy-7,18,hy-18,15,hy-1],[-15,hy-2,-20,hy-14,-11,hy-7],[2,hy-19,8,hy-32,11,hy-17],[-5,hy-17,-3,hy-26,3,hy-17]].forEach(s=>poly(s,AX.hair));
+  // thick friendly eyebrows
+  X.strokeStyle=AX.hair;X.lineWidth=2.4;X.lineCap='round';
+  X.beginPath();X.moveTo(-10.4,hy-7.4);X.quadraticCurveTo(-5.8,hy-10.8,-1.5,hy-7.6);X.stroke();
+  X.beginPath();X.moveTo(1.5,hy-7.6);X.quadraticCurveTo(5.8,hy-10.8,10.4,hy-7.4);X.stroke();
+  // two large warm brown eyes with white highlights (never a single side-profile eye)
+  const axEye=(ex,ey)=>{ell(ex,ey,5.2,6.0,'#fff');circ(ex,ey+0.55,3.2,AX.eye);circ(ex,ey+0.8,1.55,'#2a1810');circ(ex-1.55,ey-1.55,1.6,'#fff');circ(ex+1.35,ey+1.85,0.7,'rgba(255,255,255,0.8)')};
+  axEye(-5.9,hy-0.8);axEye(5.9,hy-0.8);
+  // small nose, rosy cheeks, light freckles on both sides
+  ell(0,hy+4.8,2.2,1.7,'#d4956a');
+  ell(-10.2,hy+6.0,3.6,2.2,'rgba(232,120,100,0.42)');ell(10.2,hy+6.0,3.6,2.2,'rgba(232,120,100,0.42)');
+  [[-8.2,hy+4.8],[-5.6,hy+6.0],[-7.4,hy+7.0],[8.2,hy+4.8],[5.6,hy+6.0],[7.4,hy+7.0]].forEach(p=>circ(p[0],p[1],0.62,'rgba(140,80,40,0.5)'));
+  // joyful grin; bigger open smile when jumping or cheering
+  if(air||pose==='cheer'||pose==='cape'){ell(0,hy+8.4,5.6,3.9,'#8d3b3b');X.fillStyle='#fff';rrect(-4.0,hy+5.8,8.0,2.3,1);X.fill()}
+  else{X.fillStyle='#8d3b3b';X.beginPath();X.moveTo(-6.0,hy+6.2);X.quadraticCurveTo(0,hy+12.2,6.0,hy+6.2);X.quadraticCurveTo(0,hy+8.6,-6.0,hy+6.2);X.fill();X.fillStyle='#fff';rrect(-3.8,hy+6.4,7.6,1.9,0.8);X.fill()}
   // hats / hoods (theme costumes sit on the locked face + hair)
   if(A.dino){X.fillStyle='#66bb6a';X.beginPath();X.arc(0,hy-4,15,Math.PI,TAU);X.fill();poly([-8,hy-16,-12,hy-28,-2,hy-18],'#66bb6a');poly([8,hy-16,12,hy-28,2,hy-18],'#66bb6a');circ(-12,hy-28,2.4,'#ef5350');circ(12,hy-28,2.4,'#ef5350');ell(-6,hy-8,3,2,'#81c784');ell(6,hy-8,3,2,'#81c784')}
   else if(A.explorer){X.fillStyle='#c9a227';rrect(-15,hy-16,30,7,2);X.fill();ell(0,hy-18,8,4,'#e0c056');X.fillStyle='#8d6e63';X.fillRect(-16,hy-11,32,3)}

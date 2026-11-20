@@ -34,7 +34,7 @@ function kitTap(wx,wy){for(const k of kits){const h=70*k.K.s/0.66;if(Math.abs(wx
 function kitHint(){return kits.some(k=>k.st==='wait'&&kitNear(k))}
 function drawKits(){for(const k of kits){if(k.x<camX-80||k.x>camX+W+80)continue;const hop=k.st==='purr'?-Math.abs(Math.sin(k.t*8))*4:0;
   const pose=k.st==='follow'&&k.moving?'walk':'sit';blitKit(k.K.k,pose,k.fr,k.x,k.y+hop,k.face,1,{closed:k.st==='purr'});
-  if(k.st==='wait'){const by=k.y-90*k.K.s/0.66-8+Math.sin(T*3)*4;circ(k.x,by,14,'rgba(255,255,255,0.92)');heartP(k.x,by+3,8,'#ff5c9e');if(Math.sin(T*4)>0.3)star5(k.x+18,by-12,5,'#fff59d')}}}
+  if(k.st==='wait'){const by=k.y-90*k.K.s/0.66-8+Math.sin(T*3)*4;circ(k.x,by,14,'rgba(255,255,255,0.92)');star5(k.x,by+3,8,'#ffd54f');if(Math.sin(T*4)>0.3)star5(k.x+18,by-12,5,'#fff59d')}}}
 // ---------- name picker (after petting a new kitty, or from the collection page). Pictures + voice: no reading needed ----------
 let kitPick=null;// {K,sel,onDone}
 function nameDone(K,i){const n=K.names[i][0],first=!SAVE.kit[K.k];SAVE.kit[K.k]=Object.assign(SAVE.kit[K.k]||{at:Date.now()},{name:n});save();AUD.SFX.sticker();

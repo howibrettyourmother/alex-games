@@ -1,5 +1,5 @@
 // offline support for Alex & Doodle's Big Adventure
-const P='adba-',V='1.9.0-20261120boytheme',C=P+V;
+const P='adba-',V='1.9.1-20261120eyes',C=P+V;
 const A=["index.html","manifest.json","favicon-32.png","apple-touch-icon.png","icon-192.png","icon-512.png","og.png"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(A.map(u=>fetch(new Request(u,{cache:'reload'})).then(res=>{if(res.ok)return c.put(u,res)}).catch(()=>{})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P)&&k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()).then(()=>self.clients.matchAll()).then(cs=>cs.forEach(c=>c.postMessage('offline-ready'))))});

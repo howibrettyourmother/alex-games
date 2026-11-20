@@ -34,7 +34,7 @@ const DECO={
     for(let i=0;i<3;i++){X.fillStyle='#7fcf9a';X.fillRect(o.x+10+i*14,-40,3,40)}},
   abc(o){const L='ABCDEF';const C=['#e53935','#ffb74d','#fff176','#43a047','#1565c0','#fb8c00'];for(let i=0;i<6;i++){rrect(o.x+i*44,-300,38,38,8);X.fillStyle=C[i];X.fill();txt(L[i],o.x+i*44+19,-280,24,'#fff',{st:'rgba(0,0,0,0.2)',sw:3})}},
   hooks(o){X.fillStyle=WOODD;X.fillRect(o.x,-170,o.w,10);for(let i=0;i<4;i++){const c=['#e53935','#1565c0','#ffd54f','#43a047'][i];rrect(o.x+12+i*44,-160,30,40,10);X.fillStyle=c;X.fill()}},
-  easel(o){X.strokeStyle=WOODD;X.lineWidth=5;X.beginPath();X.moveTo(o.x,0);X.lineTo(o.x+30,-120);X.lineTo(o.x+60,0);X.stroke();X.fillStyle='#fff';X.fillRect(o.x+4,-120,52,60);heartP(o.x+30,-88,12,'#c5a3ff');circ(o.x+18,-104,6,'#ffd54f')},
+  easel(o){X.strokeStyle=WOODD;X.lineWidth=5;X.beginPath();X.moveTo(o.x,0);X.lineTo(o.x+30,-120);X.lineTo(o.x+60,0);X.stroke();X.fillStyle='#fff';X.fillRect(o.x+4,-120,52,60);star5(o.x+30,-88,12,'#1565c0');circ(o.x+18,-104,6,'#ffd54f')},
   basket(o){X.fillStyle='#d7a77a';rrect(o.x-26,-30,52,30,8);X.fill();X.fillStyle='rgba(0,0,0,0.08)';for(let i=0;i<4;i++)X.fillRect(o.x-24,-26+i*7,48,2);circ(o.x-10,-32,10,'#b39ddb');circ(o.x+8,-34,10,'#80deea')},
   tvwall(o){X.fillStyle='#212121';rrect(o.x,-180,140,84,8);X.fill();X.fillStyle='#1565c0';rrect(o.x+6,-174,128,72,5);X.fill();txt('GO!',o.x+70,-136,16,'#ffd54f')},
   slideD(o){}

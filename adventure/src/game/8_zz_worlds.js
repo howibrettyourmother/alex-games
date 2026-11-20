@@ -177,7 +177,7 @@ const _wallBgB=wallBg;wallBg=function(sec,top,bot){const o=sec.out;if(WORLD_KS.i
 
 // ---------- NPCs + quest items ----------
 function boyNPC(k,t,wave){
-  if(k==='trex'){X.save();ell(0,-36,48,22,'#8bc34a');[-30,-12,10,28].forEach(l=>X.fillRect(l-5,-24,8,24));ell(40,-70,22,16,'#7cb342');circ(48,-76,3,'#222');X.beginPath();X.arc(52,-66,10,0.2,Math.PI-0.4);sl(2,'#33691e');poly([30,-86,24,-110,36,-90],'#8bc34a');poly([44,-88,50,-112,56,-88],'#8bc34a');ell(54,-70,3,2,'rgba(255,130,160,0.5)');txt('🌮',20,-50,14,'#000');X.restore();return}
+  if(k==='trex'){X.save();ell(0,-36,48,22,'#8bc34a');[-30,-12,10,28].forEach(l=>X.fillRect(l-5,-24,8,24));ell(-40,-28,22,10,'#7cb342');ell(28,-72,24,20,'#7cb342');ell(36,-64,14,10,'#8bc34a');ell(20,-78,5.4,6.2,'#fff');ell(34,-80,5.4,6.2,'#fff');circ(21,-77,2.6,'#222');circ(35,-79,2.6,'#222');circ(19.5,-79.5,1.3,'#fff');circ(33.5,-81.5,1.3,'#fff');X.beginPath();X.arc(34,-62,9,0.25,Math.PI-0.25);sl(2.2,'#33691e');poly([16,-88,12,-112,24,-92],'#8bc34a');poly([30,-90,32,-116,40,-92],'#8bc34a');ell(44,-68,3.2,2,'rgba(255,130,160,0.5)');txt('🌮',8,-48,14,'#000');X.restore();return}
   if(k==='explorer'){v7person({tall:148,top:'#ff7043',leg:'#5d4037',shoe:'#3e2723',sk:'#f2c9a8',h:'#6d4c41',cap:'#ff8a65'},t,wave);return}
   if(k==='astro'){X.save();circ(0,-86,20,'#eceff1');circ(0,-86,14,'#81d4fa');circ(-4,-88,3,'#222');circ(6,-88,3,'#222');X.fillStyle='#eceff1';rrect(-18,-70,36,50,8);X.fill();X.fillStyle='#90caf9';X.fillRect(-8,-60,16,10);X.fillStyle='#b0bec5';X.fillRect(-10,-22,8,22);X.fillRect(4,-22,8,22);X.restore();return}
   if(k==='capn'){v7person({tall:150,top:'#00695c',leg:'#4e342e',shoe:'#3e2723',sk:'#f2c9a8',h:'#212121',cap:'#b71c1c',mus:1},t,wave);return}
@@ -340,7 +340,7 @@ XS.bosses={draw(){UI=[];softBg('#fff8e1','#ffe0b2');boyHead('Boss Battles','#c62
 XS.boss={upd(dt){if(!BS)return;BS.t+=dt;BS.pop=Math.max(0,BS.pop-dt*4);BS.shake=Math.max(0,BS.shake-dt);if(BS.over)BS.fin+=dt},
   draw(){UI=[];if(!BS){bigBack();return}softBg('#fff8e1','#e3f2fd');const sh=(BS.shake?rr(-6,6):0);
     txt(BS.n,W/2,TOP+80,30,'#c62828');txt(BS.line,W/2,TOP+112,16,'#6d4c41');
-    const cx=W/2+sh,cy=H*0.46,sc=1.6+BS.pop*0.3;X.save();X.translate(cx,cy);X.scale(sc,sc);txt(BS.ic,0,0,72,'#000');X.restore();
+    const cx=W/2+sh,cy=H*0.46,sc=1.6+BS.pop*0.3;X.save();X.translate(cx,cy+30);X.scale(sc,sc);if(BS.k==='dino')boyNPC('trex',BS.t,0);else txt(BS.ic,0,-30,72,'#000');X.restore();
     for(let i=0;i<BS.need;i++){const x=W/2-(BS.need*28)/2+i*28+14,y=H*0.68;circ(x,y,12,i<BS.hp?'#81c784':'#eee');if(i<BS.hp)txt('✓',x,y+1,12,'#fff')}
     txt('Tap '+BS.n+'!',W/2,H*0.76,20,'#ef6c00');
     if(BS.over){const s=back(BS.fin*2),w=Math.min(W-40,400),h=200;X.save();X.translate(W/2,H*0.4);X.scale(s,s);X.fillStyle='#fff';rrect(-w/2,-h/2,w,h,24);X.fill();txt('You win!',0,-36,32,'#2e7d32');txt(BS.win,0,16,16,'#6a1b9a');X.restore()}
