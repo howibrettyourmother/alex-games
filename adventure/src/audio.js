@@ -145,9 +145,26 @@ const AUD=(()=>{
     sfxBus.gain.cancelScheduledValues(t);sfxBus.gain.setTargetAtTime(0.38,t,0.04);sfxBus.gain.setTargetAtTime(0.62,curEnd,0.2);return true}
   // ---------- free text: ElevenLabs pack for known lines; animal recs stay; no Piper v/ stitching ----------
   const vbuf={},tKeys=[];let tTimer=0,tN=0;
+  function packNorm(s){s=String(s||'').replace(/[\u2018\u2019`]/g,"'").replace(/[\u201C\u201D]/g,'"').toLowerCase();s=s.replace(/\[[^\]]*\]/g,' ');s=s.replace(/[^a-z0-9']+/g,' ');return s.replace(/\s+/g,' ').trim()}
+  function packBare(s){return String(s||'').replace(/'/g,'')}
+  function packLookup(text){
+    const M=window.ADV_VOICE_MAP; if(!M)return null;
+    const n=packNorm(text); if(!n)return null;
+    if(M[n])return M[n];
+    const b=packBare(n); if(b&&M[b])return M[b];
+    // longest packed prefix (min 18 chars / 4 words) so a longer game line can still play
+    let best=null,bn=0;
+    for(const k in M){
+      if(k.length<18 && k.split(' ').length<4)continue;
+      if((n===k||n.indexOf(k+' ')===0||b.indexOf(packBare(k))===0) && k.length>bn){best=M[k];bn=k.length}
+    }
+    return best;
+  }
   function packSayText(text){
     if(!window.KVX)return false;
     const raw=String(text||'').trim();
+    const hit=packLookup(raw);
+    if(hit){KVX.say(hit[1],{voice:hit[0],force:true});return true;}
     const tl=raw.toLowerCase().replace(/[^a-z0-9' !?]+/g,' ').replace(/\s+/g,' ').trim();
     if(/^(hi alex!?|hey alex!?|hello!?|hi!?)$/.test(tl)){KVX.say('a_hi');return true;}
     if(raw.length<48 && /\b(yay|yes|great job|you did it|awesome|nice job|woohoo|all right|good job|you win)\b/.test(tl)){KVX.praise();return true;}
@@ -227,5 +244,6 @@ const AUD=(()=>{
    SFX.quack=()=>{try{if(!rec('a_duck',1.4))sq()}catch(e){}};SFX.hoot=()=>{try{if(!rec('a_owl'))sh()}catch(e){}}}
   function speakingNow(){return !!(C&&now()<curEnd)||!!(window.__kvxSpk);}
   try{const g=window;const prev=g.__vSpk;g.__vSpk=function(){return !!(speakingNow()||(typeof prev==='function'&&prev()))};}catch(e){}
+  try{window.__advLookup=packLookup;window.__packSayText=packSayText}catch(e){}
   return{unlock,SFX,say,num,count,sayText,prefetch,plan,setTheme,setMuted,get muted(){return muted},get unlocked(){return unlocked&&!!C},get running(){return !!C&&C.state==='running'},get clipCount(){return Object.keys(clips).length},get theme(){return theme},get ctx(){return C},get musicGain(){return musicDuck},stats,get speaking(){return speakingNow()}};
 })();

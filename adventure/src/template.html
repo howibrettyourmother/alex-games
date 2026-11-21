@@ -122,14 +122,15 @@ b.addEventListener('mousedown',down);b.addEventListener('mouseup',up);b.addEvent
 ['pointerdown','pointerup','click'].forEach(function(n){b.addEventListener(n,stop)});
 function add(){document.body.appendChild(b);document.body.appendChild(hint);watchOffl()}if(document.body)add();else addEventListener('DOMContentLoaded',add)})();</script>
 
-<script>/*bgm*/window.BGM_CFG={"id":"alex-doodle-adventure","base":"music/","v":"20261120el","intro":"intro","tracks":{"title":[48.0,1.0],"home":[48.0,1.0],"dino":[48.0,1.0],"volc":[48.0,1.0],"space":[48.0,1.0],"pirate":[48.0,1.0],"castle":[48.0,1.0],"robot":[48.0,1.0],"boss":[48.0,1.0]},"map":{"park":"home","cozy":"home","lull":"home","win":"home"},"pos":"left:10px;top:58px","poll":function(){var muted=false,speaking=!!(window.__vSpk&&window.__vSpk()),th="title";try{if(window.AUD){muted=!!AUD.muted;th=AUD.theme||th;if(AUD.speaking)speaking=true}}catch(e){}if(th==="none"||th==="off")return{area:"",muted:muted,speaking:speaking};return{area:th,muted:muted,speaking:speaking}}};</script>
-<script src="music/bgm.js?v=20261120el" defer></script>
-<script src="audio/pack.js?v=20261120el"></script>
+<script>/*bgm*/window.BGM_CFG={"id":"alex-doodle-adventure","base":"music/","v":"20261120el2","intro":"intro","tracks":{"title":[48.0,1.0],"home":[48.0,1.0],"dino":[48.0,1.0],"volc":[48.0,1.0],"space":[48.0,1.0],"pirate":[48.0,1.0],"castle":[48.0,1.0],"robot":[48.0,1.0],"boss":[48.0,1.0]},"map":{"park":"home","cozy":"home","lull":"home","win":"home"},"pos":"left:10px;top:58px","poll":function(){var muted=false,speaking=!!(window.__vSpk&&window.__vSpk()),th="title";try{if(window.AUD){muted=!!AUD.muted;th=AUD.theme||th;if(AUD.speaking)speaking=true}}catch(e){}if(th==="none"||th==="off")return{area:"",muted:muted,speaking:speaking};return{area:th,muted:muted,speaking:speaking}}};</script>
+<script src="music/bgm.js?v=20261120el2" defer></script>
+<script src="audio/adv_map.js?v=20261120el2"></script>
+<script src="audio/pack.js?v=20261120el2"></script>
 <script>
 (function(){
   function musicGain(){try{if(window.AUD&&AUD.musicGain)return AUD.musicGain;}catch(e){}return null;}
   function getCtx(){try{if(window.AUD&&AUD.ctx)return AUD.ctx;}catch(e){}return null;}
-  if(window.KVX) KVX.init({base:'audio/', getCtx:getCtx, musicGain:musicGain, kid:'alex', v:'20261120el', preload:['sfx/ui_click','sfx/correct','sfx/win','sfx/pop','sfx/jump','voice/alex/a_hi']});
+  if(window.KVX) KVX.init({base:'audio/', getCtx:getCtx, musicGain:musicGain, kid:'alex', v:'20261120el2', preload:['sfx/ui_click','sfx/correct','sfx/win','sfx/pop','sfx/jump','voice/alex/a_hi']});
   function wrap(obj,name,sfx){if(!obj||typeof obj[name]!=='function')return;var orig=obj[name];obj[name]=function(){try{if(window.KVX){KVX.sfx(sfx);return;}}catch(e){}try{return orig.apply(this,arguments);}catch(e){}};}
   function hookSfx(){
     var S=window.AUD&&AUD.SFX; if(!S)return;
